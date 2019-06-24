@@ -19,7 +19,7 @@ class HighCardTest {
             )
     )
 
-    private val weakerHandA = HighCard(
+    private val weakerHand = HighCard(
             listOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
@@ -29,7 +29,7 @@ class HighCardTest {
             )
     )
 
-    private val weakerHandB = HighCard(
+    private val weakerHand2 = HighCard(
             listOf(
                     Card(CardRank.ACE, CardSuit.CLUBS),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
@@ -41,16 +41,11 @@ class HighCardTest {
 
     @Test
     fun `HighCard 'greater than' comparison should be true when first hand is stronger`() {
-        assert(strongerHand > weakerHandA)
+        assert(strongerHand > weakerHand)
     }
 
     @Test
-    fun `HighCard 'greater than or equal' comparison should be true when both hands contain equally strong kickers`() {
-        assert(weakerHandA >= weakerHandB)
-    }
-
-    @Test
-    fun `HighCard 'less than or equal' comparison should be true when both hands contain equally strong kickers`() {
-        assert(weakerHandA <= weakerHandB)
+    fun `HighCard compareTo should return 0 when both hands contain equally strong kickers`() {
+        assert(weakerHand.compareTo(weakerHand2) == 0)
     }
 }

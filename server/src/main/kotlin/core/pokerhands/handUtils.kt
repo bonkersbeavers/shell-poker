@@ -28,11 +28,6 @@ fun isStraight(cards: List<Card>): Boolean {
 
 fun isFlush(cards: List<Card>): Boolean = cards.all { it.suit == cards[0].suit }
 
-fun isFullHouse(cards: List<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
-    return rankCounts.any { it == 2 } and rankCounts.any { it == 3 }
-}
-
 fun isFourOfAKind(cards: List<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 4 }
