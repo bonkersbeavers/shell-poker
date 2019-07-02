@@ -2,17 +2,9 @@ package core.pokerhands
 
 import core.Card
 
-
-fun isTwoPair(cards: List<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
-    return rankCounts.count { it == 2 } == 2
-}
-
-
-
 class TwoPair(cards: List<Card>) : PokerHand(HandRank.TWO_PAIR, cards) {
 
-    init { assert(isTwoPair(cards)) }
+    override fun isValidHand(): Boolean = isTwoPair(cards)
 
     /**
      * First tries to find the highest pair rank that is different for each hand.
