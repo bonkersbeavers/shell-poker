@@ -68,7 +68,7 @@ class PairTest {
     @Test
     fun `Pair instantiation should fail if there is no pair in the hand`() {
         assertThrows<AssertionError> {
-            val invalidPair = Pair(
+            Pair(
                     listOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
