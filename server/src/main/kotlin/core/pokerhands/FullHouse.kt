@@ -2,17 +2,9 @@ package core.pokerhands
 
 import core.Card
 
-
-fun isFullHouse(cards: List<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
-    return rankCounts.any { it == 2 } and rankCounts.any { it == 3 }
-}
-
-
-
 class FullHouse(cards: List<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
 
-    init { assert(isFullHouse(cards)) }
+    override fun isValidHand(): Boolean = isFullHouse(cards)
 
     /** First compares the sets ranks, then pairs if necessary. */
     override fun compareWithinRank(other: PokerHand): Int {

@@ -2,17 +2,9 @@ package core.pokerhands
 
 import core.Card
 
-
-fun isPair(cards: List<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
-    return rankCounts.any { it == 2 }
-}
-
-
-
 class Pair(cards: List<Card>) : PokerHand(HandRank.PAIR, cards) {
 
-    init { assert(isPair(cards)) }
+    override fun isValidHand(): Boolean = isPair(cards)
 
     /** First compares pair ranks. If those are the same, then compares kickers. */
     override fun compareWithinRank(other: PokerHand): Int {

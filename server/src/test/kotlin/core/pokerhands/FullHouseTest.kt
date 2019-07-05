@@ -69,7 +69,7 @@ class FullHouseTest {
     @Test
     fun `FullHouse instantiation should fail if there are no pair and set in the hand`() {
         assertThrows<AssertionError> {
-            val invalidFullHouse = FullHouse(
+            FullHouse(
                     listOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),

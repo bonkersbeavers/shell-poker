@@ -5,6 +5,7 @@ import core.CardRank
 import core.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PokerHandTest {
@@ -18,8 +19,8 @@ class PokerHandTest {
     )
 
     @Test
-    fun `isValidHand should be true for 5 distinct cards`() {
-        assert(isValidHand(validHand))
+    fun `constructor assertion should succeed for 5 distinct cards`() {
+        HighCard(validHand)
     }
 
     private val fourCardHand = listOf(
@@ -30,8 +31,10 @@ class PokerHandTest {
     )
 
     @Test
-    fun `isValidHand should be false if there are 4 cards`() {
-        assert(!isValidHand(fourCardHand))
+    fun `constructor assertion should fail if there are 4 cards`() {
+        assertThrows<AssertionError> {
+            HighCard(fourCardHand)
+        }
     }
 
     private val repeatedCardsHand = listOf(
@@ -43,7 +46,9 @@ class PokerHandTest {
     )
 
     @Test
-    fun `isValidHand should be false if there are any repeated cards`() {
-        assert(!isValidHand(repeatedCardsHand))
+    fun `constructor assertion should fail if there are any repeated cards`() {
+        assertThrows<AssertionError> {
+            HighCard(repeatedCardsHand)
+        }
     }
 }

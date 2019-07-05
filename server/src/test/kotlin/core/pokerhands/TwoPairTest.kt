@@ -68,7 +68,7 @@ class TwoPairTest {
     @Test
     fun `TwoPair instantiation should fail if there are no two pairs in the hand`() {
         assertThrows<AssertionError> {
-            val invalidTwoPair = TwoPair(
+            TwoPair(
                     listOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
