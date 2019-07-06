@@ -7,10 +7,10 @@ fun makeHand(cards: List<Card>): PokerHand {
     return when {
 //        isRoyalFlush(cards) -> RoyalFlush(cards)
 //        isStraightFlush(cards) -> StraightFlush(cards)
-//        isFourOfAKind(cards) -> FourOfAKind(cards)
+        isFourOfAKind(cards) -> FourOfAKind(cards)
         isFullHouse(cards) -> FullHouse(cards)
         isFlush(cards) -> Flush(cards)
-//        isStraight(cards) -> Straight(cards)
+        isStraight(cards) -> Straight(cards)
         isThreeOfAKind(cards) -> ThreeOfAKind(cards)
         isTwoPair(cards) -> TwoPair(cards)
         isPair(cards) -> Pair(cards)
