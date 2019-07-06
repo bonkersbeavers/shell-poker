@@ -66,9 +66,9 @@ class ThreeOfAKindTest {
     }
 
     @Test
-    fun `Three of a kind instantiation should fail if there is no pair in the hand`() {
+    fun `Three of a kind instantiation should fail if there are no three cards with the same rank in the hand`() {
         assertThrows<AssertionError> {
-            val invalidThree = ThreeOfAKind(
+            ThreeOfAKind(
                     listOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),

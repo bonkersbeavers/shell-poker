@@ -39,7 +39,7 @@ class FlushTest {
             )
     )
 
-    private val `weaker by one kicker` = Flush(
+    private val weakerByOneKicker = Flush(
             listOf(
                     Card(CardRank.ACE, CardSuit.CLUBS),
                     Card(CardRank.TEN, CardSuit.CLUBS),
@@ -51,7 +51,7 @@ class FlushTest {
 
     @Test
     fun `Flush 'greater than' comparision should be true when first hand is stronger`() {
-        assert(strongest > `weaker by one kicker`)
+        assert(strongest > weakerByOneKicker)
         assert(strongest > mediocre1)
     }
 
