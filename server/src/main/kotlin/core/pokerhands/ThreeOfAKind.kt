@@ -5,7 +5,7 @@ import core.Card
 
 class ThreeOfAKind(cards: List<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, cards) {
 
-    init { assert(isThreeOfAKind(cards)) }
+    override fun isValidHand(): Boolean = isThreeOfAKind(cards)
 
     /** First compares three's ranks. If those are the same, then compares kickers. */
     override fun compareWithinRank(other: PokerHand): Int {
