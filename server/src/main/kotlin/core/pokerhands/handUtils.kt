@@ -5,8 +5,8 @@ import core.CardRank
 
 fun makeHand(cards: List<Card>): PokerHand {
     return when {
-//        isRoyalFlush(cards) -> RoyalFlush(cards)
-//        isStraightFlush(cards) -> StraightFlush(cards)
+        isRoyalFlush(cards) -> RoyalFlush(cards)
+        isStraightFlush(cards) -> StraightFlush(cards)
         isFourOfAKind(cards) -> FourOfAKind(cards)
         isFullHouse(cards) -> FullHouse(cards)
         isFlush(cards) -> Flush(cards)
