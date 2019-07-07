@@ -3,7 +3,7 @@ package core.pokerhands
 import core.Card
 
 
-class FourOfAKind(cards: List<Card>) : PokerHand(HandRank.STRAIGHT, cards) {
+class FourOfAKind(cards: List<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards) {
 
     override fun isValidHand(): Boolean = isFourOfAKind(cards)
 
