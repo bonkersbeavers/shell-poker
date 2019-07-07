@@ -5,6 +5,8 @@ import core.CardRank
 import core.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StraightTest {
@@ -39,6 +41,16 @@ class StraightTest {
             )
     )
 
+    private val mediocre2same = Straight(
+            listOf(
+                    Card(CardRank.SEVEN, CardSuit.SPADES),
+                    Card(CardRank.SIX, CardSuit.SPADES),
+                    Card(CardRank.FIVE, CardSuit.DIAMONDS),
+                    Card(CardRank.FOUR, CardSuit.DIAMONDS),
+                    Card(CardRank.THREE, CardSuit.SPADES)
+            )
+    )
+
     private val weakest = Straight(
             listOf(
                     Card(CardRank.FIVE, CardSuit.HEARTS),
@@ -55,4 +67,26 @@ class StraightTest {
         assert(mediocre2 > weakest)
         assert(strongest > weakest)
     }
+
+    @Test
+    fun `Straight compareTo should be 0 when both hands contain equally strong straights`() {
+        assert(mediocre2.compareTo(mediocre2same) == 0)
+    }
+
+    @Test
+    fun `Straight instantiation should fail if there is no straight in a hand`() {
+        assertThrows<AssertionError> {
+            Straight(
+                    listOf(
+                            Card(CardRank.EIGHT, CardSuit.SPADES),
+                            Card(CardRank.SIX, CardSuit.SPADES),
+                            Card(CardRank.FIVE, CardSuit.DIAMONDS),
+                            Card(CardRank.FOUR, CardSuit.DIAMONDS),
+                            Card(CardRank.THREE, CardSuit.SPADES)
+                    )
+            )
+        }
+    }
+
+
 }
