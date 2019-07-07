@@ -5,6 +5,8 @@ import core.CardRank
 import core.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FourOfAKindTest {
@@ -43,7 +45,31 @@ class FourOfAKindTest {
     @Test
     fun `FourOfAKind 'greater than' comparision should be true when first hand is stronger`() {
         assert(strongest > mediocre1)
-        assert(strongest > mediocre2)
         assert(mediocre2 > mediocre1)
+    }
+
+    @Test
+    fun `FourOfAKind 'greater than' comparision should be true when first hand has a better kicker`() {
+        assert(strongest > mediocre2)
+    }
+
+    @Test
+    fun `FourOfaKind compareTo should be 0 when both hands contain equally strong hands`() {
+        assert(strongest.compareTo(strongest) == 0)
+    }
+
+    @Test
+    fun `FourOfAKind instantiation should fail if there is no four of a kind on hand`() {
+        assertThrows<AssertionError> {
+            FourOfAKind(
+                    listOf(
+                            Card(CardRank.ACE, CardSuit.CLUBS),
+                            Card(CardRank.ACE, CardSuit.DIAMONDS),
+                            Card(CardRank.ACE, CardSuit.SPADES),
+                            Card(CardRank.TWO, CardSuit.HEARTS),
+                            Card(CardRank.EIGHT, CardSuit.CLUBS)
+                    )
+            )
+        }
     }
 }
