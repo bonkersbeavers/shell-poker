@@ -86,7 +86,17 @@ class StraightTest {
                     )
             )
         }
+
+        assertThrows<AssertionError> {
+            Straight(
+                    listOf(
+                            Card(CardRank.SIX, CardSuit.HEARTS),
+                            Card(CardRank.FOUR, CardSuit.SPADES),
+                            Card(CardRank.THREE, CardSuit.CLUBS),
+                            Card(CardRank.TWO, CardSuit.DIAMONDS),
+                            Card(CardRank.ACE, CardSuit.SPADES)
+                    )
+            )
+        }
     }
-
-
 }
