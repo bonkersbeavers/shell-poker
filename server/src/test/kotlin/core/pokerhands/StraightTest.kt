@@ -74,7 +74,7 @@ class StraightTest {
     }
 
     @Test
-    fun `Straight instantiation should fail if there is no straight in a hand`() {
+    fun `Straight instantiation should fail if there is no straight on hand`() {
         assertThrows<AssertionError> {
             Straight(
                     listOf(

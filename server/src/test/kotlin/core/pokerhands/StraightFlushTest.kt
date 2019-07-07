@@ -59,12 +59,12 @@ class StraightFlushTest {
     }
 
     @Test
-    fun `StraightFlush compareTo should be 0 when both hands contain equally strong straights`() {
+    fun `StraightFlush compareTo should be 0 when both hands are equally strong`() {
         assert(mediocre1.compareTo(mediocre1same) == 0)
     }
 
     @Test
-    fun `StraightFlush instantiation should fail if there is no straight in a hand`() {
+    fun `StraightFlush instantiation should fail if there is no straight flush on hand`() {
         assertThrows<AssertionError> {
             StraightFlush(
                     listOf(

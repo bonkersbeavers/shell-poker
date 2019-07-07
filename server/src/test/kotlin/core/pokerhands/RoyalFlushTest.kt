@@ -30,7 +30,7 @@ class RoyalFlushTest {
                     Card(CardRank.TEN, CardSuit.CLUBS)
             )
     )
-    
+
     @Test
     fun `RoyalFlush compareTo should be 0 always`() {
         assert(first.compareTo(second) == 0)

@@ -54,7 +54,7 @@ class FourOfAKindTest {
     }
 
     @Test
-    fun `FourOfaKind compareTo should be 0 when both hands contain equally strong hands`() {
+    fun `FourOfaKind compareTo should be 0 when both hands are equally strong`() {
         assert(strongest.compareTo(strongest) == 0)
     }
 
