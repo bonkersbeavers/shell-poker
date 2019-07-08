@@ -6,10 +6,6 @@ class TwoPair(cards: List<Card>) : PokerHand(HandRank.TWO_PAIR, cards) {
 
     override fun isValidHand(): Boolean = isTwoPair(cards)
 
-    /**
-     * First tries to find the highest pair rank that is different for each hand.
-     * If no such exists, compares the remaining kicker.
-     */
     override fun compareWithinRank(other: PokerHand): Int {
         val thisPairRanks = this.cards.groupBy { it.rank }.filterValues { it.size == 2 }.keys.sortedDescending()
         val otherPairRanks = other.cards.groupBy { it.rank }.filterValues { it.size == 2 }.keys.sortedDescending()

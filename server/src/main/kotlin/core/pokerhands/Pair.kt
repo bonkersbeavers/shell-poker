@@ -6,7 +6,6 @@ class Pair(cards: List<Card>) : PokerHand(HandRank.PAIR, cards) {
 
     override fun isValidHand(): Boolean = isPair(cards)
 
-    /** First compares pair ranks. If those are the same, then compares kickers. */
     override fun compareWithinRank(other: PokerHand): Int {
         val thisPairRank = this.cards.groupBy { it.rank }.maxBy { it.value.size }!!.key
         val otherPairRank = other.cards.groupBy { it.rank }.maxBy { it.value.size }!!.key

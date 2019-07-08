@@ -6,7 +6,6 @@ class FullHouse(cards: List<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
 
     override fun isValidHand(): Boolean = isFullHouse(cards)
 
-    /** First compares the sets ranks, then pairs if necessary. */
     override fun compareWithinRank(other: PokerHand): Int {
         val thisSetRank = this.cards.groupBy { it.rank }.filterValues { it.size == 3 }.keys.first()
         val otherSetRank = other.cards.groupBy { it.rank }.filterValues { it.size == 3 }.keys.first()

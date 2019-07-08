@@ -5,8 +5,7 @@ import core.Card
 abstract class PokerHand(val rank: HandRank, val cards: List<Card>) {
 
     init {
-        // checks if cards parameter is a list of five distinct cards
-        assert((cards.size == 5) and (cards.distinct().size == 5))
+        assert(is5CardHand(cards))
         assert(isValidHand())
     }
 

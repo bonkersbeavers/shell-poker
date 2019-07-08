@@ -2,7 +2,6 @@ package core.pokerhands
 
 import core.Card
 
-
 class Flush(cards: List<Card>) : PokerHand(HandRank.FLUSH, cards) {
 
     override fun isValidHand(): Boolean = isFlush(cards)
