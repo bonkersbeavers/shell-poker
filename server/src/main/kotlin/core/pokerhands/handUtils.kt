@@ -3,7 +3,12 @@ package core.pokerhands
 import core.Card
 import core.CardRank
 
+fun is5CardHand(cards: List<Card>): Boolean = (cards.size == 5) and (cards.distinct().size == 5)
+
 fun makeHand(cards: List<Card>): PokerHand {
+
+    assert(is5CardHand(cards))
+
     return when {
         isRoyalFlush(cards) -> RoyalFlush(cards)
         isStraightFlush(cards) -> StraightFlush(cards)
@@ -19,8 +24,8 @@ fun makeHand(cards: List<Card>): PokerHand {
 }
 
 /**
- * Following methods check if given list of cards make certain poker hand.
- * It is assumed that cards parameter is always a valid 5-card hand.
+ * Following methods check if given list of cards make certain poker hand,
+ * cards parameter should always be a valid 5-card hand.
  */
 
 fun isPair(cards: List<Card>): Boolean {
@@ -69,7 +74,6 @@ fun isRoyalFlush(cards: List<Card>): Boolean {
     return isFlush(cards) and isHighestStraight
 }
 
-
 /**
  * Performs kickers comparison. Returns positive value if the first list contains
  * better kickers, 0 if both lists are equally strong and negative value otherwise.
@@ -84,4 +88,12 @@ fun compareKickers(kickersA: List<Card>, kickersB: List<Card>): Int {
     }
 
     return 0
+}
+
+/** cards parameter should contain 5 cards that make valid straight. */
+fun getStraightRank(cards: List<Card>): CardRank {
+    val ranks = cards.map { it.rank }.toSet()
+    val lowestStraight = (CardRank.TWO..CardRank.FIVE).toSet() + CardRank.ACE
+
+    return if (ranks == lowestStraight) CardRank.FIVE else ranks.maxBy { it.strength }!!
 }
