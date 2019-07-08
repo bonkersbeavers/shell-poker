@@ -50,7 +50,6 @@ class FullHouseTest {
             )
     )
 
-
     @Test
     fun `FullHouse 'greater than' comparison should be true when first hand has stronger set`() {
         assert(strongFullHouse > mediocreFullHouse)

@@ -45,10 +45,10 @@ fun isThreeOfAKind(cards: List<Card>): Boolean {
 
 fun isStraight(cards: List<Card>): Boolean {
 
-    val ranks = cards.map{ it.rank }.toSet()
-    val lowest: CardRank = ranks.minBy { it.strength } !!
+    val ranks = cards.map { it.rank }.toSet()
+    val lowest: CardRank = ranks.minBy { it.strength }!!
 
-    return when(ranks) {
+    return when (ranks) {
         (lowest..(lowest + 4)).toSet() -> true
         (CardRank.TWO..CardRank.FIVE).toSet() + CardRank.ACE -> true
         else -> false

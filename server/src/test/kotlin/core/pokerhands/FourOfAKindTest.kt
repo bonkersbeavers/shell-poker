@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FourOfAKindTest {
 
@@ -40,7 +39,6 @@ class FourOfAKindTest {
                     Card(CardRank.TEN, CardSuit.DIAMONDS)
             )
     )
-
 
     @Test
     fun `FourOfAKind 'greater than' comparision should be true when first hand is stronger`() {

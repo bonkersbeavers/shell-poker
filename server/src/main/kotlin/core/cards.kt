@@ -16,7 +16,7 @@ enum class CardRank(val strength: Int) {
     ACE(14);
 
     companion object {
-        fun fromInt(strength: Int): CardRank = CardRank.values().find { it.strength == strength } !!
+        fun fromInt(strength: Int): CardRank = CardRank.values().find { it.strength == strength }!!
     }
 
     operator fun plus(inc: Int): CardRank = fromInt(strength + inc)

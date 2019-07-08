@@ -1,7 +1,6 @@
 package core.pokerhands
 
 import core.Card
-import core.CardRank
 
 class Straight(cards: List<Card>) : PokerHand(HandRank.STRAIGHT, cards) {
 
