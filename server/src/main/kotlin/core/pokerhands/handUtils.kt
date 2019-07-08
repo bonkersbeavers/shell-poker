@@ -97,3 +97,10 @@ fun getStraightRank(cards: List<Card>): CardRank {
 
     return if (ranks == lowestStraight) CardRank.FIVE else ranks.maxBy { it.strength }!!
 }
+
+fun compareStraights(cardsA: List<Card>, cardsB: List<Card>): Int {
+    val straightRankA = getStraightRank(cardsA)
+    val straightRankB = getStraightRank(cardsB)
+
+    return straightRankA.strength - straightRankB.strength
+}
