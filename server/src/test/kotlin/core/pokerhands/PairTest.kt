@@ -72,7 +72,7 @@ class PairTest {
                     listOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
-                            Card(CardRank.JACK, CardSuit.DIAMONDS),
+                            Card(CardRank.FIVE, CardSuit.DIAMONDS),
                             Card(CardRank.TWO, CardSuit.HEARTS),
                             Card(CardRank.EIGHT, CardSuit.CLUBS)
                     )
