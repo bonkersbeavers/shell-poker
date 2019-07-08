@@ -5,6 +5,7 @@ import core.CardRank
 import core.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FlushTest {
@@ -58,6 +59,21 @@ class FlushTest {
     @Test
     fun `Flush compareTo should return 0 when both hands contain equally strong kickers`() {
         assert(mediocre1.compareTo(mediocre2) == 0)
+    }
+
+    @Test
+    fun `Flush instantiation should fail when cards are not single suited`() {
+        assertThrows<AssertionError> {
+            Flush(
+                    listOf(
+                            Card(CardRank.FIVE, CardSuit.CLUBS),
+                            Card(CardRank.ACE, CardSuit.CLUBS),
+                            Card(CardRank.JACK, CardSuit.DIAMONDS),
+                            Card(CardRank.TWO, CardSuit.HEARTS),
+                            Card(CardRank.EIGHT, CardSuit.CLUBS)
+                    )
+            )
+        }
     }
 
 }
