@@ -10,18 +10,18 @@ import org.junit.jupiter.api.assertThrows
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlayerTest {
 
-    private val testHoleCards: List<Card> = listOf(
+    private val testHoleCards = listOf(
             Card(CardRank.ACE, CardSuit.SPADES),
             Card(CardRank.TEN, CardSuit.SPADES)
     )
 
-    private val testStack: Int = 1000
+    private val testStack = 1000
 
-    private val testBetSize: Int = 500
+    private val testBetSize = 500
 
-    private val testCurrentBet: Int = 700
+    private val testCurrentBet = 700
 
-    private val testPlayer: Player = Player(
+    private val testPlayer = Player(
             position = 0,
             stack = testStack,
             holeCards = testHoleCards,
@@ -47,7 +47,7 @@ class PlayerTest {
     }
 
     @Test
-    fun `Player withBet method throw NotEnoughChipsExcetpion when betSize is larger than stack`() {
+    fun `Player withBet method throw NotEnoughChipsException when betSize is larger than stack`() {
         assertThrows<NotEnoughChipsException> {
             testPlayer.withBet(1001)
         }
