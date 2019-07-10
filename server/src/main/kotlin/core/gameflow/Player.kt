@@ -5,9 +5,9 @@ import core.Card
 data class Player(
     val position: Int,
     val stack: Int,
-    val holeCards: List<Card>,
-    val chipsInPot: Int,
-    val currentBet: Int,
+    val holeCards: List<Card> = listOf(),
+    val chipsInPot: Int = 0,
+    val currentBet: Int = 0,
     val folded: Boolean = false
 ) {
     fun withCards(newCards: List<Card>): Player {
