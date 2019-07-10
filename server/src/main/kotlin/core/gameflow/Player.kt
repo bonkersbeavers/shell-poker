@@ -5,7 +5,7 @@ import core.Card
 data class Player(
     val position: Int,
     val stack: Int,
-    val holeCards: List<Card> = listOf(),
+    val holeCards: List<Card> = emptyList(),
     val chipsInPot: Int = 0,
     val currentBet: Int = 0,
     val folded: Boolean = false
