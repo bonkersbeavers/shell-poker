@@ -3,12 +3,12 @@ package core.gameflow
 import core.Card
 
 data class Player(
-        val position: Int,
-        val stack: Int,
-        val holeCards: List<Card>,
-        val chipsInPot: Int,
-        val currentBet: Int,
-        val folded: Boolean = false
+    val position: Int,
+    val stack: Int,
+    val holeCards: List<Card>,
+    val chipsInPot: Int,
+    val currentBet: Int,
+    val folded: Boolean = false
 ) {
     fun withCards(newCards: List<Card>): Player {
         return this.copy(holeCards = newCards)
