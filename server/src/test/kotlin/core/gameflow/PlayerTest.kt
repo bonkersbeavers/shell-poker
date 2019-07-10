@@ -38,35 +38,35 @@ class PlayerTest {
     }
 
     @Test
-    fun `Player withBet method should transfer proper amount of chips from stack to currentBet`() {
+    fun `Player afterRaise method should transfer proper amount of chips from stack to currentBet`() {
         val testBetSize = 500
-        val playerWithBet = testPlayer.withBet(testBetSize)
+        val playerWithBet = testPlayer.afterRaise(testBetSize)
         assert(playerWithBet.stack == testStack - testBetSize && playerWithBet.currentBet == testBetSize + testCurrentBet)
     }
 
     @Test
-    fun `Player withBet method throw NotEnoughChipsException when betSize is larger than stack`() {
+    fun `Player afterRaise method throw NotEnoughChipsException when betSize is larger than stack`() {
         val testBetSize = 1001
 
         assertThrows<NotEnoughChipsException> {
-            testPlayer.withBet(testBetSize)
+            testPlayer.afterRaise(testBetSize)
         }
     }
 
     @Test
-    fun `Player withCall method should appply allIn when there are not enough chips in stack to call`() {
+    fun `Player afterCall method should appply allIn when there are not enough chips in stack to call`() {
         val testBetSize = 2000
 
-        val playerAfterCall = testPlayer.withCall(testBetSize)
+        val playerAfterCall = testPlayer.afterCall(testBetSize)
         assert(playerAfterCall.isAllIn())
     }
 
     @Test
-    fun `Player withCall method should appply withBet when there are enough chips in stack to call`() {
+    fun `Player afterCall method should appply withBet when there are enough chips in stack to call`() {
         val testBetSize = 1500
         val amountToCall = testBetSize - testPlayer.currentBet
 
-        val playerAfterCall = testPlayer.withCall(testBetSize)
+        val playerAfterCall = testPlayer.afterCall(testBetSize)
         assert(playerAfterCall.stack == testStack - amountToCall && playerAfterCall.currentBet == testBetSize)
     }
 }
