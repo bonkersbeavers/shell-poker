@@ -29,6 +29,15 @@ data class Player(
         return this.copy(currentBet = this.currentBet + betSize, stack = this.stack - betSize)
     }
 
+    fun withCall(betSize: Int): Player {
+        val amountToCall = betSize - this.currentBet
+
+        return when (amountToCall > this.stack) {
+            true -> afterAllIn()
+            else -> withBet(amountToCall)
+        }
+    }
+
     fun isAllIn(): Boolean {
         return stack == 0 && currentBet != 0 && !folded
     }

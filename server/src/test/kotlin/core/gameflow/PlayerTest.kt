@@ -17,39 +17,56 @@ class PlayerTest {
 
     private val testStack = 1000
 
-    private val testBetSize = 500
-
     private val testCurrentBet = 700
 
     private val testPlayer = Player(
             position = 0,
             stack = testStack,
             holeCards = testHoleCards,
-            chipsInPot = 0,
             currentBet = testCurrentBet)
 
     @Test
     fun `Player afterAllIn method should transfer all chips from chipsInStack to currentBet`() {
-        val playerAfterAllIn: Player = testPlayer.afterAllIn()
+        val playerAfterAllIn = testPlayer.afterAllIn()
         assert(playerAfterAllIn.stack == 0 && playerAfterAllIn.currentBet == testStack + testCurrentBet)
     }
 
     @Test
     fun `Player isAllIn method should return true when player is all in`() {
-        val playerAfterAllIn: Player = testPlayer.afterAllIn()
+        val playerAfterAllIn = testPlayer.afterAllIn()
         assert(playerAfterAllIn.isAllIn())
     }
 
     @Test
     fun `Player withBet method should transfer proper amount of chips from stack to currentBet`() {
-        val playerWithBet: Player = testPlayer.withBet(testBetSize)
+        val testBetSize = 500
+        val playerWithBet = testPlayer.withBet(testBetSize)
         assert(playerWithBet.stack == testStack - testBetSize && playerWithBet.currentBet == testBetSize + testCurrentBet)
     }
 
     @Test
     fun `Player withBet method throw NotEnoughChipsException when betSize is larger than stack`() {
+        val testBetSize = 1001
+
         assertThrows<NotEnoughChipsException> {
-            testPlayer.withBet(1001)
+            testPlayer.withBet(testBetSize)
         }
+    }
+
+    @Test
+    fun `Player withCall method should appply allIn when there are not enough chips in stack to call`() {
+        val testBetSize = 2000
+
+        val playerAfterCall = testPlayer.withCall(testBetSize)
+        assert(playerAfterCall.isAllIn())
+    }
+
+    @Test
+    fun `Player withCall method should appply withBet when there are enough chips in stack to call`() {
+        val testBetSize = 1500
+        val amountToCall = testBetSize - testPlayer.currentBet
+
+        val playerAfterCall = testPlayer.withCall(testBetSize)
+        assert(playerAfterCall.stack == testStack - amountToCall && playerAfterCall.currentBet == testBetSize)
     }
 }
