@@ -2,6 +2,13 @@ package core.gameflow
 
 import core.Card
 
+/**
+ * lastAggressor parameter should be used to determine when the action in a betting round should end,
+ * as well as to resolve the order in which players show their cards during the showdown. That's why
+ * every time a betting rounds starts with a check, the first player that checks should be marked
+ * as the last aggressor (even though no raise was made). The same rule applies when UTG calls the big blind
+ * in pre-flop betting round.
+ */
 data class HandState(
     val players: List<Player>,
     val blinds: Blinds,
