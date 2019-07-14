@@ -8,7 +8,8 @@ data class Player(
     val holeCards: List<Card> = emptyList(),
     val chipsInPot: Int = 0,
     val currentBet: Int = 0,
-    val folded: Boolean = false
+    val folded: Boolean = false,
+    val id: Int = position
 ) {
     fun withCards(newCards: List<Card>): Player {
         return this.copy(holeCards = newCards)
