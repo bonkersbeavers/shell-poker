@@ -10,4 +10,4 @@ fun findNextPlayer(players: List<Player>, position: Int): Player {
     }
 }
 
-fun getActivePlayers(players: List<Player>): List<Player>  = players.filter { !it.folded }
+fun getActivePlayers(players: List<Player>): List<Player> = players.filter { !it.folded }
