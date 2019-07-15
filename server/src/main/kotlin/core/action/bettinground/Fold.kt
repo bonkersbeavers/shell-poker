@@ -21,5 +21,5 @@ class Fold : BettingAction() {
         }
     }
 
-    override fun isLegal(handState: HandState): Boolean = handState.activePlayer != null
+    override fun innerIsLegal(handState: HandState): Boolean = true
 }
