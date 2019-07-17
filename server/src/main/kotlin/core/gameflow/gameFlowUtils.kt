@@ -9,5 +9,3 @@ fun findNextPlayer(players: List<Player>, position: Int): Player {
         else -> sortedPlayers.first()
     }
 }
-
-fun getActivePlayers(players: List<Player>): List<Player> = players.filter { !it.folded }

@@ -3,7 +3,6 @@ package core.action.bettinground
 import core.gameflow.Blinds
 import core.gameflow.HandState
 import core.gameflow.Player
-import core.gameflow.getActivePlayers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -31,7 +30,7 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == player3)
-        assert(getActivePlayers(newState.players).toSet() == setOf(player0, player3))
+        assert(newState.playersInGame().toSet() == setOf(player0, player3))
     }
 
     @Test
@@ -53,7 +52,7 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == null)
-        assert(getActivePlayers(newState.players).toSet() == setOf(player1, player2))
+        assert(newState.playersInGame().toSet() == setOf(player1, player2))
     }
 
     @Test
@@ -75,6 +74,6 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == null)
-        assert(getActivePlayers(newState.players).toSet() == setOf(player3))
+        assert(newState.playersInGame().toSet() == setOf(player3))
     }
 }

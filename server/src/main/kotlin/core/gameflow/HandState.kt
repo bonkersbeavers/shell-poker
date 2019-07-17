@@ -43,4 +43,6 @@ data class HandState(
 
         return this.copy(players = newPlayers, activePlayer = playerUpdate)
     }
+
+    fun playersInGame(): List<Player> = players.filter { !it.folded }
 }

@@ -2,7 +2,6 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 import core.gameflow.findNextPlayer
-import core.gameflow.getActivePlayers
 
 class Fold : BettingAction() {
 
@@ -10,7 +9,7 @@ class Fold : BettingAction() {
         val updatedPlayer = handState.activePlayer!!.afterFold()
         val updatedState = handState.updateActivePlayer(updatedPlayer)
 
-        val activePlayers = getActivePlayers(updatedState.players)
+        val activePlayers = updatedState.playersInGame()
         val nextPlayer = findNextPlayer(activePlayers, updatedPlayer.position)
 
         return when {

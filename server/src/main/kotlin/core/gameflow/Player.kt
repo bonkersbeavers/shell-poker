@@ -20,20 +20,20 @@ data class Player(
     }
 
     fun afterAllIn(): Player {
-        return this.copy(currentBet = this.currentBet + this.stack, stack = 0)
+        return this.copy(currentBet = currentBet + stack, stack = 0)
     }
 
     fun afterRaise(betSize: Int): Player {
-        if (betSize > this.stack)
-            throw NotEnoughChipsException("Bet size of $betSize larger than stack size ${this.stack}")
+        if (betSize > stack)
+            throw NotEnoughChipsException("Bet size of $betSize larger than stack size $stack")
 
-        return this.copy(currentBet = this.currentBet + betSize, stack = this.stack - betSize)
+        return this.copy(currentBet = currentBet + betSize, stack = stack - betSize)
     }
 
     fun afterCall(betSize: Int): Player {
-        val amountToCall = betSize - this.currentBet
+        val amountToCall = betSize - currentBet
 
-        return when (amountToCall > this.stack) {
+        return when (amountToCall > stack) {
             true -> afterAllIn()
             else -> afterRaise(amountToCall)
         }
