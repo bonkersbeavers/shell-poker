@@ -38,6 +38,20 @@ class PlayerTest {
     }
 
     @Test
+    fun `Player inGame method should return true when player is not all in nor has folded`() {
+        val playerAfterAllIn = testPlayer.afterAllIn()
+        assert(!playerAfterAllIn.inGame())
+
+        val playerAfterFold = testPlayer.afterFold()
+        assert(!playerAfterFold.inGame())
+    }
+
+    @Test
+    fun `Player inGame method should return false when player is all in or has folded`() {
+        assert(testPlayer.inGame())
+    }
+
+    @Test
     fun `Player afterRaise method should transfer proper amount of chips from stack to currentBet`() {
         val testBetSize = 500
         val playerWithBet = testPlayer.afterRaise(testBetSize)
