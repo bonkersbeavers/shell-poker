@@ -30,47 +30,55 @@ class HandStateTest {
 
     private val mockBlinds = Blinds(0, 0)
 
+    private val basicPlayers = listOf(playerA, playerB, playerC)
+
+    private val findPlayers1 = listOf(
+            Player(position = 0, stack = 0, folded = true),
+            Player(position = 1, currentBet = 1000, stack = 0), //all in
+            Player(position = 2, stack = 0),
+            Player(position = 3, stack = 0)
+    )
+
+    private val findPlayers2 = listOf(
+            Player(position = 0, stack = 0, folded = true),
+            Player(position = 1, stack = 0, folded = true),
+            Player(position = 2, stack = 0, folded = true),
+            Player(position = 3, stack = 0)
+    )
+
+    private val findPlayers3 = listOf(
+            Player(position = 0, stack = 0, folded = true),
+            Player(position = 1, stack = 0, folded = true),
+            Player(position = 2, stack = 0, folded = true),
+            Player(position = 3, stack = 0, folded = true)
+    )
+
     private val handState = HandState(
-            players = listOf(playerA, playerB, playerC),
+            players = basicPlayers,
             blinds = mockBlinds,
             buttonPosition = 0,
             activePlayer = playerB
     )
 
     private val findHandState1 = HandState(
-            players = listOf(
-                    Player(position = 0, stack = 0, folded = true),
-                    Player(position = 1, currentBet = 1000, stack = 0), //all in
-                    Player(position = 2, stack = 0),
-                    Player(position = 3, stack = 0)
-            ),
+            players = findPlayers1,
             blinds = mockBlinds,
             buttonPosition = 0,
-            activePlayer = playerB
+            activePlayer = findPlayers1[0]
     )
 
     private val findHandState2 = HandState(
-            players = listOf(
-                    Player(position = 0, stack = 0, folded = true),
-                    Player(position = 1, stack = 0, folded = true),
-                    Player(position = 1, stack = 0, folded = true),
-                    Player(position = 3, stack = 0)
-            ),
+            players = findPlayers2,
             blinds = mockBlinds,
             buttonPosition = 0,
-            activePlayer = playerB
+            activePlayer = findPlayers2[0]
     )
 
     private val findHandState3 = HandState(
-            players = listOf(
-                    Player(position = 0, stack = 0, folded = true),
-                    Player(position = 1, stack = 0, folded = true),
-                    Player(position = 1, stack = 0, folded = true),
-                    Player(position = 3, stack = 0, folded = true)
-            ),
+            players = findPlayers3,
             blinds = mockBlinds,
             buttonPosition = 0,
-            activePlayer = playerB
+            activePlayer = findPlayers3[0]
     )
 
     @Test
