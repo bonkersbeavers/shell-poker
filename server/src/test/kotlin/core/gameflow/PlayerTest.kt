@@ -38,17 +38,18 @@ class PlayerTest {
     }
 
     @Test
-    fun `Player inGame method should return true when player is not all in nor has folded`() {
-        val playerAfterAllIn = testPlayer.afterAllIn()
-        assert(!playerAfterAllIn.inGame())
-
+    fun `Player inGame method should return false when player has folded`() {
         val playerAfterFold = testPlayer.afterFold()
-        assert(!playerAfterFold.inGame())
+        assert(!playerAfterFold.isInGame())
     }
 
     @Test
-    fun `Player inGame method should return false when player is all in or has folded`() {
-        assert(testPlayer.inGame())
+    fun `Player isDecisive method should return false when player is all in or has folded`() {
+        val playerAfterFold = testPlayer.afterFold()
+        assert(!playerAfterFold.isDecisive())
+
+        val playerAfterAllIn = testPlayer.afterAllIn()
+        assert(!playerAfterAllIn.isDecisive())
     }
 
     @Test

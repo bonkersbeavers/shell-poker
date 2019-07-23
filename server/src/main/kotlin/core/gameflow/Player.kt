@@ -43,7 +43,12 @@ data class Player(
         return stack == 0 && currentBet != 0 && !folded
     }
 
-    fun inGame(): Boolean {
+    fun isInGame(): Boolean {
+        return !folded
+    }
+
+    fun isDecisive(): Boolean {
         return !(isAllIn() or folded)
     }
 }
+
