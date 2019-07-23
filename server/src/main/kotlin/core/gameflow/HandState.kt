@@ -44,5 +44,51 @@ data class HandState(
         return this.copy(players = newPlayers, activePlayer = playerUpdate)
     }
 
-    fun playersInGame(): List<Player> = players.filter { !it.folded }
+    fun playersInGame(): List<Player> = players.filter { it.isInGame() }
+
+    fun decisivePlayers(): List<Player> = players.filter { it.isDecisive() }
+
+    fun findNextPlayer(position: Int): Player {
+        val sortedPlayers = players.sortedBy { it.position }
+        val nextPlayer = sortedPlayers.find { it.position > position }
+
+        return when {
+            nextPlayer != null -> nextPlayer
+            else -> sortedPlayers.first()
+        }
+    }
+
+    fun findNextDecisivePlayer(position: Int): Player? {
+        if (players.all { !it.isDecisive() })
+            return null
+
+        val foundPlayer = findNextPlayer(position)
+
+        return when(foundPlayer.isDecisive()) {
+            true -> foundPlayer
+            else -> findNextDecisivePlayer(foundPlayer.position)
+        }
+    }
+
+    fun findPrevPlayer(position: Int): Player {
+        val reverseSortedPlayers = players.sortedBy { it.position }.reversed()
+        val prevPlayer = reverseSortedPlayers.find { it.position < position }
+
+        return when {
+            prevPlayer != null -> prevPlayer
+            else -> reverseSortedPlayers.first()
+        }
+    }
+
+    fun findPrevDecisivePlayer(position: Int): Player? {
+        if (players.all { !it.isDecisive() })
+            return null
+
+        val foundPlayer = findPrevPlayer(position)
+
+        return when(foundPlayer.isDecisive()) {
+            true -> foundPlayer
+            else -> findPrevDecisivePlayer(foundPlayer.position)
+        }
+    }
 }
