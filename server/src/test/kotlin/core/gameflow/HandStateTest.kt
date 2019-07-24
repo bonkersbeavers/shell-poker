@@ -125,35 +125,35 @@ class HandStateTest {
 
     @Test
     fun `findNextPlayer should find next player`() {
-        assert(findHandState1.findNextPlayer(3) == findHandState1.players[0])
-        assert(findHandState1.findNextPlayer(1) == findHandState1.players[2])
+        assert(findHandState1.nextPlayer(3) == findHandState1.players[0])
+        assert(findHandState1.nextPlayer(1) == findHandState1.players[2])
     }
 
     @Test
     fun `findNextDecisivePlayer should find next active player`() {
-        assert(findHandState1.findNextDecisivePlayer(3) == findHandState1.players[2])
-        assert(findHandState1.findNextDecisivePlayer(0) == findHandState1.players[2])
-        assert(findHandState1.findNextDecisivePlayer(2) == findHandState1.players[3])
+        assert(findHandState1.nextDecisivePlayer(3) == findHandState1.players[2])
+        assert(findHandState1.nextDecisivePlayer(0) == findHandState1.players[2])
+        assert(findHandState1.nextDecisivePlayer(2) == findHandState1.players[3])
 
-        assert(findHandState2.findNextDecisivePlayer(3) == findHandState2.players[3])
+        assert(findHandState2.nextDecisivePlayer(3) == findHandState2.players[3])
 
-        assert(findHandState3.findNextDecisivePlayer(3) == null)
+        assert(findHandState3.nextDecisivePlayer(3) == null)
     }
 
     @Test
     fun `findPrevPlayer should find previous player`() {
-        assert(findHandState1.findPrevPlayer(2) == findHandState1.players[1])
-        assert(findHandState1.findPrevPlayer(3) == findHandState1.players[2])
-        assert(findHandState1.findPrevPlayer(0) == findHandState1.players[3])
+        assert(findHandState1.prevPlayer(2) == findHandState1.players[1])
+        assert(findHandState1.prevPlayer(3) == findHandState1.players[2])
+        assert(findHandState1.prevPlayer(0) == findHandState1.players[3])
     }
 
     @Test
     fun `findPrevActivePlayer should find previous active player`() {
-        assert(findHandState1.findPrevDecisivePlayer(2) == findHandState1.players[3])
-        assert(findHandState1.findPrevDecisivePlayer(3) == findHandState1.players[2])
+        assert(findHandState1.prevDecisivePlayer(2) == findHandState1.players[3])
+        assert(findHandState1.prevDecisivePlayer(3) == findHandState1.players[2])
 
-        assert(findHandState2.findPrevDecisivePlayer(3) == findHandState2.players[3])
+        assert(findHandState2.prevDecisivePlayer(3) == findHandState2.players[3])
 
-        assert(findHandState3.findPrevDecisivePlayer(0) == null)
+        assert(findHandState3.prevDecisivePlayer(0) == null)
     }
 }

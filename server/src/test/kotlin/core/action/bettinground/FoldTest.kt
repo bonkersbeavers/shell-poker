@@ -30,7 +30,7 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == player3)
-        assert(newState.playersInGame().toSet() == setOf(player0, player3))
+        assert(newState.playersInGame.toSet() == setOf(player0, player3))
     }
 
     @Test
@@ -52,7 +52,7 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == null)
-        assert(newState.playersInGame().toSet() == setOf(player1, player2))
+        assert(newState.playersInGame.toSet() == setOf(player1, player2))
     }
 
     @Test
@@ -74,6 +74,6 @@ class FoldTest {
         val newState = fold.apply(state)
 
         assert(newState.activePlayer == null)
-        assert(newState.playersInGame().toSet() == setOf(player3))
+        assert(newState.playersInGame.toSet() == setOf(player3))
     }
 }

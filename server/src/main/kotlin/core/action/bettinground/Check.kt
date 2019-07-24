@@ -10,7 +10,7 @@ class Check : BettingAction() {
             return handState.copy(activePlayer = null)
         }
 
-        val nextPlayer = handState.findNextDecisivePlayer(handState.activePlayer.position)
+        val nextPlayer = handState.nextDecisivePlayer(handState.activePlayer.position)
 
         return handState.copy(activePlayer = nextPlayer)
     }

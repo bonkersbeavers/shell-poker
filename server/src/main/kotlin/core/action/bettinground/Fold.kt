@@ -8,10 +8,10 @@ class Fold : BettingAction() {
         val updatedPlayer = handState.activePlayer!!.afterFold()
         val updatedState = handState.updateActivePlayer(updatedPlayer)
 
-        val nextPlayer = updatedState.findNextDecisivePlayer(updatedPlayer.position)
+        val nextPlayer = updatedState.nextDecisivePlayer(updatedPlayer.position)
 
         return when {
-            (updatedState.decisivePlayers().size == 1) or (nextPlayer == handState.lastAggressor) ->
+            (updatedState.decisivePlayers.size == 1) or (nextPlayer == handState.lastAggressor) ->
                 updatedState.copy(activePlayer = null)
 
             else -> updatedState.copy(activePlayer = nextPlayer)
