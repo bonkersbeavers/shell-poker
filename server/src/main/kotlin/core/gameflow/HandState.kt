@@ -26,6 +26,9 @@ data class HandState(
 
         if (activePlayer != null)
             assert(players.find { it == activePlayer } != null)
+
+        if (lastAggressor != null)
+            assert(players.find { it == lastAggressor } != null)
     }
 
     val pot: Int = players.sumBy { it.chipsInPot }
@@ -44,51 +47,22 @@ data class HandState(
         return this.copy(players = newPlayers, activePlayer = playerUpdate)
     }
 
-    fun playersInGame(): List<Player> = players.filter { it.isInGame() }
-
-    fun decisivePlayers(): List<Player> = players.filter { it.isDecisive() }
-
-    fun findNextPlayer(position: Int): Player {
+    fun orderedPlayers(startingPosition: Int): List<Player> {
         val sortedPlayers = players.sortedBy { it.position }
-        val nextPlayer = sortedPlayers.find { it.position > position }
-
-        return when {
-            nextPlayer != null -> nextPlayer
-            else -> sortedPlayers.first()
-        }
+        val begin = sortedPlayers.filter { it.position >= startingPosition }
+        val end = sortedPlayers.filter { it.position < startingPosition }
+        return begin + end
     }
 
-    fun findNextDecisivePlayer(position: Int): Player? {
-        if (players.all { !it.isDecisive() })
-            return null
+    val playersInGame: List<Player> = players.filter { it.isInGame() }
 
-        val foundPlayer = findNextPlayer(position)
+    val decisivePlayers: List<Player> = players.filter { it.isDecisive() }
 
-        return when(foundPlayer.isDecisive()) {
-            true -> foundPlayer
-            else -> findNextDecisivePlayer(foundPlayer.position)
-        }
-    }
+    fun nextPlayer(position: Int): Player = orderedPlayers(position + 1).first()
 
-    fun findPrevPlayer(position: Int): Player {
-        val reverseSortedPlayers = players.sortedBy { it.position }.reversed()
-        val prevPlayer = reverseSortedPlayers.find { it.position < position }
+    fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive() }
 
-        return when {
-            prevPlayer != null -> prevPlayer
-            else -> reverseSortedPlayers.first()
-        }
-    }
+    fun prevPlayer(position: Int): Player = orderedPlayers(position).last()
 
-    fun findPrevDecisivePlayer(position: Int): Player? {
-        if (players.all { !it.isDecisive() })
-            return null
-
-        val foundPlayer = findPrevPlayer(position)
-
-        return when(foundPlayer.isDecisive()) {
-            true -> foundPlayer
-            else -> findPrevDecisivePlayer(foundPlayer.position)
-        }
-    }
+    fun prevDecisivePlayer(position: Int): Player? = orderedPlayers(position).findLast { it.isDecisive() }
 }
