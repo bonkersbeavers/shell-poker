@@ -51,4 +51,3 @@ data class Player(
         return !(isAllIn() or folded)
     }
 }
-

@@ -30,7 +30,7 @@ class CheckTest {
         assert(check.isLegal(state))
     }
 
-    //TODO: BUGGED FOR NOW, IMPOSSIBLE SCENARIO ACCRORDING TO @meszszi
+    // TODO: BUGGED FOR NOW, IMPOSSIBLE SCENARIO ACCRORDING TO @meszszi
     @Test
     fun `checking should be legal as a big blind when big blind is called`() {
         val player0 = Player(position = 0, currentBet = blindsMock.bigBlind, stack = 0)

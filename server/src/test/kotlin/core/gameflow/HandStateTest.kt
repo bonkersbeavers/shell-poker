@@ -34,7 +34,7 @@ class HandStateTest {
 
     private val findPlayers1 = listOf(
             Player(position = 0, stack = 0, folded = true),
-            Player(position = 1, currentBet = 1000, stack = 0), //all in
+            Player(position = 1, currentBet = 1000, stack = 0), // all in
             Player(position = 2, stack = 0),
             Player(position = 3, stack = 0)
     )
