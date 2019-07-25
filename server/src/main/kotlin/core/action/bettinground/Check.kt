@@ -4,8 +4,8 @@ import core.gameflow.HandState
 
 class Check : BettingAction() {
 
-    //TODO: BUGGED FOR NOW!!!!
-    override fun apply(handState: HandState): HandState {
+    // TODO: BUGGED FOR NOW!!!!
+    override fun innerApply(handState: HandState): HandState {
         if (handState.activePlayer!!.position == handState.buttonPosition) {
             return handState.copy(activePlayer = null)
         }
@@ -15,7 +15,7 @@ class Check : BettingAction() {
         return handState.copy(activePlayer = nextPlayer)
     }
 
-    //TODO: BUGGED FOR NOW!!!!
+    // TODO: BUGGED FOR NOW!!!!
     override fun innerIsLegal(handState: HandState): Boolean {
         return when {
             (handState.lastAggressor == null) -> true

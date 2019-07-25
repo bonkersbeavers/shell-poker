@@ -4,11 +4,11 @@ import core.gameflow.HandState
 
 class Fold : BettingAction() {
 
-    override fun apply(handState: HandState): HandState {
+    override fun innerApply(handState: HandState): HandState {
         val updatedPlayer = handState.activePlayer!!.afterFold()
         val updatedState = handState.updateActivePlayer(updatedPlayer)
 
-        val nextPlayer = updatedState.nextDecisivePlayer(updatedPlayer.position)
+        val nextPlayer = updatedState.nextDecisivePlayer(updatedPlayer)
 
         return when {
             (updatedState.decisivePlayers.size == 1) or (nextPlayer == handState.lastAggressor) ->
