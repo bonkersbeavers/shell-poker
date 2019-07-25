@@ -13,17 +13,17 @@ class FoldTest {
 
     @Test
     fun `folding with active players ahead should simply move activePlayer`() {
-        val player0 = Player(position = 0, stack = 0, folded = false) // aggressor
-        val player1 = Player(position = 1, stack = 0, folded = false) // active player
-        val player2 = Player(position = 2, stack = 0, folded = true)
-        val player3 = Player(position = 3, stack = 0, folded = false)
+        val player0 = Player(position = 0, stack = 150, currentBet = 100) // original raiser
+        val player1 = Player(position = 1, stack = 200) // active player
+        val player2 = Player(position = 2, stack = 100, folded = true)
+        val player3 = Player(position = 3, stack = 100, currentBet = 50)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 buttonPosition = 0,
                 activePlayer = player1,
-                lastAggressor = player0
+                currentBet = 100
         )
 
         val fold = Fold()
@@ -34,18 +34,18 @@ class FoldTest {
     }
 
     @Test
-    fun `folding with last aggressor as the next player should set activePlayer to null`() {
+    fun `folding to original raiser should set activePlayer to null`() {
         val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, stack = 0, folded = false) // aggressor
-        val player2 = Player(position = 2, stack = 0, folded = false)
-        val player3 = Player(position = 3, stack = 0, folded = false) // active player
+        val player1 = Player(position = 1, stack = 100, currentBet = 100) // original raiser
+        val player2 = Player(position = 2, stack = 100, folded = false)
+        val player3 = Player(position = 3, stack = 200, folded = false) // active player
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 buttonPosition = 0,
                 activePlayer = player3,
-                lastAggressor = player1
+                currentBet = 100
         )
 
         val fold = Fold()
@@ -57,17 +57,17 @@ class FoldTest {
 
     @Test
     fun `folding with only big blind left in game (no aggressor) should set activePlayer to null`() {
-        val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, stack = 0, folded = true)
-        val player2 = Player(position = 2, stack = 0, folded = false) // active player
-        val player3 = Player(position = 3, stack = 0, folded = false) // big blind
+        val player0 = Player(position = 0, stack = 100, folded = true)
+        val player1 = Player(position = 1, stack = 100, folded = true)
+        val player2 = Player(position = 2, stack = 100, currentBet = 50, folded = false) // active player / small blind
+        val player3 = Player(position = 3, stack = 100, currentBet = 100, folded = false) // big blind
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 buttonPosition = 0,
                 activePlayer = player2,
-                lastAggressor = null
+                currentBet = 100
         )
 
         val fold = Fold()
