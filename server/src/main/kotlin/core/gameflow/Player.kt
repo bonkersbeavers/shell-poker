@@ -7,8 +7,8 @@ import core.action.bettinground.*
  * handStartingStack - player's stack size at the beginning of currently played hand,
  *      it remains unchanged throughout the hand
  *
- * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
- *      note that it doesn't include the chips in player's current bet
+ * chipsInPot - the amount of player's chips that already went into the pot,
+ *      not including the chips in player's current bet
  */
 data class Player(
     val position: Int,
