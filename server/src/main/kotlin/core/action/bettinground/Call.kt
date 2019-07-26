@@ -2,7 +2,7 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 
-class Bet(val size: Int) : BettingAction {
+class Call(val size: Int) : BettingAction {
 
     // TODO
     override fun innerApply(handState: HandState): HandState = handState
