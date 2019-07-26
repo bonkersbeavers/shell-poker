@@ -1,16 +1,14 @@
 package core.action.bettinground
-
-import core.gameflow.BettingRound
 import core.gameflow.HandState
 
-abstract class BettingAction {
+interface BettingAction {
 
     /*
      * This method should only update active player, fields related to current bet size
      * and lastAggressor field, activePlayer must not be shifted.
      */
-    abstract fun innerApply(handState: HandState): HandState
-    abstract fun innerIsLegal(handState: HandState): Boolean
+    fun innerApply(handState: HandState): HandState
+    fun innerIsLegal(handState: HandState): Boolean
 
     fun apply(handState: HandState): HandState {
         assert(isLegal(handState))
@@ -28,14 +26,9 @@ abstract class BettingAction {
 
         if (nextDecisivePlayer != null) {
 
-            /* The special case when no raise was made pre-flop and action gets to BB. */
-            if ((handState.bettingRound == BettingRound.PRE_FLOP) and
-                    (handState.totalBet == handState.blinds.bigBlind) and
-                    (nextDecisivePlayer == handState.bigBlindPlayer))
+            /* The case when the next decisive player didn't have a chance to take any action yet. */
+            if ((nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction is Post))
                 return handState.copy(activePlayer = nextDecisivePlayer)
-
-            val nextPlayer = handState.nextDecisivePlayer(handState.activePlayer)
-            val firstPlayer = handState.nextDecisivePlayer(handState.buttonPosition)
 
             /*
              * These are the cases when the action should end:
@@ -47,7 +40,7 @@ abstract class BettingAction {
             if ((handState.playersInGame.size == 1) or
                     (nextDecisivePlayer == handState.activePlayer) or
                     ((handState.totalBet > 0) and (nextDecisivePlayer.currentBet == handState.totalBet)) or
-                    ((handState.totalBet == 0) and (nextPlayer == firstPlayer)))
+                    ((handState.totalBet == 0) and (nextDecisivePlayer.lastAction is Check)))
                 return handState.copy(activePlayer = null)
         }
 
