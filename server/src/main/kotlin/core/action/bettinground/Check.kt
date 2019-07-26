@@ -1,22 +1,22 @@
 package core.action.bettinground
 
-import core.gameflow.BettingRound
 import core.gameflow.HandState
 
-class Check : BettingAction() {
+class Check : BettingAction {
 
     override fun innerApply(handState: HandState): HandState {
-        return handState
+        val updatedPlayer = handState.activePlayer!!.copy(lastAction = this)
+        return handState.updateActivePlayer(updatedPlayer)
     }
 
     override fun innerIsLegal(handState: HandState): Boolean {
-        return when {
-            (handState.lastAggressor == null) -> true
+        val activePlayer = handState.activePlayer!!
 
-            /* Pre flop scenario in which BB should have an option to check */
-            (handState.activePlayer == handState.bigBlindPlayer) and
-                    (handState.totalBet == handState.blinds.bigBlind) and
-                    (handState.bettingRound == BettingRound.PRE_FLOP) -> true
+        return when {
+            (handState.totalBet == 0) -> true
+
+            /* Pre flop scenario in which BB / straddler should have an option to check */
+            ((activePlayer.currentBet == handState.totalBet) and (activePlayer.lastAction is Post)) -> true
 
             else -> false
         }
