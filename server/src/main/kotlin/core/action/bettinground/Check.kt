@@ -12,9 +12,12 @@ class Check : BettingAction() {
     override fun innerIsLegal(handState: HandState): Boolean {
         return when {
             (handState.lastAggressor == null) -> true
+
+            /* Pre flop scenario in which BB should have an option to check */
             (handState.activePlayer == handState.bigBlindPlayer) and
                     (handState.totalBet == handState.blinds.bigBlind) and
                     (handState.bettingRound == BettingRound.PRE_FLOP) -> true
+
             else -> false
         }
     }
