@@ -1,53 +1,41 @@
 package core.gameflow
 
 import core.Card
+import core.action.bettinground.*
 
+/**
+ * handStartingStack - player's stack size at the beginning of currently played hand,
+ *      it remains unchanged throughout the hand
+ *
+ * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
+ *      note that it doesn't include the chips in player's current bet
+ */
 data class Player(
     val position: Int,
-    val stack: Int,
+    private val handStartingStack: Int,
     val holeCards: List<Card> = emptyList(),
     val chipsInPot: Int = 0,
-    val currentBet: Int = 0,
-    val folded: Boolean = false,
-    val id: Int = position
+    val lastAction: BettingAction? = null
 ) {
-    fun withCards(newCards: List<Card>): Player {
-        return this.copy(holeCards = newCards)
+
+    /* the amount od chips available for the player at the beginning of current betting round */
+    private val roundStartingStack: Int = handStartingStack - chipsInPot
+
+    val currentBet: Int = when (lastAction) {
+        is Post -> lastAction.size
+        is Call -> lastAction.size
+        is Bet -> lastAction.size
+        is Raise -> lastAction.size
+        is AllIn -> roundStartingStack
+        else -> 0   // no action / check / fold
     }
 
-    fun afterFold(): Player {
-        return this.copy(folded = true)
-    }
+    /* the amount of chips that haven't been neither put into the pot nor the current bet */
+    val stack: Int = roundStartingStack - currentBet
 
-    fun afterAllIn(): Player {
-        return this.copy(currentBet = currentBet + stack, stack = 0)
-    }
+    fun withCards(newCards: List<Card>): Player = this.copy(holeCards = newCards)
 
-    fun afterRaise(betSize: Int): Player {
-        if (betSize > stack)
-            throw NotEnoughChipsException("Bet size of $betSize larger than stack size $stack")
-
-        return this.copy(currentBet = currentBet + betSize, stack = stack - betSize)
-    }
-
-    fun afterCall(betSize: Int): Player {
-        val amountToCall = betSize - currentBet
-
-        return when (amountToCall > stack) {
-            true -> afterAllIn()
-            else -> afterRaise(amountToCall)
-        }
-    }
-
-    fun isAllIn(): Boolean {
-        return stack == 0 && currentBet != 0 && !folded
-    }
-
-    fun isInGame(): Boolean {
-        return !folded
-    }
-
-    fun isDecisive(): Boolean {
-        return !(isAllIn() or folded)
-    }
+    val isInGame: Boolean = lastAction !is Fold
+    val isAllIn: Boolean = lastAction is AllIn
+    val isDecisive: Boolean = isInGame and !isAllIn
 }
