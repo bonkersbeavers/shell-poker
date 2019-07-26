@@ -34,8 +34,8 @@ abstract class BettingAction {
                     (nextDecisivePlayer == handState.bigBlindPlayer))
                 return handState.copy(activePlayer = nextDecisivePlayer)
 
-            val nextPlayer = handState.nextPlayer(handState.activePlayer)
-            val firstPlayer = handState.nextPlayer(handState.buttonPosition)
+            val nextPlayer = handState.nextDecisivePlayer(handState.activePlayer)
+            val firstPlayer = handState.nextDecisivePlayer(handState.buttonPosition)
 
             /*
              * These are the cases when the action should end:
