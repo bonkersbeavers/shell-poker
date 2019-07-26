@@ -128,7 +128,7 @@ class CheckTest {
     @Test
     fun `applying check and it should end the round after pre flop`() {
         val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, stack = 0)
+        val player1 = Player(position = 1, stack = 0, folded = true)
         val player2 = Player(position = 2, stack = 0)
         val player3 = Player(position = 3, stack = 0) // active player
 
