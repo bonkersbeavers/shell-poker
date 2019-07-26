@@ -38,8 +38,8 @@ data class HandState(
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = currentBet + extraBet
 
-    val playersInGame: List<Player> = players.filter { it.isInGame() }
-    val decisivePlayers: List<Player> = players.filter { it.isDecisive() }
+    val playersInGame: List<Player> = players.filter { it.isInGame }
+    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
 
     val smallBlindPlayer: Player
         get() {
@@ -76,10 +76,10 @@ data class HandState(
     fun nextPlayer(position: Int): Player = orderedPlayers(position + 1).first()
     fun nextPlayer(player: Player): Player = nextPlayer(player.position)
 
-    fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive() }
+    fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive }
     fun nextDecisivePlayer(player: Player): Player? = nextDecisivePlayer(player.position)
 
     fun prevPlayer(position: Int): Player = orderedPlayers(position).last()
 
-    fun prevDecisivePlayer(position: Int): Player? = orderedPlayers(position).findLast { it.isDecisive() }
+    fun prevDecisivePlayer(position: Int): Player? = orderedPlayers(position).findLast { it.isDecisive }
 }
