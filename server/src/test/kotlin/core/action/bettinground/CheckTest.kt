@@ -35,10 +35,10 @@ class CheckTest {
 
     @Test
     fun `checking should be legal as a big blind when big blind is called in pre flop`() {
-        val player0 = Player(position = 0, currentBet = blindsMock.bigBlind, stack = 0)
-        val player1 = Player(position = 1, currentBet = blindsMock.bigBlind, stack = 0)
-        val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 0) // active player / big blind
-        val player3 = Player(position = 3, currentBet = blindsMock.bigBlind, stack = 0)
+        val player0 = Player(position = 0, currentBet = blindsMock.bigBlind, stack = 1000)
+        val player1 = Player(position = 1, currentBet = blindsMock.bigBlind, stack = 1000)
+        val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 1000) // active player / big blind
+        val player3 = Player(position = 3, currentBet = blindsMock.bigBlind, stack = 1000)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -56,10 +56,10 @@ class CheckTest {
 
     @Test
     fun `checking should be illegal as a big blind when big blind is raised in pre flop`() {
-        val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, currentBet = blindsMock.bigBlind + 100, stack = 0)
-        val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 0) // active player / big blind
-        val player3 = Player(position = 3, currentBet = blindsMock.bigBlind + 100, stack = 0)
+        val player0 = Player(position = 0, stack = 1000, folded = true)
+        val player1 = Player(position = 1, currentBet = blindsMock.bigBlind + 200, stack = 1000)
+        val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 1000) // active player / big blind
+        val player3 = Player(position = 3, currentBet = blindsMock.bigBlind + 200, stack = 1000)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -68,7 +68,7 @@ class CheckTest {
                 activePlayer = player2,
                 lastAggressor = player3,
                 bettingRound = BettingRound.PRE_FLOP,
-                currentBet = blindsMock.bigBlind + 100
+                currentBet = blindsMock.bigBlind + 200
         )
 
         val check = Check()
@@ -78,9 +78,9 @@ class CheckTest {
     @Test
     fun `checking should be illegal when a bet is made after pre flop`() {
         val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, currentBet = 200, stack = 0)
-        val player2 = Player(position = 2, currentBet = 0, stack = 0) // active player
-        val player3 = Player(position = 3, currentBet = 0, stack = 0)
+        val player1 = Player(position = 1, currentBet = 200, stack = 1000)
+        val player2 = Player(position = 2, currentBet = 0, stack = 1000) // active player
+        val player3 = Player(position = 3, currentBet = 0, stack = 1000)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -98,10 +98,10 @@ class CheckTest {
 
     @Test
     fun `applying check normally after pre flop`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0) // active player
-        val player2 = Player(position = 2, stack = 0, folded = true)
-        val player3 = Player(position = 3, stack = 0)
+        val player0 = Player(position = 0, stack = 1000)
+        val player1 = Player(position = 1, stack = 1000) // active player
+        val player2 = Player(position = 2, stack = 1000, folded = true)
+        val player3 = Player(position = 3, stack = 1000)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -127,10 +127,10 @@ class CheckTest {
 
     @Test
     fun `applying check and it should end the round after pre flop`() {
-        val player0 = Player(position = 0, stack = 0, folded = true)
-        val player1 = Player(position = 1, stack = 0, folded = true)
-        val player2 = Player(position = 2, stack = 0)
-        val player3 = Player(position = 3, stack = 0) // active player
+        val player0 = Player(position = 0, stack = 1000, folded = true)
+        val player1 = Player(position = 1, stack = 1000, folded = true)
+        val player2 = Player(position = 2, stack = 1000)
+        val player3 = Player(position = 3, stack = 1000) // active player
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -156,10 +156,10 @@ class CheckTest {
 
     @Test
     fun `applying check as a big blind in pre flop`() {
-        val player0 = Player(position = 0, currentBet = blindsMock.bigBlind, stack = 0)
-        val player1 = Player(position = 1, stack = 0, folded = true)
+        val player0 = Player(position = 0, currentBet = blindsMock.bigBlind, stack = 1000)
+        val player1 = Player(position = 1, stack = 1000, folded = true)
         val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 0) // active player / big blind
-        val player3 = Player(position = 3, stack = 0, folded = true)
+        val player3 = Player(position = 3, stack = 1000, folded = true)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
