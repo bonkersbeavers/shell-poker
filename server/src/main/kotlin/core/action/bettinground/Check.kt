@@ -2,9 +2,11 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 
-class Check : BettingAction {
+class Check : BettingAction() {
 
     override fun innerApply(handState: HandState): HandState {
+
+        // TODO: when BB / straddler checks, the info about posted blind is lost
         val updatedPlayer = handState.activePlayer!!.copy(lastAction = this)
         return handState.updateActivePlayer(updatedPlayer)
     }
