@@ -1,14 +1,14 @@
 package core.action.bettinground
 import core.gameflow.HandState
 
-interface BettingAction {
+abstract class BettingAction {
 
-    /*
-     * This method should only update active player, fields related to current bet size
-     * and lastAggressor field, activePlayer must not be shifted.
+    /**
+     * This method must not shift the activePlayer pointer as this logic
+     * is extracted to shiftActivePlayer method that is always called after innerApply.
      */
-    fun innerApply(handState: HandState): HandState
-    fun innerIsLegal(handState: HandState): Boolean
+    protected abstract fun innerApply(handState: HandState): HandState
+    protected abstract fun innerIsLegal(handState: HandState): Boolean
 
     fun apply(handState: HandState): HandState {
         assert(isLegal(handState))
@@ -24,27 +24,32 @@ interface BettingAction {
         handState.activePlayer!!
         val nextDecisivePlayer = handState.nextDecisivePlayer(handState.activePlayer)
 
-        if (nextDecisivePlayer != null) {
+        return when {
 
-            /* The case when the next decisive player didn't have a chance to take any action yet. */
-            if ((nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction is Post))
-                return handState.copy(activePlayer = nextDecisivePlayer)
+            /* End action when there are no more decisive players. */
+            nextDecisivePlayer == null -> handState.copy(activePlayer = null)
 
-            /*
-             * These are the cases when the action should end:
-             *  - only one player is left in the hand
-             *  - active player was the last decisive player in the hand
-             *  - everyone called / folded to the next player's bet
-             *  - no bet was made and everyone checked / folded
-             */
-            if ((handState.playersInGame.size == 1) or
-                    (nextDecisivePlayer == handState.activePlayer) or
-                    ((handState.totalBet > 0) and (nextDecisivePlayer.currentBet == handState.totalBet)) or
-                    ((handState.totalBet == 0) and (nextDecisivePlayer.lastAction is Check)))
-                return handState.copy(activePlayer = null)
+            /* End action when only one player is left in the hand. */
+            handState.playersInGame.size == 1 -> handState.copy(activePlayer = null)
+
+            /* End action when current action taker is the last decisive player in the hand. */
+            nextDecisivePlayer == handState.activePlayer -> handState.copy(activePlayer = null)
+
+            /* Proceed when next decisive player didn't have a chance to take any action yet. */
+            (nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction is Post) ->
+                handState.copy(activePlayer = nextDecisivePlayer)
+
+            /* End action when no one raised next player's bet. */
+            /* Exception: when action gets to BB pre-flop and no one raised, handled in previous case. */
+            (handState.totalBet > 0) and (nextDecisivePlayer.currentBet == handState.totalBet) ->
+                handState.copy(activePlayer = null)
+
+            /* End action when no bet was made and everyone checker or folded. */
+            (handState.totalBet == 0) and (nextDecisivePlayer.lastAction is Check) ->
+                handState.copy(activePlayer = null)
+
+            /* Proceed in other cases. */
+            else -> handState.copy(activePlayer = nextDecisivePlayer)
         }
-
-        /* Regular active player shift (or setting active player to null if no decisive players were found). */
-        return handState.copy(activePlayer = nextDecisivePlayer)
     }
 }
