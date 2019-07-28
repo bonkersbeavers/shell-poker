@@ -22,7 +22,7 @@ data class Player(
     }
 
     val isInGame: Boolean = lastAction != ActionType.FOLD
-    val isAllIn: Boolean = stack == 0
+    val isAllIn: Boolean = (stack == 0) and isInGame
     val isDecisive: Boolean = isInGame and !isAllIn
 
     val maxBet: Int = bet + stack
