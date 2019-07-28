@@ -20,7 +20,7 @@ data class HandState(
     val communityCards: List<Card> = emptyList(),
     val bettingRound: BettingRound = BettingRound.PRE_FLOP,
     val lastAggressor: Player? = null,
-    val currentBet: Int = 0,
+    val lastLegalBet: Int = 0,
     val minRaise: Int = blinds.bigBlind,
     val extraBet: Int = 0
 ) {
@@ -36,7 +36,7 @@ data class HandState(
     }
 
     val pot: Int = players.sumBy { it.chipsInPot }
-    val totalBet: Int = currentBet + extraBet
+    val totalBet: Int = lastLegalBet + extraBet
 
     val playersInGame: List<Player> = players.filter { it.isInGame }
     val decisivePlayers: List<Player> = players.filter { it.isDecisive }
