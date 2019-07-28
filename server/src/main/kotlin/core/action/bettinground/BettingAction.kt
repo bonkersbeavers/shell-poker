@@ -1,7 +1,7 @@
 package core.action.bettinground
 import core.gameflow.HandState
 
-abstract class BettingAction {
+abstract class BettingAction(val type: ActionType) {
 
     /**
      * This method must not shift the activePlayer pointer as this logic
@@ -36,16 +36,16 @@ abstract class BettingAction {
             nextDecisivePlayer == handState.activePlayer -> handState.copy(activePlayer = null)
 
             /* Proceed when next decisive player didn't have a chance to take any action yet. */
-            (nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction is Post) ->
+            (nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction == ActionType.POST) ->
                 handState.copy(activePlayer = nextDecisivePlayer)
 
             /* End action when no one raised next player's bet. */
             /* Exception: when action gets to BB pre-flop and no one raised, handled in previous case. */
-            (handState.totalBet > 0) and (nextDecisivePlayer.currentBet == handState.totalBet) ->
+            (handState.totalBet > 0) and (nextDecisivePlayer.bet == handState.totalBet) ->
                 handState.copy(activePlayer = null)
 
             /* End action when no bet was made and everyone checker or folded. */
-            (handState.totalBet == 0) and (nextDecisivePlayer.lastAction is Check) ->
+            (handState.totalBet == 0) and (nextDecisivePlayer.lastAction == ActionType.CHECK) ->
                 handState.copy(activePlayer = null)
 
             /* Proceed in other cases. */

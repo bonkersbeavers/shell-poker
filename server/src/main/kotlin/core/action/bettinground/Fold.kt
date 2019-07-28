@@ -2,15 +2,10 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 
-class Fold : BettingAction() {
+class Fold : BettingAction(ActionType.FOLD) {
 
     override fun innerApply(handState: HandState): HandState {
-        val player = handState.activePlayer!!
-        val updatedPlayer = player.copy(
-                lastAction = this,
-                chipsInPot = player.chipsInPot + player.currentBet
-        )
-
+        val updatedPlayer = handState.activePlayer!!.copy(lastAction = ActionType.FOLD)
         return handState.updateActivePlayer(updatedPlayer)
     }
 

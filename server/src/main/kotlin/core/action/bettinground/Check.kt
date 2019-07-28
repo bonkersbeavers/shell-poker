@@ -2,7 +2,7 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 
-class Check : BettingAction() {
+class Check : BettingAction(ActionType.CHECK) {
 
     override fun innerApply(handState: HandState): HandState {
 
