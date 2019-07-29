@@ -13,7 +13,7 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
         return handState
                 .updateActivePlayer(updatedPlayer)
                 .copy(lastAggressor = updatedPlayer,
-                        minRaise = (size - handState.totalBet) * 2,
+                        minRaise = size * 2,
                         lastLegalBet = size)
     }
 
