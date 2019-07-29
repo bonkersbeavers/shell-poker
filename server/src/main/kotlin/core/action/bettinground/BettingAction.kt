@@ -48,7 +48,7 @@ abstract class BettingAction(val type: ActionType) {
             (handState.totalBet > 0) and (nextDecisivePlayer.bet == handState.totalBet) ->
                 handState.copy(activePlayer = null)
 
-            /* End action when no bet was made and everyone checker or folded. */
+            /* End action when no bet was made and everyone checked or folded. */
             (handState.totalBet == 0) and (nextDecisivePlayer.lastAction == ActionType.CHECK) ->
                 handState.copy(activePlayer = null)
 
