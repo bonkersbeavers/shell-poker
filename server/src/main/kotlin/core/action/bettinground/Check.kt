@@ -5,7 +5,6 @@ import core.gameflow.HandState
 class Check : BettingAction(ActionType.CHECK) {
 
     override fun innerApply(handState: HandState): HandState {
-
         val updatedPlayer = handState.activePlayer!!.copy(lastAction = ActionType.CHECK)
         return handState.updateActivePlayer(updatedPlayer)
     }
