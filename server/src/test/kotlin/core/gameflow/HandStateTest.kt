@@ -1,159 +1,268 @@
-// package core.gameflow
-//
-// import org.junit.jupiter.api.Test
-// import org.junit.jupiter.api.TestInstance
-// import org.junit.jupiter.api.assertThrows
-//
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-// class HandStateTest {
-//
-//    private val chipsA = 150
-//    private val playerA = Player(
-//            position = 0,
-//            stack = 0,
-//            chipsInPot = chipsA
-//    )
-//
-//    private val chipsB = 300
-//    private val playerB = Player(
-//            position = 1,
-//            stack = 0,
-//            chipsInPot = chipsB
-//    )
-//
-//    private val chipsC = 200
-//    private val playerC = Player(
-//            position = 2,
-//            stack = 0,
-//            chipsInPot = chipsC
-//    )
-//
-//    private val mockBlinds = Blinds(0, 0)
-//
-//    private val basicPlayers = listOf(playerA, playerB, playerC)
-//
-//    private val findPlayers1 = listOf(
-//            Player(position = 0, stack = 0, folded = true),
-//            Player(position = 1, currentBet = 1000, stack = 0), // all in
-//            Player(position = 2, stack = 0),
-//            Player(position = 3, stack = 0)
-//    )
-//
-//    private val findPlayers2 = listOf(
-//            Player(position = 0, stack = 0, folded = true),
-//            Player(position = 1, stack = 0, folded = true),
-//            Player(position = 2, stack = 0, folded = true),
-//            Player(position = 3, stack = 0)
-//    )
-//
-//    private val findPlayers3 = listOf(
-//            Player(position = 0, stack = 0, folded = true),
-//            Player(position = 1, stack = 0, folded = true),
-//            Player(position = 2, stack = 0, folded = true),
-//            Player(position = 3, stack = 0, folded = true)
-//    )
-//
-//    private val handState = HandState(
-//            players = basicPlayers,
-//            blinds = mockBlinds,
-//            buttonPosition = 0,
-//            activePlayer = playerB
-//    )
-//
-//    private val findHandState1 = HandState(
-//            players = findPlayers1,
-//            blinds = mockBlinds,
-//            buttonPosition = 0,
-//            activePlayer = findPlayers1[0]
-//    )
-//
-//    private val findHandState2 = HandState(
-//            players = findPlayers2,
-//            blinds = mockBlinds,
-//            buttonPosition = 0,
-//            activePlayer = findPlayers2[0]
-//    )
-//
-//    private val findHandState3 = HandState(
-//            players = findPlayers3,
-//            blinds = mockBlinds,
-//            buttonPosition = 0,
-//            activePlayer = findPlayers3[0]
-//    )
-//
-//    @Test
-//    fun `pot member should return the sum of all players' chipsInPot`() {
-//        assert(handState.pot == chipsA + chipsB + chipsC)
-//    }
-//
-//    @Test
-//    fun `updateActivePlayer should properly substitute active player with new instance`() {
-//        val update = playerB.copy(chipsInPot = 500)
-//        val newState = handState.updateActivePlayer(update)
-//        assert(newState.activePlayer == update)
-//        assert(newState.pot == chipsA + 500 + chipsC)
-//    }
-//
-//    @Test
-//    fun `HandState instantiation should fail if activePlayer is not present in players list`() {
-//        assertThrows<AssertionError> {
-//            HandState(
-//                    players = listOf(playerA, playerB),
-//                    blinds = mockBlinds,
-//                    buttonPosition = 0,
-//                    activePlayer = playerC
-//            )
-//        }
-//    }
-//
-//    @Test
-//    fun `HandState instantiation should fail if players' positions are not unique`() {
-//        val illegalPlayer = Player(
-//                position = 2,
-//                stack = 0
-//        )
-//
-//        assertThrows<AssertionError> {
-//            HandState(
-//                    players = listOf(playerA, playerB, playerC, illegalPlayer),
-//                    blinds = mockBlinds,
-//                    buttonPosition = 0,
-//                    activePlayer = playerC
-//            )
-//        }
-//    }
-//
-//    @Test
-//    fun `findNextPlayer should find next player`() {
-//        assert(findHandState1.nextPlayer(3) == findHandState1.players[0])
-//        assert(findHandState1.nextPlayer(1) == findHandState1.players[2])
-//    }
-//
-//    @Test
-//    fun `findNextDecisivePlayer should find next active player`() {
-//        assert(findHandState1.nextDecisivePlayer(3) == findHandState1.players[2])
-//        assert(findHandState1.nextDecisivePlayer(0) == findHandState1.players[2])
-//        assert(findHandState1.nextDecisivePlayer(2) == findHandState1.players[3])
-//
-//        assert(findHandState2.nextDecisivePlayer(3) == findHandState2.players[3])
-//
-//        assert(findHandState3.nextDecisivePlayer(3) == null)
-//    }
-//
-//    @Test
-//    fun `findPrevPlayer should find previous player`() {
-//        assert(findHandState1.prevPlayer(2) == findHandState1.players[1])
-//        assert(findHandState1.prevPlayer(3) == findHandState1.players[2])
-//        assert(findHandState1.prevPlayer(0) == findHandState1.players[3])
-//    }
-//
-//    @Test
-//    fun `findPrevActivePlayer should find previous active player`() {
-//        assert(findHandState1.prevDecisivePlayer(2) == findHandState1.players[3])
-//        assert(findHandState1.prevDecisivePlayer(3) == findHandState1.players[2])
-//
-//        assert(findHandState2.prevDecisivePlayer(3) == findHandState2.players[3])
-//
-//        assert(findHandState3.prevDecisivePlayer(0) == null)
-//    }
-// }
+ package core.gameflow
+
+ import core.action.bettinground.ActionType
+ import core.action.bettinground.AllIn
+ import org.junit.jupiter.api.Test
+ import org.junit.jupiter.api.TestInstance
+ import org.junit.jupiter.api.assertThrows
+ import java.lang.AssertionError
+
+ @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+ class HandStateTest {
+
+     @Test
+     fun `HandState instantiation should fail if there are less than 2 players`() {
+         assertThrows<AssertionError> {
+
+             val player = Player(position = 0, stack = 100)
+
+             HandState(
+                     players = listOf(player),
+                     blinds = Blinds(50, 100),
+                     buttonPosition = 0,
+                     activePlayer = player
+             )
+         }
+     }
+
+     @Test
+     fun `HandState instantiation should fail if players' positions are not unique`() {
+         assertThrows<AssertionError> {
+
+             val player0 = Player(position = 0, stack = 100)
+             val player1 = Player(position = 1, stack = 100)
+             val player2 = Player(position = 1, stack = 100)
+
+             HandState(
+                     players = listOf(player0, player1, player2),
+                     blinds = Blinds(50, 100),
+                     buttonPosition = 0,
+                     activePlayer = null
+             )
+         }
+     }
+
+     @Test
+     fun `HandState instantiation should fail if active player doesn't point to any of the players`() {
+         assertThrows<AssertionError> {
+
+             val player0 = Player(position = 0, stack = 100)
+             val player1 = Player(position = 1, stack = 100)
+             val player2 = Player(position = 2, stack = 100)
+
+             HandState(
+                     players = listOf(player0, player1),
+                     blinds = Blinds(50, 100),
+                     buttonPosition = 0,
+                     activePlayer = player2
+             )
+         }
+     }
+
+     @Test
+     fun `HandState instantiation should fail if last aggressor doesn't point to any of the players`() {
+         assertThrows<AssertionError> {
+
+             val player0 = Player(position = 0, stack = 100)
+             val player1 = Player(position = 1, stack = 100)
+             val player2 = Player(position = 2, stack = 100)
+
+             HandState(
+                     players = listOf(player0, player1),
+                     blinds = Blinds(50, 100),
+                     buttonPosition = 0,
+                     activePlayer = player1,
+                     lastAggressor = player2
+             )
+         }
+     }
+
+     @Test
+     fun `pot should properly sum players' bets from previous rounds`() {
+
+         val player0 = Player(position = 0, stack = 0, chipsInPot = 50)
+         val player1 = Player(position = 1, stack = 100, chipsInPot = 150)
+         val player2 = Player(position = 2, stack = 100, chipsInPot = 150)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 0,
+                 activePlayer = player1
+         )
+
+         assert(state.pot == 50 + 150 + 150)
+     }
+
+     @Test
+     fun `total bet should return the highest bet made so far in given betting round`() {
+
+         val player0 = Player(position = 0, stack = 0)
+         val player1 = Player(position = 1, stack = 100)
+         val player2 = Player(position = 2, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 0,
+                 activePlayer = player1,
+                 lastLegalBet = 100,
+                 extraBet = 75
+         )
+
+         assert(state.totalBet == 100 + 75)
+     }
+
+     @Test
+     fun `playersInGame should find all players that haven't folded yet`() {
+
+         val player0 = Player(position = 0, stack = 0, lastAction = ActionType.ALL_IN)
+         val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 0,
+                 activePlayer = player2,
+                 lastLegalBet = 100,
+                 extraBet = 75
+         )
+
+         assert(state.playersInGame == listOf(player0, player2, player3))
+     }
+
+     @Test
+     fun `decisivePlayers should find all players that can potentially make decisions`() {
+
+         val player0 = Player(position = 0, stack = 0, lastAction = ActionType.ALL_IN)
+         val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 0,
+                 activePlayer = player2,
+                 lastLegalBet = 100,
+                 extraBet = 75
+         )
+
+         assert(state.decisivePlayers == listOf(player2, player3))
+     }
+
+     @Test
+     fun `HandState should properly identify players on blind positions when there are more than two players`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100)
+         val player2 = Player(position = 2, stack = 100) // BTN
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 2,
+                 activePlayer = player3
+         )
+
+         assert(state.smallBlindPlayer == player3)
+         assert(state.bigBlindPlayer == player0)
+     }
+
+     @Test
+     fun `HandState should properly identify players on blind positions when the game is heads up`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100) // BTN
+
+         val state = HandState(
+                 players = listOf(player0, player1),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 1,
+                 activePlayer = player0
+         )
+
+         assert(state.smallBlindPlayer == player1)
+         assert(state.bigBlindPlayer == player0)
+     }
+
+     @Test
+     fun `updateActivePlayer should properly substitute active player in players list`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 2,
+                 activePlayer = player3
+         )
+
+         val newPlayer = player3.copy(stack = 0, bet = 100)
+         val newState = state.updateActivePlayer(newPlayer)
+
+         assert(newState.players[3] == newPlayer)
+     }
+
+     @Test
+     fun `orderedPlayers should return players list in clockwise order`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 2,
+                 activePlayer = player3
+         )
+
+         assert(state.orderedPlayers(2) == listOf(player2, player3, player0, player1))
+     }
+
+     @Test
+     fun `nextPlayer should find the first player after given position`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 100)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 2,
+                 activePlayer = player3
+         )
+
+         assert(state.nextPlayer(0) == player1)
+         assert(state.nextPlayer(3) == player0)
+     }
+
+     @Test
+     fun `nextDecisivePlayer should find the first decisive player after given position`() {
+
+         val player0 = Player(position = 0, stack = 100)
+         val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
+         val player2 = Player(position = 2, stack = 100)
+         val player3 = Player(position = 3, stack = 0, lastAction = ActionType.ALL_IN)
+
+         val state = HandState(
+                 players = listOf(player0, player1, player2, player3),
+                 blinds = Blinds(50, 100),
+                 buttonPosition = 2,
+                 activePlayer = player3
+         )
+
+         assert(state.nextDecisivePlayer(0) == player2)
+         assert(state.nextDecisivePlayer(3) == player0)
+     }
+ }
