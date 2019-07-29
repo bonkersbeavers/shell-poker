@@ -17,11 +17,11 @@ class Post(val size: Int) : BettingAction(ActionType.POST) {
         return when {
 
             /* When posted bet is lower than current bet in the hand. */
-            bet <= newState.totalBet -> newState
+            bet <= handState.totalBet -> newState
 
             /* When posted bet has an effect of raising current bet in the hand. */
-            bet >= newState.minRaise -> {
-                val difference = bet - newState.totalBet
+            bet >= handState.minRaise -> {
+                val difference = bet - handState.lastLegalBet
                 val newMinRaise = bet + difference
                 newState.copy(lastLegalBet = bet, extraBet = 0, minRaise = newMinRaise)
             }
