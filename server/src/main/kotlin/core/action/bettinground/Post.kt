@@ -15,7 +15,6 @@ class Post(val size: Int) : BettingAction(ActionType.POST) {
         val newState = handState.updateActivePlayer(playerUpdate)
 
         return when {
-
             /* When posted bet is lower than current bet in the hand. */
             bet <= handState.totalBet -> newState
 

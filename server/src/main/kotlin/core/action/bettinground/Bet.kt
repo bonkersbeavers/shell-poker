@@ -21,7 +21,6 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
         val activePlayer = handState.activePlayer!!
 
         return when {
-
             size < handState.minRaise ->
                 InvalidAction("Bet of size $size smaller than minimum legal bet ${handState.minRaise}")
 

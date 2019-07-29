@@ -30,7 +30,6 @@ abstract class BettingAction(val type: ActionType) {
         val nextDecisivePlayer = handState.nextDecisivePlayer(handState.activePlayer)
 
         return when {
-
             /* End action when there are no more decisive players. */
             nextDecisivePlayer == null -> handState.copy(activePlayer = null)
 
