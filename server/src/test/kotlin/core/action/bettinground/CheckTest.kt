@@ -73,7 +73,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.validate(state) is InvalidAction)
+        assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
     }
 
     @Test
@@ -94,7 +94,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.validate(state) is InvalidAction)
+        assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
     }
 
     @Test

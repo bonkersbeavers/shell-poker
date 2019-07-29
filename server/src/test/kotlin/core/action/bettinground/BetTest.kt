@@ -36,20 +36,17 @@ class BetTest {
         val bet1 = Bet(200)
         assert(bet1.validate(state) is ValidAction)
 
-        // TODO: NOT ABOVE MIN RAISE EXCEPTION
         val bet2 = Bet(199)
-        assert(bet2.validate(state) is InvalidAction)
+        assert((bet2.validate(state) == InvalidAction("Bet of size 199 smaller than minimum legal bet ${blindsMock.bigBlind}")))
 
         val bet3 = Bet(currentStack - 1)
         assert(bet3.validate(state) is ValidAction)
 
-        // TODO ALL IN BET CASE -> WHAT TO DO?
         val bet4 = Bet(currentStack)
         assert(bet4.validate(state) is ValidAction)
 
-        // TODO: NOT ENOUGH CHIPS EXCEPTION
         val bet5 = Bet(currentStack + 1)
-        assert(bet5.validate(state) is InvalidAction)
+        assert(bet5.validate(state) == InvalidAction("Bet of size ${currentStack + 1} larger than player's stack $currentStack"))
     }
 
     @Test
@@ -68,12 +65,11 @@ class BetTest {
                 bettingRound = BettingRound.FLOP,
                 lastLegalBet = 300,
                 extraBet = 0,
-                minRaise = 900
+                minRaise = 600
         )
 
-        // TODO: SHOULD_RAISE EXCEPTION
-        val bet1 = Bet(950)
-        assert(bet1.validate(state) is InvalidAction)
+        val bet1 = Bet(650)
+        assert(bet1.validate(state) == InvalidAction("A bet has already been made in current betting round"))
     }
 
     @Test
@@ -95,9 +91,8 @@ class BetTest {
                 minRaise = blindsMock.bigBlind * 2
         )
 
-        // TODO: SHOULD_RAISE EXCEPTION
         val bet1 = Bet(blindsMock.bigBlind * 2 + 1)
-        assert(bet1.validate(state) is InvalidAction)
+        assert(bet1.validate(state) == InvalidAction("A bet has already been made in current betting round"))
     }
 
     @Test
@@ -136,6 +131,4 @@ class BetTest {
         assert(newState.lastAggressor == newState.players[1])
         assert(newState.lastLegalBet == betSize)
     }
-
-    // TODO: Extra bet scenarios
 }
