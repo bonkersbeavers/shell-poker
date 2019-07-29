@@ -14,10 +14,10 @@ class BetTest {
 
     @Test
     fun `bet should be legal if a player has bet above minRaise and he has enough chips`() {
-        val player0 = Player(position = 0, currentBet = 0, stack = startingStack)
-        val player1 = Player(position = 1, currentBet = 0, stack = startingStack)  // active player
-        val player2 = Player(position = 2, currentBet = 0, stack = startingStack)
-        val player3 = Player(position = 3, currentBet = 0, stack = startingStack)
+        val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player1 = Player(position = 1, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
+        val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -26,35 +26,38 @@ class BetTest {
                 activePlayer = player1,
                 lastAggressor = null,
                 bettingRound = BettingRound.FLOP,
-                currentBet = 0
+                lastLegalBet = 0,
+                extraBet = 0,
+                minRaise = blindsMock.bigBlind
         )
 
+        val currentStack = startingStack - blindsMock.bigBlind
 
         val bet1 = Bet(200)
         assert(bet1.isLegal(state))
 
-        //TODO: NOT ABOVE MIN RAISE EXCEPTION
+        // TODO: NOT ABOVE MIN RAISE EXCEPTION
         val bet2 = Bet(199)
         assert(!bet2.isLegal(state))
 
-        val bet3 = Bet(999)
+        val bet3 = Bet(currentStack - 1)
         assert(bet3.isLegal(state))
 
-        //ALL IN BET CASE -> WHAT TO DO?
-        val bet4 = Bet(1000)
+        // TODO ALL IN BET CASE -> WHAT TO DO?
+        val bet4 = Bet(currentStack)
         assert(bet4.isLegal(state))
 
-        //TODO: NOT ENOUGH CHIPS EXCEPTION
-        val bet5 = Bet(1001)
+        // TODO: NOT ENOUGH CHIPS EXCEPTION
+        val bet5 = Bet(currentStack + 1)
         assert(!bet5.isLegal(state))
     }
 
     @Test
-    fun `bet should be legal only if a player bet above minRaise`() {
-        val player0 = Player(position = 0, currentBet = 0, stack = startingStack)
-        val player1 = Player(position = 1, currentBet = 200, stack = startingStack - 200)
-        val player2 = Player(position = 2, currentBet = 0, stack = startingStack) // active player
-        val player3 = Player(position = 3, currentBet = 0, stack = startingStack)
+    fun `bet should be illegal if a bet has already been made after pre flop`() {
+        val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player1 = Player(position = 1, bet = 300, stack = startingStack - blindsMock.bigBlind - 300, lastAction = ActionType.BET)
+        val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
+        val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
@@ -63,62 +66,76 @@ class BetTest {
                 activePlayer = player2,
                 lastAggressor = player1,
                 bettingRound = BettingRound.FLOP,
-                currentBet = 200,
-                minRaise = 200
+                lastLegalBet = 300,
+                extraBet = 0,
+                minRaise = 900
         )
 
-        val bet1 = Bet(400)
-        assert(bet1.isLegal(state))
-
-        //TODO: NOT ABOVE MIN RAISE EXCEPTION
-        val bet2 = Bet(399)
-        assert(!bet2.isLegal(state))
-    }
-
-    @Test
-    fun `bet should be illegal if a player has already made a bet after pre flop`() {
-        val player0 = Player(position = 0, currentBet = 0, stack = startingStack)
-        val player1 = Player(position = 1, currentBet = 400, stack = startingStack - 400)
-        val player2 = Player(position = 2, currentBet = 200, stack = startingStack - 200) // active player
-        val player3 = Player(position = 3, currentBet = 0, stack = startingStack, folded = true)
-
-        val state = HandState(
-                players = listOf(player0, player1, player2, player3),
-                blinds = blindsMock,
-                buttonPosition = 0,
-                activePlayer = player2,
-                lastAggressor = player1,
-                bettingRound = BettingRound.FLOP,
-                currentBet = 400,
-                minRaise = 400
-        )
-
-        // BET ILLEGAL -> SHOULD APPLY RAISE, TODO: SHOULD_RAISE EXCEPTION
-        val bet1 = Bet(200)
+        // TODO: SHOULD_RAISE EXCEPTION
+        val bet1 = Bet(950)
         assert(!bet1.isLegal(state))
     }
 
     @Test
-    fun `bet should be illegal as bigBlind in pre flop`() {
-        val player0 = Player(position = 0, currentBet = 0, stack = startingStack)
-        val player1 = Player(position = 1, currentBet = blindsMock.bigBlind + 200, stack = 1000)
-        val player2 = Player(position = 2, currentBet = blindsMock.bigBlind, stack = 1000) // active player / big blind
-        val player3 = Player(position = 3, currentBet = blindsMock.bigBlind + 200, stack = 1000)
+    fun `bet should be illegal if a bet has already been made in pre flop`() {
+        val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player1 = Player(position = 1, bet = blindsMock.smallBlind, stack = startingStack - blindsMock.smallBlind, lastAction = ActionType.POST)
+        val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
+        val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = null) // active player
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 buttonPosition = 0,
-                activePlayer = player2,
-                lastAggressor = player3,
+                activePlayer = player3,
+                lastAggressor = null,
                 bettingRound = BettingRound.PRE_FLOP,
-                currentBet = blindsMock.bigBlind + 200
+                lastLegalBet = blindsMock.bigBlind,
+                extraBet = 0,
+                minRaise = blindsMock.bigBlind * 2
         )
 
-        val check = Check()
-        assert(!check.isLegal(state))
+        // TODO: SHOULD_RAISE EXCEPTION
+        val bet1 = Bet(blindsMock.bigBlind * 2 + 1)
+        assert(!bet1.isLegal(state))
     }
 
+    @Test
+    fun `applying bet normally`() {
+        val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player1 = Player(position = 1, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
+        val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
+        val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
+        val state = HandState(
+                players = listOf(player0, player1, player2, player3),
+                blinds = blindsMock,
+                buttonPosition = 0,
+                activePlayer = player1,
+                lastAggressor = null,
+                bettingRound = BettingRound.FLOP,
+                lastLegalBet = 0,
+                extraBet = 0,
+                minRaise = blindsMock.bigBlind
+        )
 
+        val currentStack = startingStack - blindsMock.bigBlind
+        val betSize = 500
+
+        val bet = Bet(betSize)
+        assert(bet.isLegal(state))
+
+        val newState = bet.apply(state)
+
+        assert(newState.players[1].stack == currentStack - betSize)
+        assert(newState.players[1].bet == betSize)
+        assert(newState.players[1].lastAction == ActionType.BET)
+        assert(newState.players[1].isDecisive)
+        assert(newState.activePlayer == newState.players[2])
+        assert(newState.minRaise == betSize * 2)
+        assert(newState.lastAggressor == newState.players[1])
+        assert(newState.lastLegalBet == betSize)
+    }
+
+    // TODO: Extra bet scenarios
 }
