@@ -8,5 +8,5 @@ class Call(val size: Int) : BettingAction(ActionType.CALL) {
     override fun innerApply(handState: HandState): HandState = handState
 
     // TODO
-    override fun innerIsLegal(handState: HandState): Boolean = true
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
 }

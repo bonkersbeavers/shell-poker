@@ -35,5 +35,5 @@ class Post(val size: Int) : BettingAction(ActionType.POST) {
         }
     }
 
-    override fun innerIsLegal(handState: HandState): Boolean = true
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
 }

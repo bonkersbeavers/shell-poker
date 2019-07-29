@@ -9,5 +9,5 @@ class Fold : BettingAction(ActionType.FOLD) {
         return handState.updateActivePlayer(updatedPlayer)
     }
 
-    override fun innerIsLegal(handState: HandState): Boolean = true
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
 }

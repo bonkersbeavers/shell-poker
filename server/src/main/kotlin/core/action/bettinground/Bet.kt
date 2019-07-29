@@ -17,14 +17,21 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
                         lastLegalBet = size)
     }
 
-    override fun innerIsLegal(handState: HandState): Boolean {
+    override fun innerValidate(handState: HandState): ActionValidation {
         val activePlayer = handState.activePlayer!!
 
         return when {
-            (size >= handState.minRaise)
-                    and (size <= activePlayer.stack)
-                    and (handState.lastLegalBet == 0) -> true
-            else -> false
+
+            size < handState.minRaise ->
+                InvalidAction("Bet of size $size smaller than minimum legal bet ${handState.minRaise}")
+
+            size > activePlayer.stack ->
+                InvalidAction("Bet of size $size larger than player's stack ${activePlayer.stack}")
+
+            handState.lastLegalBet > 0 ->
+                InvalidAction("A bet has already been made in current betting round")
+
+            else -> ValidAction()
         }
     }
 }

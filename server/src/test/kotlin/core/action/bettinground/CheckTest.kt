@@ -31,7 +31,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.isLegal(state))
+        assert(check.validate(state) is ValidAction)
     }
 
     @Test
@@ -52,7 +52,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.isLegal(state))
+        assert(check.validate(state) is ValidAction)
     }
 
     @Test
@@ -73,7 +73,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(!check.isLegal(state))
+        assert(check.validate(state) is InvalidAction)
     }
 
     @Test
@@ -94,7 +94,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(!check.isLegal(state))
+        assert(check.validate(state) is InvalidAction)
     }
 
     @Test
@@ -115,7 +115,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.isLegal(state))
+        assert(check.validate(state) is ValidAction)
 
         val newState = check.apply(state)
 
@@ -145,7 +145,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.isLegal(state))
+        assert(check.validate(state) is ValidAction)
 
         val newState = check.apply(state)
 
@@ -176,7 +176,7 @@ class CheckTest {
         )
 
         val check = Check()
-        assert(check.isLegal(state))
+        assert(check.validate(state) is ValidAction)
 
         val newState = check.apply(state)
 

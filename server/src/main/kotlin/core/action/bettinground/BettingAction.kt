@@ -8,16 +8,21 @@ abstract class BettingAction(val type: ActionType) {
      * is extracted to shiftActivePlayer method that is always called after innerApply.
      */
     protected abstract fun innerApply(handState: HandState): HandState
-    protected abstract fun innerIsLegal(handState: HandState): Boolean
+    protected abstract fun innerValidate(handState: HandState): ActionValidation
 
     fun apply(handState: HandState): HandState {
-        assert(isLegal(handState))
+        assert(validate(handState) is ValidAction)
 
         val newState = innerApply(handState)
         return shiftActivePlayer(newState)
     }
 
-    fun isLegal(handState: HandState): Boolean = (handState.activePlayer != null) and innerIsLegal(handState)
+    fun validate(handState: HandState): ActionValidation {
+        return when (handState.activePlayer) {
+            null -> InvalidAction("There is no active player")
+            else -> innerValidate(handState)
+        }
+    }
 
     private fun shiftActivePlayer(handState: HandState): HandState {
 

@@ -34,22 +34,22 @@ class BetTest {
         val currentStack = startingStack - blindsMock.bigBlind
 
         val bet1 = Bet(200)
-        assert(bet1.isLegal(state))
+        assert(bet1.validate(state) is ValidAction)
 
         // TODO: NOT ABOVE MIN RAISE EXCEPTION
         val bet2 = Bet(199)
-        assert(!bet2.isLegal(state))
+        assert(bet2.validate(state) is InvalidAction)
 
         val bet3 = Bet(currentStack - 1)
-        assert(bet3.isLegal(state))
+        assert(bet3.validate(state) is ValidAction)
 
         // TODO ALL IN BET CASE -> WHAT TO DO?
         val bet4 = Bet(currentStack)
-        assert(bet4.isLegal(state))
+        assert(bet4.validate(state) is ValidAction)
 
         // TODO: NOT ENOUGH CHIPS EXCEPTION
         val bet5 = Bet(currentStack + 1)
-        assert(!bet5.isLegal(state))
+        assert(bet5.validate(state) is InvalidAction)
     }
 
     @Test
@@ -73,7 +73,7 @@ class BetTest {
 
         // TODO: SHOULD_RAISE EXCEPTION
         val bet1 = Bet(950)
-        assert(!bet1.isLegal(state))
+        assert(bet1.validate(state) is InvalidAction)
     }
 
     @Test
@@ -97,7 +97,7 @@ class BetTest {
 
         // TODO: SHOULD_RAISE EXCEPTION
         val bet1 = Bet(blindsMock.bigBlind * 2 + 1)
-        assert(!bet1.isLegal(state))
+        assert(bet1.validate(state) is InvalidAction)
     }
 
     @Test
@@ -123,7 +123,7 @@ class BetTest {
         val betSize = 500
 
         val bet = Bet(betSize)
-        assert(bet.isLegal(state))
+        assert(bet.validate(state) is ValidAction)
 
         val newState = bet.apply(state)
 
