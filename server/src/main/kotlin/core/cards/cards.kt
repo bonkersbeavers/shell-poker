@@ -32,6 +32,6 @@ enum class CardSuit {
 
 data class Card(val rank: CardRank, val suit: CardSuit) {
     override fun toString(): String {
-        return "${rank.toString()} of ${suit.toString()}"
+        return "$rank of $suit"
     }
 }

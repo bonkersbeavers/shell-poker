@@ -2,7 +2,7 @@ package core.gameflow
 
 import core.cards.Card
 
-class Dealer(deck: List<Card>){
+class Dealer(deck: List<Card>) {
     private val deckIterator = deck.listIterator()
 
     fun dealHoleCards(handState: HandState): HandState {

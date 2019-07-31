@@ -58,7 +58,7 @@ val baseDeck: List<Card> = listOf(
         )
 
 fun shuffledDeck(seed: Int? = null): List<Card> {
-        return when(seed) {
+        return when (seed) {
                 null -> baseDeck.shuffled()
                 else -> baseDeck.shuffled(Random(seed))
         }
