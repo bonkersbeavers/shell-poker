@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class Flush(cards: List<Card>) : PokerHand(HandRank.FLUSH, cards) {
 

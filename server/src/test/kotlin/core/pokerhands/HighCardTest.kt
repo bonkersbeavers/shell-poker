@@ -1,8 +1,8 @@
 package core.pokerhands
 
-import core.Card
-import core.CardRank
-import core.CardSuit
+import core.cards.Card
+import core.cards.CardRank
+import core.cards.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 

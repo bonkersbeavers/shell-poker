@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class HighCard(cards: List<Card>) : PokerHand(HandRank.HIGH_CARD, cards) {
 

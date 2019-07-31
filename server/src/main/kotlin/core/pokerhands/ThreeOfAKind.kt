@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class ThreeOfAKind(cards: List<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, cards) {
 

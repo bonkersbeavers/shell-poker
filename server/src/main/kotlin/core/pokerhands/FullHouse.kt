@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class FullHouse(cards: List<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
 

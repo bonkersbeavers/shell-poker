@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class Pair(cards: List<Card>) : PokerHand(HandRank.PAIR, cards) {
 

@@ -1,7 +1,7 @@
 package core.pokerhands
 
-import core.Card
-import core.CardRank
+import core.cards.Card
+import core.cards.CardRank
 
 fun is5CardHand(cards: List<Card>): Boolean = (cards.size == 5) and (cards.distinct().size == 5)
 

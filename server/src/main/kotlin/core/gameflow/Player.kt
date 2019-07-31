@@ -1,6 +1,6 @@
 package core.gameflow
 
-import core.Card
+import core.cards.Card
 import core.action.bettinground.*
 
 /**
@@ -8,12 +8,12 @@ import core.action.bettinground.*
  *      not including the chips in player's current bet
  */
 data class Player(
-    val position: Int,
-    val stack: Int,
-    val holeCards: List<Card> = emptyList(),
-    val bet: Int = 0,
-    val chipsInPot: Int = 0,
-    val lastAction: ActionType? = null
+        val position: Int,
+        val stack: Int,
+        val holeCards: List<Card> = emptyList(),
+        val bet: Int = 0,
+        val chipsInPot: Int = 0,
+        val lastAction: ActionType? = null
 ) {
     init {
         assert(stack >= 0)

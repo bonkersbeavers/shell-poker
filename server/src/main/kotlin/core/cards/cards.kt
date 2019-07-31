@@ -1,4 +1,4 @@
-package core
+package core.cards
 
 enum class CardRank(val strength: Int) {
     TWO(2),

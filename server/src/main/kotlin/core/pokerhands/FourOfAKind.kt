@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class FourOfAKind(cards: List<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards) {
 

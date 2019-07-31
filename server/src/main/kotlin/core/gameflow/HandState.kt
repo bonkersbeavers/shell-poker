@@ -1,6 +1,6 @@
 package core.gameflow
 
-import core.Card
+import core.cards.Card
 
 /**
  * activePlayer set to null indicates that there is no further action possible in given betting round.
@@ -13,16 +13,16 @@ import core.Card
  * It should be reset to 0 every time a legal bet / raise is made.
  */
 data class HandState(
-    val players: List<Player>,
-    val blinds: Blinds,
-    val buttonPosition: Int,
-    val activePlayer: Player?,
-    val communityCards: List<Card> = emptyList(),
-    val bettingRound: BettingRound = BettingRound.PRE_FLOP,
-    val lastAggressor: Player? = null,
-    val lastLegalBet: Int = 0,
-    val minRaise: Int = blinds.bigBlind,
-    val extraBet: Int = 0
+        val players: List<Player>,
+        val blinds: Blinds,
+        val buttonPosition: Int,
+        val activePlayer: Player?,
+        val communityCards: List<Card> = emptyList(),
+        val bettingRound: BettingRound = BettingRound.PRE_FLOP,
+        val lastAggressor: Player? = null,
+        val lastLegalBet: Int = 0,
+        val minRaise: Int = blinds.bigBlind,
+        val extraBet: Int = 0
 ) {
     init {
         assert(players.size >= 2)

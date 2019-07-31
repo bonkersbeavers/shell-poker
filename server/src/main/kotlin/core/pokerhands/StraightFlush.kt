@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 class StraightFlush(cards: List<Card>) : PokerHand(HandRank.STRAIGHT_FLUSH, cards) {
 
