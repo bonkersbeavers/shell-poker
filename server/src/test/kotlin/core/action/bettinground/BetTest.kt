@@ -13,7 +13,7 @@ class BetTest {
     private val startingStack = 1000
 
     @Test
-    fun `bet should be legal if a player has bet above minRaise and he has enough chips`() {
+    fun `bet should be valid if a player has bet above minRaise and he has enough chips`() {
         val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player1 = Player(position = 1, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
@@ -46,11 +46,11 @@ class BetTest {
         assert(bet4.validate(state) is ValidAction)
 
         val bet5 = Bet(currentStack + 1)
-        assert(bet5.validate(state) == InvalidAction("Bet of size ${currentStack + 1} larger than player's stack $currentStack"))
+        assert(bet5.validate(state) == InvalidAction("Bet of size ${currentStack + 1} larger than player's maximum possible bet $currentStack"))
     }
 
     @Test
-    fun `bet should be illegal if a bet has already been made after pre flop`() {
+    fun `bet should be invalid if a bet has already been made after pre flop`() {
         val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player1 = Player(position = 1, bet = 300, stack = startingStack - blindsMock.bigBlind - 300, lastAction = ActionType.BET)
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
@@ -69,11 +69,11 @@ class BetTest {
         )
 
         val bet1 = Bet(650)
-        assert(bet1.validate(state) == InvalidAction("A bet has already been made in current betting round"))
+        assert(bet1.validate(state) == InvalidAction("Cannot bet when a bet has already been made"))
     }
 
     @Test
-    fun `bet should be illegal if a bet has already been made in pre flop`() {
+    fun `bet should be valid if a bet has already been made in pre flop`() {
         val player0 = Player(position = 0, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player1 = Player(position = 1, bet = blindsMock.smallBlind, stack = startingStack - blindsMock.smallBlind, lastAction = ActionType.POST)
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
@@ -92,7 +92,7 @@ class BetTest {
         )
 
         val bet1 = Bet(blindsMock.bigBlind * 2 + 1)
-        assert(bet1.validate(state) == InvalidAction("A bet has already been made in current betting round"))
+        assert(bet1.validate(state) == InvalidAction("Cannot bet when a bet has already been made"))
     }
 
     @Test
