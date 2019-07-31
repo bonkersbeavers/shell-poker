@@ -1,45 +1,39 @@
 package core.gameflow
 
 import core.Card
+import core.action.bettinground.*
 
+/**
+ * chipsInPot - the amount of player's chips that already went into the pot in previous rbetting rounds,
+ *      not including the chips in player's current bet
+ */
 data class Player(
     val position: Int,
     val stack: Int,
     val holeCards: List<Card> = emptyList(),
+    val bet: Int = 0,
     val chipsInPot: Int = 0,
-    val currentBet: Int = 0,
-    val folded: Boolean = false,
-    val id: Int = position
+    val lastAction: ActionType? = null
 ) {
-    fun withCards(newCards: List<Card>): Player {
-        return this.copy(holeCards = newCards)
+    init {
+        assert(stack >= 0)
+        assert(bet >= 0)
+        assert(chipsInPot >= 0)
     }
 
-    fun afterFold(): Player {
-        return this.copy(folded = true)
+    val isInGame: Boolean = lastAction != ActionType.FOLD
+    val isAllIn: Boolean = (stack == 0) and isInGame
+    val isDecisive: Boolean = isInGame and !isAllIn
+
+    val maxBet: Int = bet + stack
+
+    fun withBet(betSize: Int): Player {
+        val difference = betSize - bet
+        return this.copy(
+                stack = stack - difference,
+                bet = betSize
+        )
     }
 
-    fun afterAllIn(): Player {
-        return this.copy(currentBet = this.currentBet + this.stack, stack = 0)
-    }
-
-    fun afterRaise(betSize: Int): Player {
-        if (betSize > this.stack)
-            throw NotEnoughChipsException("Bet size of $betSize larger than stack size ${this.stack}")
-
-        return this.copy(currentBet = this.currentBet + betSize, stack = this.stack - betSize)
-    }
-
-    fun afterCall(betSize: Int): Player {
-        val amountToCall = betSize - this.currentBet
-
-        return when (amountToCall > this.stack) {
-            true -> afterAllIn()
-            else -> afterRaise(amountToCall)
-        }
-    }
-
-    fun isAllIn(): Boolean {
-        return stack == 0 && currentBet != 0 && !folded
-    }
+    fun withCards(newCards: List<Card>): Player = this.copy(holeCards = newCards)
 }

@@ -1,72 +1,150 @@
 package core.gameflow
 
-import core.Card
-import core.CardRank
-import core.CardSuit
+import core.action.bettinground.ActionType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
+import java.lang.AssertionError
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlayerTest {
 
-    private val testHoleCards = listOf(
-            Card(CardRank.ACE, CardSuit.SPADES),
-            Card(CardRank.TEN, CardSuit.SPADES)
-    )
-
-    private val testStack = 1000
-
-    private val testCurrentBet = 700
-
-    private val testPlayer = Player(
-            position = 0,
-            stack = testStack,
-            holeCards = testHoleCards,
-            currentBet = testCurrentBet)
-
     @Test
-    fun `Player afterAllIn method should transfer all chips from chipsInStack to currentBet`() {
-        val playerAfterAllIn = testPlayer.afterAllIn()
-        assert(playerAfterAllIn.stack == 0 && playerAfterAllIn.currentBet == testStack + testCurrentBet)
+    fun `withBet method should properly transfer chips from player's stack to their bet`() {
+        val player = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 1000,
+                bet = 0
+        )
+
+        val player1 = player.withBet(500)
+        assert(player1.bet == 500)
+        assert(player1.stack == 500)
+
+        val player2 = player1.withBet(800)
+        assert(player2.bet == 800)
+        assert(player2.stack == 200)
     }
 
     @Test
-    fun `Player isAllIn method should return true when player is all in`() {
-        val playerAfterAllIn = testPlayer.afterAllIn()
-        assert(playerAfterAllIn.isAllIn())
+    fun `maxBet should properly calculate the maximum amount a player can bet`() {
+        val player = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 1000,
+                bet = 800
+        )
+
+        assert(player.maxBet == 1800)
     }
 
     @Test
-    fun `Player afterRaise method should transfer proper amount of chips from stack to currentBet`() {
-        val testBetSize = 500
-        val playerWithBet = testPlayer.afterRaise(testBetSize)
-        assert(playerWithBet.stack == testStack - testBetSize && playerWithBet.currentBet == testBetSize + testCurrentBet)
-    }
+    fun `Player instantiation should fail if either of the stack, chipsInPot or bet is negative`() {
+        assertThrows<AssertionError> {
+            Player(
+                    chipsInPot = -40,
+                    position = 0,
+                    stack = 50
+            )
+        }
 
-    @Test
-    fun `Player afterRaise method throw NotEnoughChipsException when betSize is larger than stack`() {
-        val testBetSize = 1001
+        assertThrows<AssertionError> {
+            Player(
+                    chipsInPot = 0,
+                    position = 0,
+                    stack = -100
+            )
+        }
 
-        assertThrows<NotEnoughChipsException> {
-            testPlayer.afterRaise(testBetSize)
+        assertThrows<AssertionError> {
+            Player(
+                    chipsInPot = 100,
+                    position = 0,
+                    stack = 50,
+                    bet = -5
+            )
         }
     }
 
     @Test
-    fun `Player afterCall method should appply allIn when there are not enough chips in stack to call`() {
-        val testBetSize = 2000
+    fun `isInGame should check if player has folded`() {
+        val playerNotInGame = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 1000,
+                bet = 800,
+                lastAction = ActionType.FOLD
+        )
+        assert(!playerNotInGame.isInGame)
 
-        val playerAfterCall = testPlayer.afterCall(testBetSize)
-        assert(playerAfterCall.isAllIn())
+        val playerInGame = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 1000,
+                bet = 800,
+                lastAction = ActionType.CALL
+        )
+        assert(playerInGame.isInGame)
     }
 
     @Test
-    fun `Player afterCall method should appply withBet when there are enough chips in stack to call`() {
-        val testBetSize = 1500
-        val amountToCall = testBetSize - testPlayer.currentBet
+    fun `isAllIn should check if player hasn't folded and his stack is empty`() {
+        val playerAllIn = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 0,
+                bet = 800,
+                lastAction = ActionType.CALL
+        )
+        assert(playerAllIn.isAllIn)
 
-        val playerAfterCall = testPlayer.afterCall(testBetSize)
-        assert(playerAfterCall.stack == testStack - amountToCall && playerAfterCall.currentBet == testBetSize)
+        val foldPlayer = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 0,
+                bet = 800,
+                lastAction = ActionType.FOLD
+        )
+        assert(!foldPlayer.isAllIn)
+
+        val betPlayer = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 200,
+                bet = 800,
+                lastAction = ActionType.BET
+        )
+        assert(!betPlayer.isAllIn)
+    }
+
+    @Test
+    fun `isDecisive should check if player is able to make any decision in game`() {
+        val playerAllIn = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 0,
+                bet = 800,
+                lastAction = ActionType.CALL
+        )
+        assert(!playerAllIn.isDecisive)
+
+        val foldPlayer = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 0,
+                bet = 800,
+                lastAction = ActionType.FOLD
+        )
+        assert(!foldPlayer.isDecisive)
+
+        val betPlayer = Player(
+                chipsInPot = 500,
+                position = 0,
+                stack = 200,
+                bet = 800,
+                lastAction = ActionType.BET
+        )
+        assert(betPlayer.isDecisive)
     }
 }

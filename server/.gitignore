@@ -4,3 +4,5 @@
 /build/*
 /out/*
 /target/*
+/src/main/kotlin/Main.kt
+/shellpoker-server.iml
