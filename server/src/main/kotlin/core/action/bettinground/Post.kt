@@ -1,13 +1,16 @@
 package core.action.bettinground
 
 import core.gameflow.HandState
-import kotlin.math.min
 
 class Post(val size: Int) : BettingAction(ActionType.POST) {
 
     override fun innerApply(handState: HandState): HandState {
         val activePlayer = handState.activePlayer!!
-        val bet = min(size, activePlayer.maxBet)
+        val bet = when {
+            size > activePlayer.maxBet -> activePlayer.maxBet
+            else -> size
+        }
+
         val playerUpdate = activePlayer
                 .withBet(bet)
                 .copy(lastAction = ActionType.POST)
