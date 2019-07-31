@@ -14,7 +14,8 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
                 .updateActivePlayer(updatedPlayer)
                 .copy(lastAggressor = updatedPlayer,
                         minRaise = size * 2,
-                        lastLegalBet = size)
+                        lastLegalBet = size,
+                        extraBet = 0)
     }
 
     override fun innerValidate(handState: HandState): ActionValidation {
