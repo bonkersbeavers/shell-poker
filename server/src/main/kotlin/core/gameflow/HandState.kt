@@ -78,8 +78,4 @@ data class HandState(
 
     fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive }
     fun nextDecisivePlayer(player: Player): Player? = nextDecisivePlayer(player.position)
-
-    fun prevPlayer(position: Int): Player = orderedPlayers(position).last()
-
-    fun prevDecisivePlayer(position: Int): Player? = orderedPlayers(position).findLast { it.isDecisive }
 }
