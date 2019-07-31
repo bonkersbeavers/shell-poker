@@ -2,7 +2,7 @@ package core.action.bettinground
 
 import core.gameflow.HandState
 
-class Call() : BettingAction(ActionType.CALL) {
+class Call : BettingAction(ActionType.CALL) {
 
     override fun innerApply(handState: HandState): HandState {
         val activePlayer = handState.activePlayer!!
