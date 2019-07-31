@@ -12,8 +12,7 @@ class Call() : BettingAction(ActionType.CALL) {
             else -> activePlayer.stack
         }
 
-        val updatedPlayer = handState
-                .activePlayer!!
+        val updatedPlayer = activePlayer
                 .withBet(callAmount)
                 .copy(lastAction = ActionType.CALL)
 
