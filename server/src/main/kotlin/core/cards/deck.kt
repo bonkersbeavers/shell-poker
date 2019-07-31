@@ -56,10 +56,3 @@ val baseDeck: List<Card> = listOf(
         Card(CardRank.QUEEN, CardSuit.CLUBS),
         Card(CardRank.KING, CardSuit.CLUBS)
         )
-
-fun shuffledDeck(seed: Int? = null): List<Card> {
-        return when (seed) {
-                null -> baseDeck.shuffled()
-                else -> baseDeck.shuffled(Random(seed))
-        }
-}
