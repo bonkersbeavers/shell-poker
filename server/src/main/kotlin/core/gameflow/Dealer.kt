@@ -52,6 +52,8 @@ class Dealer() {
     }
 
     fun setColdDeck(cards: List<Card>) {
+        assert(cards.size == 52)
+        assert(cards.distinct() == cards)
         deckIterator = cards.listIterator()
     }
 }
