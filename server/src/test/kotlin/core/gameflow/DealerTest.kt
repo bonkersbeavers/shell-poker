@@ -44,7 +44,6 @@ class DealerTest {
                 Card(CardRank.SIX, CardSuit.HEARTS)
         ))
 
-
         val newSeed = 234
         dealer.shuffle(newSeed)
 

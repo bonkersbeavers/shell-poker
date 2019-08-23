@@ -1,7 +1,5 @@
 package core.cards
 
-import kotlin.random.Random
-
 val baseDeck: List<Card> = listOf(
         Card(CardRank.ACE, CardSuit.HEARTS),
         Card(CardRank.TWO, CardSuit.HEARTS),

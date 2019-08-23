@@ -10,7 +10,7 @@ class Dealer() {
     fun dealHoleCards(handState: HandState): HandState {
         deckIterator!!
 
-        for(player: Player in handState.players)
+        for (player: Player in handState.players)
             assert(player.holeCards.isEmpty())
 
         val updatedPlayers = handState.players.map { it.withCards(listOf(deckIterator!!.next(), deckIterator!!.next())) }
