@@ -4,7 +4,7 @@ import core.cards.Card
 import core.bettinground.ActionType
 
 /**
- * chipsInPot - the amount of player's chips that already went into the pot in previous rbetting rounds,
+ * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
  *      not including the chips in player's current bet
  */
 data class Player(
