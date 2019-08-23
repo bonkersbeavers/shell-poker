@@ -1,4 +1,4 @@
-package core.action.bettinground
+package core.bettinground
 
 enum class ActionType {
     POST,

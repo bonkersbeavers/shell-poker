@@ -1,4 +1,4 @@
-package core.action.bettinground
+package core.bettinground
 import core.gameflow.HandState
 
 abstract class BettingAction(val type: ActionType) {
