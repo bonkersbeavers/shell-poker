@@ -1,6 +1,6 @@
 package core.gameflow
 
-import core.action.bettinground.ActionType
+import core.bettinground.ActionType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
