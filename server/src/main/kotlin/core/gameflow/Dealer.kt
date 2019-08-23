@@ -4,14 +4,12 @@ import core.cards.Card
 import core.cards.baseDeck
 import kotlin.random.Random
 
-class Dealer(initialSeed: Int? = null) {
+class Dealer() {
     private var deckIterator: ListIterator<Card>? = null
 
-    init {
-        shuffle(initialSeed)
-    }
-
     fun dealHoleCards(handState: HandState): HandState {
+        deckIterator!!
+
         for(player: Player in handState.players)
             assert(player.holeCards.isEmpty())
 
@@ -20,6 +18,8 @@ class Dealer(initialSeed: Int? = null) {
     }
 
     fun dealFlop(handState: HandState): HandState {
+        deckIterator!!
+
         assert(handState.communityCards.isEmpty())
 
         val flopCards = listOf(deckIterator!!.next(), deckIterator!!.next(), deckIterator!!.next())
@@ -27,6 +27,8 @@ class Dealer(initialSeed: Int? = null) {
     }
 
     fun dealTurn(handState: HandState): HandState {
+        deckIterator!!
+
         assert(handState.communityCards.size == 3)
 
         val turnCard = deckIterator!!.next()
@@ -34,6 +36,8 @@ class Dealer(initialSeed: Int? = null) {
     }
 
     fun dealRiver(handState: HandState): HandState {
+        deckIterator!!
+
         assert(handState.communityCards.size == 4)
 
         val riverCard = deckIterator!!.next()
@@ -45,5 +49,9 @@ class Dealer(initialSeed: Int? = null) {
             null -> baseDeck.shuffled().listIterator()
             else -> baseDeck.shuffled(Random(seed)).listIterator()
         }
+    }
+
+    fun setColdDeck(cards: List<Card>) {
+        deckIterator = cards.listIterator()
     }
 }

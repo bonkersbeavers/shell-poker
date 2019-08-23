@@ -4,7 +4,7 @@ import core.cards.CardRank
 import core.cards.CardSuit
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import java.lang.AssertionError
+//import java.lang.AssertionError
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DealerTest {
@@ -12,6 +12,9 @@ class DealerTest {
 
     @Test
     fun `Dealer should shuffle deck and reset its iterator`() {
+        val dealer = Dealer()
+        dealer.shuffle(123)
+
         val player0 = Player(position = 0, stack = 0)
         val player1 = Player(position = 1, stack = 0)
         val player2 = Player(position = 2, stack = 0)
@@ -23,7 +26,6 @@ class DealerTest {
                 activePlayer = player1
         )
 
-        val dealer = Dealer(seed)
         val newState = dealer.dealHoleCards(state)
 
         assert(newState.players[0].holeCards == listOf(
@@ -44,6 +46,7 @@ class DealerTest {
 
         val newSeed = 234
         dealer.shuffle(newSeed)
+
         val newState2 = dealer.dealHoleCards(state)
 
         assert(newState2.players[0].holeCards == listOf(
