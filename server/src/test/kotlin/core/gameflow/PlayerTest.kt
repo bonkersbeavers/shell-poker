@@ -1,9 +1,14 @@
 package core.gameflow
 
+import core.Card
+import core.CardRank
+import core.CardSuit
 import core.bettinground.ActionType
+import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
+import java.awt.Dialog
 import java.lang.AssertionError
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -146,5 +151,32 @@ class PlayerTest {
                 lastAction = ActionType.BET
         )
         assert(betPlayer.isDecisive)
+    }
+
+    @Test
+    fun `hand member should create a proper poker hand out of 5 best cards`() {
+        val player = Player(
+                position = 0,
+                stack = 0,
+                holeCards = listOf(Card(CardRank.ACE, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.HEARTS))
+        )
+
+        val communityCards = listOf(
+                Card(CardRank.JACK, CardSuit.HEARTS),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS)
+        )
+
+        val properHand = TwoPair(listOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        ))
+
+        assert(player.hand(communityCards).compareTo(properHand) == 0)
     }
 }
