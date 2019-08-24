@@ -4,7 +4,7 @@ import core.cards.Card
 import core.cards.baseDeck
 import kotlin.random.Random
 
-class Dealer() {
+class Dealer {
     private var deckIterator: ListIterator<Card>? = null
 
     fun dealHoleCards(handState: HandState): HandState {
