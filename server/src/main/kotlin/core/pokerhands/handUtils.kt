@@ -1,7 +1,7 @@
 package core.pokerhands
 
-import core.Card
-import core.CardRank
+import core.cards.Card
+import core.cards.CardRank
 
 fun makeHand(cards: Set<Card>): PokerHand {
 

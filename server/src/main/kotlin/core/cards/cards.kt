@@ -1,4 +1,4 @@
-package core
+package core.cards
 
 enum class CardRank(val strength: Int) {
     TWO(2),
@@ -30,4 +30,8 @@ enum class CardSuit {
     DIAMONDS
 }
 
-data class Card(val rank: CardRank, val suit: CardSuit)
+data class Card(val rank: CardRank, val suit: CardSuit) {
+    override fun toString(): String {
+        return "$rank of $suit"
+    }
+}

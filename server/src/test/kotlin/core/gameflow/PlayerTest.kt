@@ -1,8 +1,8 @@
 package core.gameflow
 
-import core.Card
-import core.CardRank
-import core.CardSuit
+import core.cards.Card
+import core.cards.CardRank
+import core.cards.CardSuit
 import core.bettinground.ActionType
 import core.pokerhands.FullHouse
 import core.pokerhands.TwoPair
