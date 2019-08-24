@@ -21,7 +21,8 @@ class DealerTest {
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 buttonPosition = 0,
-                activePlayer = null
+                activePlayer = null,
+                bettingRound = BettingRound.PRE_FLOP
         )
 
         val dealer = Dealer()
@@ -75,7 +76,8 @@ class DealerTest {
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 buttonPosition = 0,
-                activePlayer = null
+                activePlayer = null,
+                bettingRound = BettingRound.PRE_FLOP
         )
 
         val dealer = Dealer()
@@ -109,7 +111,8 @@ class DealerTest {
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 buttonPosition = 0,
-                activePlayer = null
+                activePlayer = null,
+                bettingRound = BettingRound.PRE_FLOP
         )
 
         val dealer = Dealer()
@@ -117,7 +120,9 @@ class DealerTest {
 
         val newState = dealer.dealHoleCards(state)
 
-        val afterFlopState = dealer.dealFlop(newState)
+        val updatedBettingRoundState1 = newState.copy(bettingRound = BettingRound.FLOP)
+
+        val afterFlopState = dealer.dealFlop(updatedBettingRoundState1)
 
         assert(afterFlopState.communityCards == listOf(
                 Card(CardRank.SEVEN, CardSuit.HEARTS),
@@ -125,7 +130,9 @@ class DealerTest {
                 Card(CardRank.NINE, CardSuit.HEARTS)
         ))
 
-        val afterTurnState = dealer.dealTurn(afterFlopState)
+        val updatedBettingRoundState2 = afterFlopState.copy(bettingRound = BettingRound.TURN)
+
+        val afterTurnState = dealer.dealTurn(updatedBettingRoundState2)
 
         assert(afterTurnState.communityCards == listOf(
                 Card(CardRank.SEVEN, CardSuit.HEARTS),
@@ -134,7 +141,9 @@ class DealerTest {
                 Card(CardRank.TEN, CardSuit.HEARTS)
         ))
 
-        val afterRiverState = dealer.dealRiver(afterTurnState)
+        val updatedBettingRoundState3 = afterTurnState.copy(bettingRound = BettingRound.RIVER)
+
+        val afterRiverState = dealer.dealRiver(updatedBettingRoundState3)
 
         assert(afterRiverState.communityCards == listOf(
                 Card(CardRank.SEVEN, CardSuit.HEARTS),
@@ -143,75 +152,6 @@ class DealerTest {
                 Card(CardRank.TEN, CardSuit.HEARTS),
                 Card(CardRank.JACK, CardSuit.HEARTS)
         ))
-    }
-
-    @Test
-    fun `Dealer should only deal cards if all players hole cards are empty`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0, holeCards = listOf(
-                Card(CardRank.SEVEN, CardSuit.HEARTS),
-                Card(CardRank.EIGHT, CardSuit.HEARTS)
-        ))
-        val player2 = Player(position = 2, stack = 0)
-
-        val state = HandState(
-                players = listOf(player0, player1, player2),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
-                activePlayer = null
-        )
-
-        val dealer = Dealer()
-        dealer.setColdDeck(baseDeck)
-
-        assertThrows<AssertionError> {
-            dealer.dealHoleCards(state)
-        }
-    }
-
-    @Test
-    fun `Dealer should only deal flop if community cards are empty`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0)
-        val player2 = Player(position = 2, stack = 0)
-
-        val state = HandState(
-                players = listOf(player0, player1, player2),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
-                activePlayer = null,
-                communityCards = listOf(Card(CardRank.ACE, CardSuit.SPADES))
-        )
-
-        val dealer = Dealer()
-        dealer.setColdDeck(baseDeck)
-
-        assertThrows<AssertionError> {
-            dealer.dealFlop(state)
-        }
-    }
-
-    @Test
-    fun `Dealer should only deal turn if there are exactly 3 community cards and river if there are 4`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0)
-        val player2 = Player(position = 2, stack = 0)
-
-        val state = HandState(
-                players = listOf(player0, player1, player2),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
-                activePlayer = null,
-                communityCards = listOf(Card(CardRank.ACE, CardSuit.SPADES))
-        )
-
-        val dealer = Dealer()
-        dealer.setColdDeck(baseDeck)
-
-        assertThrows<AssertionError> {
-            dealer.dealTurn(state)
-            dealer.dealRiver(state)
-        }
     }
 
     @Test

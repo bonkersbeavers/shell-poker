@@ -10,8 +10,7 @@ class Dealer {
     fun dealHoleCards(handState: HandState): HandState {
         deckIterator!!
 
-        for (player: Player in handState.players)
-            assert(player.holeCards.isEmpty())
+        assert(handState.bettingRound == BettingRound.PRE_FLOP)
 
         val updatedPlayers = handState.players.map { it.withCards(listOf(deckIterator!!.next(), deckIterator!!.next())) }
         return handState.copy(players = updatedPlayers)
@@ -20,7 +19,7 @@ class Dealer {
     fun dealFlop(handState: HandState): HandState {
         deckIterator!!
 
-        assert(handState.communityCards.isEmpty())
+        assert(handState.bettingRound == BettingRound.FLOP)
 
         val flopCards = listOf(deckIterator!!.next(), deckIterator!!.next(), deckIterator!!.next())
         return handState.copy(communityCards = flopCards)
@@ -29,7 +28,7 @@ class Dealer {
     fun dealTurn(handState: HandState): HandState {
         deckIterator!!
 
-        assert(handState.communityCards.size == 3)
+        assert(handState.bettingRound == BettingRound.TURN)
 
         val turnCard = deckIterator!!.next()
         return handState.copy(communityCards = handState.communityCards + turnCard)
@@ -38,7 +37,7 @@ class Dealer {
     fun dealRiver(handState: HandState): HandState {
         deckIterator!!
 
-        assert(handState.communityCards.size == 4)
+        assert(handState.bettingRound == BettingRound.RIVER)
 
         val riverCard = deckIterator!!.next()
         return handState.copy(communityCards = handState.communityCards + riverCard)
