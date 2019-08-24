@@ -8,7 +8,6 @@ import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
-import java.awt.Dialog
 import java.lang.AssertionError
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
