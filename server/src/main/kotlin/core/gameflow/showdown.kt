@@ -31,7 +31,9 @@ fun resolveShowdown(handState: HandState): List<ShowdownAction> {
 
     orderedPlayers.forEach { player ->
 
-        // player should show the cards if no other player definitely wins with him
+        // A player should show the cards if no other showing player definitely wins with him.
+        // If so, he is added to the showing pool, and all the following players that are about to
+        // take a showdown action have to take him into account as well.
         if (showingPlayers.none { definitelyWins(it, player) })
             showingPlayers.add(player)
     }
