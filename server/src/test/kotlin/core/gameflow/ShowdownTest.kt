@@ -234,5 +234,4 @@ class ShowdownTest {
                 ShowCards(player2.id)
         ))
     }
-
 }
