@@ -44,7 +44,7 @@ data class Player(
     fun hand(communityCards: List<Card>): PokerHand {
         assert(holeCards.isNotEmpty())
         val cards = communityCards + holeCards
-        val possibleHands = cards.toSet().combinations(5).map { makeHand(it.toList()) }
+        val possibleHands = cards.toSet().combinations(5).map { makeHand(it) }
         return possibleHands.reduce { acc, next -> if (acc > next) acc else next }
     }
 }
