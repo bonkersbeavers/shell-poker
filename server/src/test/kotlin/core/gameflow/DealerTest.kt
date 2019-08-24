@@ -31,18 +31,18 @@ class DealerTest {
         val newState = dealer.dealHoleCards(state)
 
         assert(newState.players[0].holeCards == listOf(
-                Card(CardRank.TEN, CardSuit.SPADES),
-                Card(CardRank.SEVEN, CardSuit.DIAMONDS)
+                Card(CardRank.JACK, CardSuit.CLUBS),
+                Card(CardRank.EIGHT, CardSuit.HEARTS)
         ))
 
         assert(newState.players[1].holeCards == listOf(
-                Card(CardRank.QUEEN, CardSuit.CLUBS),
-                Card(CardRank.EIGHT, CardSuit.SPADES)
+                Card(CardRank.KING, CardSuit.DIAMONDS),
+                Card(CardRank.NINE, CardSuit.CLUBS)
         ))
 
         assert(newState.players[2].holeCards == listOf(
-                Card(CardRank.SEVEN, CardSuit.SPADES),
-                Card(CardRank.SIX, CardSuit.HEARTS)
+                Card(CardRank.EIGHT, CardSuit.CLUBS),
+                Card(CardRank.SEVEN, CardSuit.SPADES)
         ))
 
         val newSeed = 234
@@ -51,18 +51,18 @@ class DealerTest {
         val newState2 = dealer.dealHoleCards(state)
 
         assert(newState2.players[0].holeCards == listOf(
-                Card(CardRank.SEVEN, CardSuit.DIAMONDS),
-                Card(CardRank.JACK, CardSuit.DIAMONDS)
+                Card(CardRank.EIGHT, CardSuit.HEARTS),
+                Card(CardRank.QUEEN, CardSuit.HEARTS)
         ))
 
         assert(newState2.players[1].holeCards == listOf(
-                Card(CardRank.TEN, CardSuit.HEARTS),
-                Card(CardRank.TEN, CardSuit.CLUBS)
+                Card(CardRank.JACK, CardSuit.SPADES),
+                Card(CardRank.JACK, CardSuit.DIAMONDS)
         ))
 
         assert(newState2.players[2].holeCards == listOf(
-                Card(CardRank.FOUR, CardSuit.SPADES),
-                Card(CardRank.FIVE, CardSuit.DIAMONDS)
+                Card(CardRank.FIVE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
         ))
     }
 
@@ -86,18 +86,18 @@ class DealerTest {
         val newState = dealer.dealHoleCards(state)
 
         assert(newState.players[0].holeCards == listOf(
-                Card(CardRank.ACE, CardSuit.HEARTS),
-                Card(CardRank.TWO, CardSuit.HEARTS)
+                Card(CardRank.TWO, CardSuit.SPADES),
+                Card(CardRank.THREE, CardSuit.SPADES)
         ))
 
         assert(newState.players[1].holeCards == listOf(
-                Card(CardRank.THREE, CardSuit.HEARTS),
-                Card(CardRank.FOUR, CardSuit.HEARTS)
+                Card(CardRank.FOUR, CardSuit.SPADES),
+                Card(CardRank.FIVE, CardSuit.SPADES)
         ))
 
         assert(newState.players[2].holeCards == listOf(
-                Card(CardRank.FIVE, CardSuit.HEARTS),
-                Card(CardRank.SIX, CardSuit.HEARTS)
+                Card(CardRank.SIX, CardSuit.SPADES),
+                Card(CardRank.SEVEN, CardSuit.SPADES)
         ))
     }
 
@@ -125,9 +125,9 @@ class DealerTest {
         val afterFlopState = dealer.dealFlop(updatedBettingRoundState1)
 
         assert(afterFlopState.communityCards == listOf(
-                Card(CardRank.SEVEN, CardSuit.HEARTS),
-                Card(CardRank.EIGHT, CardSuit.HEARTS),
-                Card(CardRank.NINE, CardSuit.HEARTS)
+                Card(CardRank.EIGHT, CardSuit.SPADES),
+                Card(CardRank.NINE, CardSuit.SPADES),
+                Card(CardRank.TEN, CardSuit.SPADES)
         ))
 
         val updatedBettingRoundState2 = afterFlopState.copy(bettingRound = BettingRound.TURN)
@@ -135,10 +135,10 @@ class DealerTest {
         val afterTurnState = dealer.dealTurn(updatedBettingRoundState2)
 
         assert(afterTurnState.communityCards == listOf(
-                Card(CardRank.SEVEN, CardSuit.HEARTS),
-                Card(CardRank.EIGHT, CardSuit.HEARTS),
-                Card(CardRank.NINE, CardSuit.HEARTS),
-                Card(CardRank.TEN, CardSuit.HEARTS)
+                Card(CardRank.EIGHT, CardSuit.SPADES),
+                Card(CardRank.NINE, CardSuit.SPADES),
+                Card(CardRank.TEN, CardSuit.SPADES),
+                Card(CardRank.JACK, CardSuit.SPADES)
         ))
 
         val updatedBettingRoundState3 = afterTurnState.copy(bettingRound = BettingRound.RIVER)
@@ -146,11 +146,11 @@ class DealerTest {
         val afterRiverState = dealer.dealRiver(updatedBettingRoundState3)
 
         assert(afterRiverState.communityCards == listOf(
-                Card(CardRank.SEVEN, CardSuit.HEARTS),
-                Card(CardRank.EIGHT, CardSuit.HEARTS),
-                Card(CardRank.NINE, CardSuit.HEARTS),
-                Card(CardRank.TEN, CardSuit.HEARTS),
-                Card(CardRank.JACK, CardSuit.HEARTS)
+                Card(CardRank.EIGHT, CardSuit.SPADES),
+                Card(CardRank.NINE, CardSuit.SPADES),
+                Card(CardRank.TEN, CardSuit.SPADES),
+                Card(CardRank.JACK, CardSuit.SPADES),
+                Card(CardRank.QUEEN, CardSuit.SPADES)
         ))
     }
 
