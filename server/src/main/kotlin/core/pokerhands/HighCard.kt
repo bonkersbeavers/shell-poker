@@ -2,7 +2,7 @@ package core.pokerhands
 
 import core.Card
 
-class HighCard(cards: List<Card>) : PokerHand(HandRank.HIGH_CARD, cards) {
+class HighCard(cards: Set<Card>) : PokerHand(HandRank.HIGH_CARD, cards) {
 
     override fun isValidHand(): Boolean = true
 

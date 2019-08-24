@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class StraightFlushTest {
 
     private val strongest = StraightFlush(
-            listOf(
+            setOf(
                     Card(CardRank.KING, CardSuit.HEARTS),
                     Card(CardRank.QUEEN, CardSuit.HEARTS),
                     Card(CardRank.JACK, CardSuit.HEARTS),
@@ -21,7 +21,7 @@ class StraightFlushTest {
     )
 
     private val mediocre1 = StraightFlush(
-            listOf(
+            setOf(
                     Card(CardRank.QUEEN, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.SPADES),
                     Card(CardRank.TEN, CardSuit.SPADES),
@@ -31,7 +31,7 @@ class StraightFlushTest {
     )
 
     private val mediocre1same = StraightFlush(
-            listOf(
+            setOf(
                     Card(CardRank.QUEEN, CardSuit.CLUBS),
                     Card(CardRank.JACK, CardSuit.CLUBS),
                     Card(CardRank.TEN, CardSuit.CLUBS),
@@ -41,7 +41,7 @@ class StraightFlushTest {
     )
 
     private val weakest = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.HEARTS),
                     Card(CardRank.FOUR, CardSuit.HEARTS),
                     Card(CardRank.THREE, CardSuit.HEARTS),
@@ -66,7 +66,7 @@ class StraightFlushTest {
     fun `StraightFlush instantiation should fail if there is no straight flush on hand`() {
         assertThrows<AssertionError> {
             StraightFlush(
-                    listOf(
+                    setOf(
                             Card(CardRank.QUEEN, CardSuit.CLUBS),
                             Card(CardRank.JACK, CardSuit.DIAMONDS),
                             Card(CardRank.TEN, CardSuit.CLUBS),
@@ -78,7 +78,7 @@ class StraightFlushTest {
 
         assertThrows<AssertionError> {
             StraightFlush(
-                    listOf(
+                    setOf(
                             Card(CardRank.SIX, CardSuit.HEARTS),
                             Card(CardRank.FOUR, CardSuit.HEARTS),
                             Card(CardRank.THREE, CardSuit.HEARTS),
