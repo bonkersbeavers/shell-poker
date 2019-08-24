@@ -3,11 +3,9 @@ package core.pokerhands
 import core.Card
 import core.CardRank
 
-fun is5CardHand(cards: List<Card>): Boolean = (cards.size == 5) and (cards.distinct().size == 5)
+fun makeHand(cards: Set<Card>): PokerHand {
 
-fun makeHand(cards: List<Card>): PokerHand {
-
-    assert(is5CardHand(cards))
+    assert(cards.size == 5)
 
     return when {
         isRoyalFlush(cards) -> RoyalFlush(cards)
@@ -28,49 +26,49 @@ fun makeHand(cards: List<Card>): PokerHand {
  * cards parameter should always be a valid 5-card hand.
  */
 
-fun isPair(cards: List<Card>): Boolean {
+fun isPair(cards: Set<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 2 }
 }
 
-fun isTwoPair(cards: List<Card>): Boolean {
+fun isTwoPair(cards: Set<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.count { it == 2 } == 2
 }
 
-fun isThreeOfAKind(cards: List<Card>): Boolean {
+fun isThreeOfAKind(cards: Set<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 3 }
 }
 
-fun isStraight(cards: List<Card>): Boolean {
+fun isStraight(cards: Set<Card>): Boolean {
 
-    val ranks = cards.map { it.rank }.toSet()
-    val lowest: CardRank = ranks.minBy { it.strength }!!
+    val ranks = cards.map { it.rank }.sorted()
+    val lowest = ranks.first()
 
     return when (ranks) {
-        (lowest..(lowest + 4)).toSet() -> true
-        (CardRank.TWO..CardRank.FIVE).toSet() + CardRank.ACE -> true
+        (lowest..(lowest + 4)).toList() -> true
+        (CardRank.TWO..CardRank.FIVE).toList() + CardRank.ACE -> true
         else -> false
     }
 }
 
-fun isFlush(cards: List<Card>): Boolean = cards.all { it.suit == cards[0].suit }
+fun isFlush(cards: Set<Card>): Boolean = cards.distinctBy { it.suit }.size == 1
 
-fun isFullHouse(cards: List<Card>): Boolean {
+fun isFullHouse(cards: Set<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 2 } and rankCounts.any { it == 3 }
 }
 
-fun isFourOfAKind(cards: List<Card>): Boolean {
+fun isFourOfAKind(cards: Set<Card>): Boolean {
     val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 4 }
 }
 
-fun isStraightFlush(cards: List<Card>): Boolean = isStraight(cards) and isFlush(cards)
+fun isStraightFlush(cards: Set<Card>): Boolean = isStraight(cards) and isFlush(cards)
 
-fun isRoyalFlush(cards: List<Card>): Boolean {
-    val isHighestStraight = cards.map { it.rank }.toSet() == (CardRank.TEN..CardRank.ACE).toSet()
+fun isRoyalFlush(cards: Set<Card>): Boolean {
+    val isHighestStraight = cards.map { it.rank }.sorted() == (CardRank.TEN..CardRank.ACE).toList()
     return isFlush(cards) and isHighestStraight
 }
 
@@ -79,7 +77,7 @@ fun isRoyalFlush(cards: List<Card>): Boolean {
  * better kickers, 0 if both lists are equally strong and negative value otherwise.
  * It is assumed that both lists are equally long.
  */
-fun compareKickers(kickersA: List<Card>, kickersB: List<Card>): Int {
+fun compareKickers(kickersA: Set<Card>, kickersB: Set<Card>): Int {
     val ranksA = kickersA.map { it.rank }.sortedDescending()
     val ranksB = kickersB.map { it.rank }.sortedDescending()
 
@@ -91,14 +89,17 @@ fun compareKickers(kickersA: List<Card>, kickersB: List<Card>): Int {
 }
 
 /** cards parameter should contain 5 cards that make valid straight. */
-fun getStraightRank(cards: List<Card>): CardRank {
-    val ranks = cards.map { it.rank }.toSet()
-    val lowestStraight = (CardRank.TWO..CardRank.FIVE).toSet() + CardRank.ACE
+fun getStraightRank(cards: Set<Card>): CardRank {
+    val ranks = cards.map { it.rank }.sorted()
+    val lowestStraight = (CardRank.TWO..CardRank.FIVE).toList() + CardRank.ACE
 
-    return if (ranks == lowestStraight) CardRank.FIVE else ranks.maxBy { it.strength }!!
+    return when (ranks) {
+        lowestStraight -> CardRank.FIVE
+        else -> ranks.last()
+    }
 }
 
-fun compareStraights(cardsA: List<Card>, cardsB: List<Card>): Int {
+fun compareStraights(cardsA: Set<Card>, cardsB: Set<Card>): Int {
     val straightRankA = getStraightRank(cardsA)
     val straightRankB = getStraightRank(cardsB)
 
