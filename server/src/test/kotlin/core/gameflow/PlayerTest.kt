@@ -153,11 +153,14 @@ class PlayerTest {
     }
 
     @Test
-    fun `hand member should create a proper poker hand out of 5 best cards`() {
+    fun `hand member should create the best poker hand out of hole cards and community cards`() {
         val player = Player(
                 position = 0,
                 stack = 0,
-                holeCards = listOf(Card(CardRank.ACE, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.HEARTS))
+                holeCards = listOf(
+                        Card(CardRank.ACE, CardSuit.SPADES),
+                        Card(CardRank.SIX, CardSuit.HEARTS)
+                )
         )
 
         val communityCards = listOf(
@@ -168,7 +171,7 @@ class PlayerTest {
                 Card(CardRank.KING, CardSuit.DIAMONDS)
         )
 
-        val properHand = TwoPair(listOf(
+        val properHand = TwoPair(setOf(
                 Card(CardRank.ACE, CardSuit.SPADES),
                 Card(CardRank.TWO, CardSuit.CLUBS),
                 Card(CardRank.TWO, CardSuit.DIAMONDS),
@@ -176,6 +179,36 @@ class PlayerTest {
                 Card(CardRank.SIX, CardSuit.HEARTS)
         ))
 
-        assert(player.hand(communityCards).compareTo(properHand) == 0)
+        assert(player.hand(communityCards) == properHand)
+    }
+
+    @Test
+    fun `hand member should create one of the best hands if multiple cases are possible`() {
+        val player = Player(
+                position = 0,
+                stack = 0,
+                holeCards = listOf(
+                        Card(CardRank.ACE, CardSuit.SPADES),
+                        Card(CardRank.SIX, CardSuit.HEARTS)
+                )
+        )
+
+        val communityCards = listOf(
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS)
+        )
+
+        val possibleProperHand = TwoPair(setOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        ))
+
+        assert(player.hand(communityCards).compareTo(possibleProperHand) == 0)
     }
 }
