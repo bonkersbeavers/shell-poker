@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class ThreeOfAKindTest {
 
     private val strongThree = ThreeOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.KING, CardSuit.DIAMONDS),
                     Card(CardRank.KING, CardSuit.HEARTS),
@@ -21,7 +21,7 @@ class ThreeOfAKindTest {
     )
 
     private val weakThreeStrongKicker = ThreeOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.FIVE, CardSuit.DIAMONDS),
                     Card(CardRank.FIVE, CardSuit.HEARTS),
@@ -31,7 +31,7 @@ class ThreeOfAKindTest {
     )
 
     private val weakThreeWeakKicker = ThreeOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.CLUBS),
                     Card(CardRank.THREE, CardSuit.DIAMONDS),
                     Card(CardRank.EIGHT, CardSuit.CLUBS),
@@ -41,7 +41,7 @@ class ThreeOfAKindTest {
     )
 
     private val weakThreeWeakKicker2 = ThreeOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.CLUBS),
                     Card(CardRank.EIGHT, CardSuit.DIAMONDS),
                     Card(CardRank.FIVE, CardSuit.DIAMONDS),
@@ -69,7 +69,7 @@ class ThreeOfAKindTest {
     fun `Three of a kind instantiation should fail if there are no three cards with the same rank in the hand`() {
         assertThrows<AssertionError> {
             ThreeOfAKind(
-                    listOf(
+                    setOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
                             Card(CardRank.JACK, CardSuit.DIAMONDS),

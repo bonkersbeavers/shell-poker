@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class StraightTest {
 
     private val strongest = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.KING, CardSuit.HEARTS),
                     Card(CardRank.QUEEN, CardSuit.SPADES),
@@ -21,7 +21,7 @@ class StraightTest {
     )
 
     private val mediocre1 = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.KING, CardSuit.HEARTS),
                     Card(CardRank.QUEEN, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.CLUBS),
@@ -31,7 +31,7 @@ class StraightTest {
     )
 
     private val mediocre2 = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.SEVEN, CardSuit.HEARTS),
                     Card(CardRank.SIX, CardSuit.SPADES),
                     Card(CardRank.FIVE, CardSuit.CLUBS),
@@ -41,7 +41,7 @@ class StraightTest {
     )
 
     private val mediocre2same = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.SEVEN, CardSuit.SPADES),
                     Card(CardRank.SIX, CardSuit.SPADES),
                     Card(CardRank.FIVE, CardSuit.DIAMONDS),
@@ -51,7 +51,7 @@ class StraightTest {
     )
 
     private val weakest = Straight(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.HEARTS),
                     Card(CardRank.FOUR, CardSuit.SPADES),
                     Card(CardRank.THREE, CardSuit.CLUBS),
@@ -76,7 +76,7 @@ class StraightTest {
     fun `Straight instantiation should fail if there is no straight on hand`() {
         assertThrows<AssertionError> {
             Straight(
-                    listOf(
+                    setOf(
                             Card(CardRank.EIGHT, CardSuit.SPADES),
                             Card(CardRank.SIX, CardSuit.SPADES),
                             Card(CardRank.FIVE, CardSuit.DIAMONDS),
@@ -88,7 +88,7 @@ class StraightTest {
 
         assertThrows<AssertionError> {
             Straight(
-                    listOf(
+                    setOf(
                             Card(CardRank.SIX, CardSuit.HEARTS),
                             Card(CardRank.FOUR, CardSuit.SPADES),
                             Card(CardRank.THREE, CardSuit.CLUBS),

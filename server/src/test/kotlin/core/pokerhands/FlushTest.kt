@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class FlushTest {
 
     private val strongest = Flush(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.TEN, CardSuit.SPADES),
                     Card(CardRank.QUEEN, CardSuit.SPADES),
@@ -21,7 +21,7 @@ class FlushTest {
     )
 
     private val mediocre1 = Flush(
-            listOf(
+            setOf(
                     Card(CardRank.KING, CardSuit.SPADES),
                     Card(CardRank.TEN, CardSuit.SPADES),
                     Card(CardRank.QUEEN, CardSuit.SPADES),
@@ -31,7 +31,7 @@ class FlushTest {
     )
 
     private val mediocre2 = Flush(
-            listOf(
+            setOf(
                     Card(CardRank.KING, CardSuit.HEARTS),
                     Card(CardRank.TEN, CardSuit.HEARTS),
                     Card(CardRank.QUEEN, CardSuit.HEARTS),
@@ -41,7 +41,7 @@ class FlushTest {
     )
 
     private val weakerByOneKicker = Flush(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.CLUBS),
                     Card(CardRank.TEN, CardSuit.CLUBS),
                     Card(CardRank.QUEEN, CardSuit.CLUBS),
@@ -65,7 +65,7 @@ class FlushTest {
     fun `Flush instantiation should fail when cards are not single suited`() {
         assertThrows<AssertionError> {
             Flush(
-                    listOf(
+                    setOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.CLUBS),
                             Card(CardRank.JACK, CardSuit.DIAMONDS),
