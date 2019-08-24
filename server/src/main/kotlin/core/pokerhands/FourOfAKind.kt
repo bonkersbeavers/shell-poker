@@ -2,7 +2,7 @@ package core.pokerhands
 
 import core.Card
 
-class FourOfAKind(cards: List<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards) {
+class FourOfAKind(cards: Set<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards) {
 
     override fun isValidHand(): Boolean = isFourOfAKind(cards)
 
@@ -13,8 +13,8 @@ class FourOfAKind(cards: List<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards)
         if (thisQuadRank != otherQuadRank)
             return thisQuadRank.strength - otherQuadRank.strength
 
-        val thisKickers = this.cards.filter { it.rank != thisQuadRank }
-        val otherKickers = other.cards.filter { it.rank != otherQuadRank }
+        val thisKickers = this.cards.filter { it.rank != thisQuadRank }.toSet()
+        val otherKickers = other.cards.filter { it.rank != otherQuadRank }.toSet()
 
         return compareKickers(thisKickers, otherKickers)
     }
