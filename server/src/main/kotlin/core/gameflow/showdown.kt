@@ -12,6 +12,10 @@ fun resolveShowdown(handState: HandState): List<ShowdownAction> {
         else -> handState.orderedPlayers(handState.lastAggressor.position)
     }.filter { it.isInGame }
 
+    // when only one player is left in the game
+    if (orderedPlayers.size == 1)
+        return listOf(MuckCards(orderedPlayers.first().id))
+
     // all players must show their cards if there are more streets to be dealt
     if (handState.bettingRound != BettingRound.RIVER)
         return orderedPlayers.map { ShowCards(it.id) }
