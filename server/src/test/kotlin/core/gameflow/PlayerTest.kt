@@ -4,6 +4,7 @@ import core.Card
 import core.CardRank
 import core.CardSuit
 import core.bettinground.ActionType
+import core.pokerhands.FullHouse
 import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -171,15 +172,18 @@ class PlayerTest {
                 Card(CardRank.KING, CardSuit.DIAMONDS)
         )
 
-        val properHand = TwoPair(setOf(
+        val properHandCards = setOf(
                 Card(CardRank.ACE, CardSuit.SPADES),
                 Card(CardRank.TWO, CardSuit.CLUBS),
                 Card(CardRank.TWO, CardSuit.DIAMONDS),
                 Card(CardRank.SIX, CardSuit.CLUBS),
                 Card(CardRank.SIX, CardSuit.HEARTS)
-        ))
+        )
 
-        assert(player.hand(communityCards) == properHand)
+        val playerHand = player.hand(communityCards)
+
+        assert(playerHand is TwoPair)
+        assert(playerHand.cards == properHandCards)
     }
 
     @Test
@@ -201,7 +205,7 @@ class PlayerTest {
                 Card(CardRank.KING, CardSuit.DIAMONDS)
         )
 
-        val possibleProperHand = TwoPair(setOf(
+        val possibleProperHand = FullHouse(setOf(
                 Card(CardRank.ACE, CardSuit.SPADES),
                 Card(CardRank.ACE, CardSuit.HEARTS),
                 Card(CardRank.ACE, CardSuit.CLUBS),
