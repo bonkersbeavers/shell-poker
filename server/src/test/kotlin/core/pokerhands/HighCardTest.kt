@@ -10,7 +10,7 @@ import org.junit.jupiter.api.TestInstance
 class HighCardTest {
 
     private val strongerHand = HighCard(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.KING, CardSuit.DIAMONDS),
                     Card(CardRank.JACK, CardSuit.HEARTS),
@@ -20,7 +20,7 @@ class HighCardTest {
     )
 
     private val weakerHand = HighCard(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
                     Card(CardRank.FIVE, CardSuit.HEARTS),
@@ -30,7 +30,7 @@ class HighCardTest {
     )
 
     private val weakerHand2 = HighCard(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.CLUBS),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
                     Card(CardRank.EIGHT, CardSuit.CLUBS),

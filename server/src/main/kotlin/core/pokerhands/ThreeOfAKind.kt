@@ -2,7 +2,7 @@ package core.pokerhands
 
 import core.cards.Card
 
-class ThreeOfAKind(cards: List<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, cards) {
+class ThreeOfAKind(cards: Set<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, cards) {
 
     override fun isValidHand(): Boolean = isThreeOfAKind(cards)
 
@@ -13,8 +13,8 @@ class ThreeOfAKind(cards: List<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, card
         if (thisThreeRank != otherThreeRank)
             return thisThreeRank.strength - otherThreeRank.strength
 
-        val thisKickers = this.cards.filter { it.rank != thisThreeRank }
-        val otherKickers = other.cards.filter { it.rank != otherThreeRank }
+        val thisKickers = this.cards.filter { it.rank != thisThreeRank }.toSet()
+        val otherKickers = other.cards.filter { it.rank != otherThreeRank }.toSet()
 
         return compareKickers(thisKickers, otherKickers)
     }

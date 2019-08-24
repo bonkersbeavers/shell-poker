@@ -2,7 +2,7 @@ package core.pokerhands
 
 import core.cards.Card
 
-class FullHouse(cards: List<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
+class FullHouse(cards: Set<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
 
     override fun isValidHand(): Boolean = isFullHouse(cards)
 

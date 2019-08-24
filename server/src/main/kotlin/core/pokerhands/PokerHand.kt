@@ -2,10 +2,10 @@ package core.pokerhands
 
 import core.cards.Card
 
-abstract class PokerHand(val rank: HandRank, val cards: List<Card>) {
+abstract class PokerHand(val rank: HandRank, val cards: Set<Card>) {
 
     init {
-        assert(is5CardHand(cards))
+        assert(cards.size == 5)
         assert(isValidHand())
     }
 

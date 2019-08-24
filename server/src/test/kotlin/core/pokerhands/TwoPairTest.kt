@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class TwoPairTest {
 
     private val strongTwoPair = TwoPair(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.TEN, CardSuit.DIAMONDS),
                     Card(CardRank.JACK, CardSuit.HEARTS),
@@ -21,7 +21,7 @@ class TwoPairTest {
     )
 
     private val weakTwoPairStrongKicker = TwoPair(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.FIVE, CardSuit.DIAMONDS),
                     Card(CardRank.FIVE, CardSuit.HEARTS),
@@ -31,7 +31,7 @@ class TwoPairTest {
     )
 
     private val weakTwoPairWeakKicker = TwoPair(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.CLUBS),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
                     Card(CardRank.EIGHT, CardSuit.CLUBS),
@@ -41,7 +41,7 @@ class TwoPairTest {
     )
 
     private val weakTwoPairWeakKicker2 = TwoPair(
-            listOf(
+            setOf(
                     Card(CardRank.FIVE, CardSuit.CLUBS),
                     Card(CardRank.FIVE, CardSuit.DIAMONDS),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
@@ -69,7 +69,7 @@ class TwoPairTest {
     fun `TwoPair instantiation should fail if there are no two pairs in the hand`() {
         assertThrows<AssertionError> {
             TwoPair(
-                    listOf(
+                    setOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
                             Card(CardRank.JACK, CardSuit.DIAMONDS),

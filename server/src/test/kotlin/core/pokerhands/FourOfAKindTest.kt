@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class FourOfAKindTest {
 
     private val strongest = FourOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.ACE, CardSuit.HEARTS),
                     Card(CardRank.ACE, CardSuit.DIAMONDS),
@@ -21,7 +21,7 @@ class FourOfAKindTest {
     )
 
     private val mediocre1 = FourOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.KING, CardSuit.HEARTS),
                     Card(CardRank.KING, CardSuit.SPADES),
                     Card(CardRank.KING, CardSuit.CLUBS),
@@ -31,7 +31,7 @@ class FourOfAKindTest {
     )
 
     private val mediocre2 = FourOfAKind(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.ACE, CardSuit.HEARTS),
                     Card(CardRank.ACE, CardSuit.DIAMONDS),
@@ -60,7 +60,7 @@ class FourOfAKindTest {
     fun `FourOfAKind instantiation should fail if there is no four of a kind on hand`() {
         assertThrows<AssertionError> {
             FourOfAKind(
-                    listOf(
+                    setOf(
                             Card(CardRank.ACE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
                             Card(CardRank.ACE, CardSuit.SPADES),

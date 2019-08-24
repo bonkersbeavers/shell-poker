@@ -1,6 +1,11 @@
 package core.gameflow
 
+import core.Card
+import core.CardRank
+import core.CardSuit
 import core.bettinground.ActionType
+import core.pokerhands.FullHouse
+import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
@@ -146,5 +151,68 @@ class PlayerTest {
                 lastAction = ActionType.BET
         )
         assert(betPlayer.isDecisive)
+    }
+
+    @Test
+    fun `hand member should create the best poker hand out of hole cards and community cards`() {
+        val player = Player(
+                position = 0,
+                stack = 0,
+                holeCards = listOf(
+                        Card(CardRank.ACE, CardSuit.SPADES),
+                        Card(CardRank.SIX, CardSuit.HEARTS)
+                )
+        )
+
+        val communityCards = listOf(
+                Card(CardRank.JACK, CardSuit.HEARTS),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS)
+        )
+
+        val properHandCards = setOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        )
+
+        val playerHand = player.hand(communityCards)
+
+        assert(playerHand is TwoPair)
+        assert(playerHand.cards == properHandCards)
+    }
+
+    @Test
+    fun `hand member should create one of the best hands if multiple cases are possible`() {
+        val player = Player(
+                position = 0,
+                stack = 0,
+                holeCards = listOf(
+                        Card(CardRank.ACE, CardSuit.SPADES),
+                        Card(CardRank.SIX, CardSuit.HEARTS)
+                )
+        )
+
+        val communityCards = listOf(
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS)
+        )
+
+        val possibleProperHand = FullHouse(setOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        ))
+
+        assert(player.hand(communityCards).compareTo(possibleProperHand) == 0)
     }
 }

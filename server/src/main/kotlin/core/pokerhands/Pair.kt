@@ -2,7 +2,7 @@ package core.pokerhands
 
 import core.cards.Card
 
-class Pair(cards: List<Card>) : PokerHand(HandRank.PAIR, cards) {
+class Pair(cards: Set<Card>) : PokerHand(HandRank.PAIR, cards) {
 
     override fun isValidHand(): Boolean = isPair(cards)
 
@@ -13,8 +13,8 @@ class Pair(cards: List<Card>) : PokerHand(HandRank.PAIR, cards) {
         if (thisPairRank != otherPairRank)
             return thisPairRank.strength - otherPairRank.strength
 
-        val thisKickers = this.cards.filter { it.rank != thisPairRank }
-        val otherKickers = other.cards.filter { it.rank != otherPairRank }
+        val thisKickers = this.cards.filter { it.rank != thisPairRank }.toSet()
+        val otherKickers = other.cards.filter { it.rank != otherPairRank }.toSet()
 
         return compareKickers(thisKickers, otherKickers)
     }

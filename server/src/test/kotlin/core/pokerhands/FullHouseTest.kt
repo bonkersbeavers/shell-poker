@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class FullHouseTest {
 
     private val strongFullHouse = FullHouse(
-            listOf(
+            setOf(
                     Card(CardRank.ACE, CardSuit.SPADES),
                     Card(CardRank.TEN, CardSuit.DIAMONDS),
                     Card(CardRank.ACE, CardSuit.HEARTS),
@@ -21,7 +21,7 @@ class FullHouseTest {
     )
 
     private val mediocreFullHouse = FullHouse(
-            listOf(
+            setOf(
                     Card(CardRank.JACK, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
                     Card(CardRank.JACK, CardSuit.HEARTS),
@@ -31,7 +31,7 @@ class FullHouseTest {
     )
 
     private val weakFullHouse = FullHouse(
-            listOf(
+            setOf(
                     Card(CardRank.TWO, CardSuit.SPADES),
                     Card(CardRank.JACK, CardSuit.DIAMONDS),
                     Card(CardRank.TWO, CardSuit.HEARTS),
@@ -41,7 +41,7 @@ class FullHouseTest {
     )
 
     private val weakFullHouse2 = FullHouse(
-            listOf(
+            setOf(
                     Card(CardRank.TWO, CardSuit.SPADES),
                     Card(CardRank.TWO, CardSuit.DIAMONDS),
                     Card(CardRank.JACK, CardSuit.HEARTS),
@@ -69,7 +69,7 @@ class FullHouseTest {
     fun `FullHouse instantiation should fail if there are no pair and set in the hand`() {
         assertThrows<AssertionError> {
             FullHouse(
-                    listOf(
+                    setOf(
                             Card(CardRank.FIVE, CardSuit.CLUBS),
                             Card(CardRank.ACE, CardSuit.DIAMONDS),
                             Card(CardRank.JACK, CardSuit.DIAMONDS),

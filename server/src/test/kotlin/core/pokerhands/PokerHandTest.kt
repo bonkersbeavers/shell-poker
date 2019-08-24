@@ -10,7 +10,7 @@ import org.junit.jupiter.api.assertThrows
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PokerHandTest {
 
-    private val validHand = listOf(
+    private val validHand = setOf(
             Card(CardRank.ACE, CardSuit.SPADES),
             Card(CardRank.ACE, CardSuit.DIAMONDS),
             Card(CardRank.TWO, CardSuit.HEARTS),
@@ -23,7 +23,7 @@ class PokerHandTest {
         HighCard(validHand)
     }
 
-    private val fourCardHand = listOf(
+    private val fourCardHand = setOf(
             Card(CardRank.ACE, CardSuit.SPADES),
             Card(CardRank.ACE, CardSuit.DIAMONDS),
             Card(CardRank.TWO, CardSuit.HEARTS),
@@ -37,7 +37,7 @@ class PokerHandTest {
         }
     }
 
-    private val repeatedCardsHand = listOf(
+    private val repeatedCardsHand = setOf(
             Card(CardRank.ACE, CardSuit.SPADES),
             Card(CardRank.ACE, CardSuit.DIAMONDS),
             Card(CardRank.TWO, CardSuit.HEARTS),
