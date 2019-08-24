@@ -1,13 +1,13 @@
 package core.gameflow
 
+import core.cards.Card
 import com.marcinmoskala.math.combinations
-import core.Card
 import core.bettinground.ActionType
 import core.pokerhands.PokerHand
 import core.pokerhands.makeHand
 
 /**
- * chipsInPot - the amount of player's chips that already went into the pot in previous rbetting rounds,
+ * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
  *      not including the chips in player's current bet
  */
 data class Player(

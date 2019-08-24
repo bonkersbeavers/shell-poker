@@ -1,6 +1,6 @@
 package core.pokerhands
 
-import core.Card
+import core.cards.Card
 
 abstract class PokerHand(val rank: HandRank, val cards: Set<Card>) {
 
