@@ -1,6 +1,6 @@
 package core.gameflow
 
-import core.Card
+import core.cards.Card
 
 /**
  * activePlayer set to null indicates that there is no further action possible in given betting round.

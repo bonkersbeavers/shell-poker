@@ -1,7 +1,7 @@
 package core.pokerhands
 
-import core.Card
-import core.CardRank
+import core.cards.Card
+import core.cards.CardRank
 
 fun makeHand(cards: Set<Card>): PokerHand {
 
@@ -45,6 +45,9 @@ fun isStraight(cards: Set<Card>): Boolean {
 
     val ranks = cards.map { it.rank }.sorted()
     val lowest = ranks.first()
+
+    if (lowest > CardRank.TEN)
+        return false
 
     return when (ranks) {
         (lowest..(lowest + 4)).toList() -> true
