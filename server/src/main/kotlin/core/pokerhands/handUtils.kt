@@ -46,6 +46,9 @@ fun isStraight(cards: Set<Card>): Boolean {
     val ranks = cards.map { it.rank }.sorted()
     val lowest = ranks.first()
 
+    if (lowest > CardRank.TEN)
+        return false
+
     return when (ranks) {
         (lowest..(lowest + 4)).toList() -> true
         (CardRank.TWO..CardRank.FIVE).toList() + CardRank.ACE -> true
