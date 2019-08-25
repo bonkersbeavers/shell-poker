@@ -1,9 +1,11 @@
 package core.gameflow
 
-sealed class ShowdownAction(open val playerId: Int)
+sealed class ShowdownAction {
+    abstract val playerId: Int
+}
 
-data class ShowCards(override val playerId: Int) : ShowdownAction(playerId)
-data class MuckCards(override val playerId: Int) : ShowdownAction(playerId)
+data class ShowCards(override val playerId: Int) : ShowdownAction()
+data class MuckCards(override val playerId: Int) : ShowdownAction()
 
 fun resolveShowdown(handState: HandState): List<ShowdownAction> {
 
