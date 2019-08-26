@@ -16,7 +16,7 @@ data class HandState(
     val players: List<Player>,
     val blinds: Blinds,
     val positions: Positions,
-    val activePlayer: Player?,
+    val activePlayer: Player? = null,
     val communityCards: List<Card> = emptyList(),
     val bettingRound: BettingRound = BettingRound.PRE_FLOP,
     val lastAggressor: Player? = null,
