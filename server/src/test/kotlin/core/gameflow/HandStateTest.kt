@@ -8,20 +8,6 @@ import java.lang.AssertionError
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HandStateTest {
-    @Test
-    fun `HandState instantiation should fail if there are less than 2 players`() {
-        assertThrows<AssertionError> {
-
-            val player = Player(position = 0, stack = 100)
-
-            HandState(
-                    players = listOf(player),
-                    blinds = Blinds(50, 100),
-                    buttonPosition = 0,
-                    activePlayer = player
-            )
-        }
-    }
 
     @Test
     fun `HandState instantiation should fail if players' positions are not unique`() {
@@ -34,8 +20,7 @@ class HandStateTest {
             HandState(
                     players = listOf(player0, player1, player2),
                     blinds = Blinds(50, 100),
-                    buttonPosition = 0,
-                    activePlayer = null
+                    positions = Positions(button = 0, smallBlind = 1, bigBlind = 2)
             )
         }
     }
@@ -51,7 +36,7 @@ class HandStateTest {
             HandState(
                     players = listOf(player0, player1),
                     blinds = Blinds(50, 100),
-                    buttonPosition = 0,
+                    positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                     activePlayer = player2
             )
         }
@@ -68,7 +53,7 @@ class HandStateTest {
             HandState(
                     players = listOf(player0, player1),
                     blinds = Blinds(50, 100),
-                    buttonPosition = 0,
+                    positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                     activePlayer = player1,
                     lastAggressor = player2
             )
@@ -85,7 +70,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1
         )
 
@@ -102,7 +87,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 100,
                 extraBet = 75
@@ -122,7 +107,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 extraBet = 75
@@ -142,7 +127,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 extraBet = 75
@@ -152,7 +137,7 @@ class HandStateTest {
     }
 
     @Test
-    fun `HandState should properly identify players on blind positions when there are more than two players`() {
+    fun `HandState should properly find players on blind positions`() {
 
         val player0 = Player(position = 0, stack = 100)
         val player1 = Player(position = 1, stack = 100)
@@ -162,28 +147,10 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 2,
-                activePlayer = player3
+                positions = Positions(button = 2, smallBlind = 3, bigBlind = 0)
         )
 
         assert(state.smallBlindPlayer == player3)
-        assert(state.bigBlindPlayer == player0)
-    }
-
-    @Test
-    fun `HandState should properly identify players on blind positions when the game is heads up`() {
-
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100) // BTN
-
-        val state = HandState(
-                players = listOf(player0, player1),
-                blinds = Blinds(50, 100),
-                buttonPosition = 1,
-                activePlayer = player0
-        )
-
-        assert(state.smallBlindPlayer == player1)
         assert(state.bigBlindPlayer == player0)
     }
 
@@ -198,7 +165,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 2,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3
         )
 
@@ -219,7 +186,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 2,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3
         )
 
@@ -237,7 +204,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 2,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3
         )
 
@@ -256,7 +223,7 @@ class HandStateTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 2,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3
         )
 
