@@ -10,7 +10,7 @@ data class MuckCards(override val playerId: Int) : ShowdownAction()
 fun resolveShowdown(handState: HandState): List<ShowdownAction> {
 
     val orderedPlayers = when {
-        handState.lastAggressor == null -> handState.orderedPlayers(handState.buttonPosition + 1)
+        handState.lastAggressor == null -> handState.orderedPlayers(handState.positions.button + 1)
         else -> handState.orderedPlayers(handState.lastAggressor.position)
     }.filter { it.isInGame }
 
