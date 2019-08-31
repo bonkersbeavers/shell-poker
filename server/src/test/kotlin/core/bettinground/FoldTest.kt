@@ -1,16 +1,11 @@
 package core.bettinground
 
-import core.gameflow.BettingRound
-import core.gameflow.Blinds
-import core.gameflow.HandState
-import core.gameflow.Player
+import core.gameflow.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FoldTest {
-
-    private val blindsMock = Blinds(0, 0)
 
     @Test
     fun `folding with active players ahead should simply move activePlayer`() {
@@ -21,8 +16,8 @@ class FoldTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = blindsMock,
-                buttonPosition = 0,
+                blinds = Blinds(50, 100),
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.FLOP
@@ -44,8 +39,8 @@ class FoldTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = blindsMock,
-                buttonPosition = 0,
+                blinds = Blinds(50, 100),
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.FLOP
@@ -67,8 +62,8 @@ class FoldTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = blindsMock,
-                buttonPosition = 1,
+                blinds = Blinds(50, 100),
+                positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.PRE_FLOP
@@ -91,7 +86,7 @@ class FoldTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 1,
+                positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.PRE_FLOP
@@ -114,7 +109,7 @@ class FoldTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 1,
+                positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 200,
                 bettingRound = BettingRound.PRE_FLOP

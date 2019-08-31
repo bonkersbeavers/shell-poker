@@ -10,6 +10,8 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ShowdownTest {
 
+    val mockBlinds = Blinds(50, 100)
+
     @Test
     fun `player can muck his cards if no other players are in the hand`() {
         val player0 = Player(position = 0, stack = 100, lastAction = ActionType.FOLD)
@@ -18,8 +20,8 @@ class ShowdownTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                blinds = mockBlinds,
+                positions = Positions(0, 1, 2),
                 bettingRound = BettingRound.TURN,
                 communityCards = listOf(
                         Card(CardRank.ACE, CardSuit.HEARTS),
@@ -43,8 +45,8 @@ class ShowdownTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                blinds = mockBlinds,
+                positions = Positions(0, 1, 2),
                 bettingRound = BettingRound.TURN,
                 communityCards = listOf(
                         Card(CardRank.ACE, CardSuit.HEARTS),
@@ -100,8 +102,8 @@ class ShowdownTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 3,
+                blinds = mockBlinds,
+                positions = Positions(3, 0, 1),
                 bettingRound = BettingRound.RIVER,
                 communityCards = listOf(
                         Card(CardRank.ACE, CardSuit.HEARTS),
@@ -155,8 +157,8 @@ class ShowdownTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 3,
+                blinds = mockBlinds,
+                positions = Positions(3, 0, 1),
                 bettingRound = BettingRound.RIVER,
                 communityCards = listOf(
                         Card(CardRank.ACE, CardSuit.HEARTS),
@@ -213,8 +215,8 @@ class ShowdownTest {
 
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 3,
+                blinds = mockBlinds,
+                positions = Positions(3, 0, 1),
                 bettingRound = BettingRound.RIVER,
                 communityCards = listOf(
                         Card(CardRank.ACE, CardSuit.HEARTS),

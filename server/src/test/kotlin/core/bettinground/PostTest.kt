@@ -1,9 +1,6 @@
 package core.bettinground
 
-import core.gameflow.BettingRound
-import core.gameflow.Blinds
-import core.gameflow.HandState
-import core.gameflow.Player
+import core.gameflow.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -20,7 +17,7 @@ class PostTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 bettingRound = BettingRound.PRE_FLOP
@@ -43,7 +40,7 @@ class PostTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(200, 400),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 bettingRound = BettingRound.PRE_FLOP
@@ -68,7 +65,7 @@ class PostTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 minRaise = 100,
@@ -93,7 +90,7 @@ class PostTest {
         val state = HandState(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 extraBet = 50,

@@ -15,8 +15,8 @@ import core.cards.Card
 data class HandState(
     val players: List<Player>,
     val blinds: Blinds,
-    val buttonPosition: Int,
-    val activePlayer: Player?,
+    val positions: Positions,
+    val activePlayer: Player? = null,
     val communityCards: List<Card> = emptyList(),
     val bettingRound: BettingRound = BettingRound.PRE_FLOP,
     val lastAggressor: Player? = null,
@@ -41,16 +41,12 @@ data class HandState(
     val playersInGame: List<Player> = players.filter { it.isInGame }
     val decisivePlayers: List<Player> = players.filter { it.isDecisive }
 
-    val smallBlindPlayer: Player
-        get() {
-            val firstPlayer = nextPlayer(buttonPosition)
-            return if (players.size >= 3)
-                firstPlayer
-            else
-                nextPlayer(firstPlayer)
-        }
+    // Small blind position may point to an empty seat in some scenarios
+    // when players leave the table between hands.
+    val smallBlindPlayer: Player? = playerAtPosition(positions.smallBlind)
 
-    val bigBlindPlayer: Player = nextPlayer(smallBlindPlayer)
+    // Big blind position must always point to some player.
+    val bigBlindPlayer: Player = playerAtPosition(positions.bigBlind)!!
 
     fun updateActivePlayer(playerUpdate: Player): HandState {
 
@@ -72,6 +68,8 @@ data class HandState(
         val end = sortedPlayers.filter { it.position < startingPosition }
         return begin + end
     }
+
+    fun playerAtPosition(position: Int): Player? = players.find { it.position == position }
 
     fun nextPlayer(position: Int): Player = orderedPlayers(position + 1).first()
     fun nextPlayer(player: Player): Player = nextPlayer(player.position)

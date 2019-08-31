@@ -20,7 +20,7 @@ class DealerTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
         )
@@ -75,7 +75,7 @@ class DealerTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
         )
@@ -110,7 +110,7 @@ class DealerTest {
         val state = HandState(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
         )
