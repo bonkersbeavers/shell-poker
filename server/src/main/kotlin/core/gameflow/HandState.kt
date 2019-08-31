@@ -32,61 +32,31 @@ class HandState private constructor(
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = lastLegalBet + extraBet
 
+    val playersInGame: List<Player> = players.filter { it.isInGame }
+    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
+
+    fun playerAtPosition(position: Int): Player? = players.find { it.position == position }
+
     // Small blind position sometimes may point to an empty when players leave the table between hands.
     val smallBlindPlayer: Player? = playerAtPosition(positions.smallBlind)
 
     // Big blind position must always point to some player.
     val bigBlindPlayer: Player = playerAtPosition(positions.bigBlind)!!
 
-    val playersInGame: List<Player> = players.filter { it.isInGame }
-    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
-
-    fun updateActivePlayer(playerUpdate: Player): HandState {
-
-        assert(activePlayer != null)
-
-        val newPlayers = players.map {
-            when (it) {
-                activePlayer -> playerUpdate
-                else -> it
-            }
-        }
-
-        return this.toBuilder()
-                .copy(players = newPlayers, activePlayer = playerUpdate)
-                .build()
-    }
-
-    fun orderedPlayers(startingPosition: Int): List<Player> {
-        val sortedPlayers = players.sortedBy { it.position }
-        val begin = sortedPlayers.filter { it.position >= startingPosition }
-        val end = sortedPlayers.filter { it.position < startingPosition }
-        return begin + end
-    }
-
-    fun playerAtPosition(position: Int): Player? = players.find { it.position == position }
-
-    fun nextPlayer(position: Int): Player = orderedPlayers(position + 1).first()
-    fun nextPlayer(player: Player): Player = nextPlayer(player.position)
-
-    fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive }
-    fun nextDecisivePlayer(player: Player): Player? = nextDecisivePlayer(player.position)
-
-
     data class ImmutableBuilder(
-            val players: List<Player>? = null,
-            val activePlayer: Player? = null,
-            val lastAggressor: Player? = null,
+        val players: List<Player>? = null,
+        val activePlayer: Player? = null,
+        val lastAggressor: Player? = null,
 
-            val blinds: Blinds? = null,
-            val positions: Positions? = null,
+        val blinds: Blinds? = null,
+        val positions: Positions? = null,
 
-            val communityCards: List<Card>? = null,
-            val bettingRound: BettingRound? = null,
+        val communityCards: List<Card>? = null,
+        val bettingRound: BettingRound? = null,
 
-            val lastLegalBet: Int? = null,
-            val minRaise: Int? = null,
-            val extraBet: Int? = null
+        val lastLegalBet: Int? = null,
+        val minRaise: Int? = null,
+        val extraBet: Int? = null
     ) {
         constructor(handState: HandState) : this(
                 players = handState.players,
