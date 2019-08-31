@@ -12,41 +12,34 @@ import core.cards.Card
  * extraBet is used when there is an incomplete raise all-in. It is used to store the additional bet value.
  * It should be reset to 0 every time a legal bet / raise is made.
  */
-data class HandState(
+class HandState private constructor(
     val players: List<Player>,
+    val activePlayer: Player?,
+    val lastAggressor: Player?,
+
     val blinds: Blinds,
     val positions: Positions,
-    val activePlayer: Player? = null,
-    val communityCards: List<Card> = emptyList(),
-    val bettingRound: BettingRound = BettingRound.PRE_FLOP,
-    val lastAggressor: Player? = null,
-    val lastLegalBet: Int = 0,
-    val minRaise: Int = blinds.bigBlind,
-    val extraBet: Int = 0
+
+    val communityCards: List<Card>,
+    val bettingRound: BettingRound,
+
+    val lastLegalBet: Int,
+    val minRaise: Int,
+    val extraBet: Int
 ) {
-    init {
-        assert(players.size >= 2)
-        assert(players.distinctBy { it.position }.size == players.size)
-
-        if (activePlayer != null)
-            assert(players.find { it == activePlayer } != null)
-
-        if (lastAggressor != null)
-            assert(players.find { it == lastAggressor } != null)
-    }
+    fun toBuilder(): ImmutableBuilder = ImmutableBuilder(this)
 
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = lastLegalBet + extraBet
 
-    val playersInGame: List<Player> = players.filter { it.isInGame }
-    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
-
-    // Small blind position may point to an empty seat in some scenarios
-    // when players leave the table between hands.
+    // Small blind position sometimes may point to an empty when players leave the table between hands.
     val smallBlindPlayer: Player? = playerAtPosition(positions.smallBlind)
 
     // Big blind position must always point to some player.
     val bigBlindPlayer: Player = playerAtPosition(positions.bigBlind)!!
+
+    val playersInGame: List<Player> = players.filter { it.isInGame }
+    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
 
     fun updateActivePlayer(playerUpdate: Player): HandState {
 
@@ -59,7 +52,9 @@ data class HandState(
             }
         }
 
-        return this.copy(players = newPlayers, activePlayer = playerUpdate)
+        return this.toBuilder()
+                .copy(players = newPlayers, activePlayer = playerUpdate)
+                .build()
     }
 
     fun orderedPlayers(startingPosition: Int): List<Player> {
@@ -76,4 +71,66 @@ data class HandState(
 
     fun nextDecisivePlayer(position: Int): Player? = orderedPlayers(position + 1).find { it.isDecisive }
     fun nextDecisivePlayer(player: Player): Player? = nextDecisivePlayer(player.position)
+
+
+    data class ImmutableBuilder(
+            val players: List<Player>? = null,
+            val activePlayer: Player? = null,
+            val lastAggressor: Player? = null,
+
+            val blinds: Blinds? = null,
+            val positions: Positions? = null,
+
+            val communityCards: List<Card>? = null,
+            val bettingRound: BettingRound? = null,
+
+            val lastLegalBet: Int? = null,
+            val minRaise: Int? = null,
+            val extraBet: Int? = null
+    ) {
+        constructor(handState: HandState) : this(
+                players = handState.players,
+                activePlayer = handState.activePlayer,
+                lastAggressor = handState.lastAggressor,
+                blinds = handState.blinds,
+                positions = handState.positions,
+                communityCards = handState.communityCards,
+                bettingRound = handState.bettingRound,
+                lastLegalBet = handState.lastLegalBet,
+                minRaise = handState.minRaise,
+                extraBet = handState.extraBet
+        )
+
+        fun build(): HandState {
+            players!!
+            assert(players.size > 2)
+            assert(players.distinctBy { it.position } == players)
+
+            activePlayer ?: assert(activePlayer in players)
+            lastAggressor ?: assert(lastAggressor in players)
+
+            blinds!!
+            positions!!
+
+            // default pre-flop state initialization
+            val communityCards = this.communityCards ?: emptyList()
+            val bettingRound = this.bettingRound ?: BettingRound.PRE_FLOP
+            val lastLegalBet = this.lastLegalBet ?: 0
+            val minRaise = this.minRaise ?: (if (bettingRound == BettingRound.PRE_FLOP) blinds.bigBlind else 0)
+            val extraBet = this.extraBet ?: 0
+
+            return HandState(
+                    players = players,
+                    activePlayer = activePlayer,
+                    lastAggressor = lastAggressor,
+                    blinds = blinds,
+                    positions = positions,
+                    communityCards = communityCards,
+                    bettingRound = bettingRound,
+                    lastLegalBet = lastLegalBet,
+                    minRaise = minRaise,
+                    extraBet = extraBet
+            )
+        }
+    }
 }
