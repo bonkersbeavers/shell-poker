@@ -1,6 +1,8 @@
 package core.bettinground
 
 import core.gameflow.HandState
+import core.gameflow.rebuild
+import core.gameflow.updateActivePlayer
 
 class Raise(val size: Int) : BettingAction(ActionType.RAISE) {
 
@@ -14,7 +16,7 @@ class Raise(val size: Int) : BettingAction(ActionType.RAISE) {
 
         return handState
                 .updateActivePlayer(updatedPlayer)
-                .copy(lastLegalBet = size,
+                .rebuild(lastLegalBet = size,
                         extraBet = 0,
                         minRaise = size + betDifference,
                         lastAggressor = updatedPlayer)

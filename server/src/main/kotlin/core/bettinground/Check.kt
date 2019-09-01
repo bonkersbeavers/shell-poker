@@ -1,6 +1,7 @@
 package core.bettinground
 
 import core.gameflow.HandState
+import core.gameflow.updateActivePlayer
 
 class Check : BettingAction(ActionType.CHECK) {
 
