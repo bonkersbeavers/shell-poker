@@ -4,6 +4,7 @@ import core.cards.CardRank
 import core.cards.CardSuit
 import core.cards.baseDeck
 import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
@@ -18,13 +19,13 @@ class DealerTest {
         val player1 = Player(position = 1, stack = 0)
         val player2 = Player(position = 2, stack = 0)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val dealer = Dealer()
         dealer.shuffle(seed)
@@ -73,13 +74,13 @@ class DealerTest {
         val player1 = Player(position = 1, stack = 0)
         val player2 = Player(position = 2, stack = 0)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val dealer = Dealer()
         dealer.setColdDeck(baseDeck)
@@ -108,20 +109,20 @@ class DealerTest {
         val player1 = Player(position = 1, stack = 0)
         val player2 = Player(position = 2, stack = 0)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = null,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val dealer = Dealer()
         dealer.setColdDeck(baseDeck)
 
         val newState = dealer.dealHoleCards(state)
 
-        val updatedBettingRoundState1 = newState.copy(bettingRound = BettingRound.FLOP)
+        val updatedBettingRoundState1 = newState.rebuild(bettingRound = BettingRound.FLOP)
 
         val afterFlopState = dealer.dealFlop(updatedBettingRoundState1)
 
@@ -131,7 +132,7 @@ class DealerTest {
                 Card(CardRank.TEN, CardSuit.SPADES)
         ))
 
-        val updatedBettingRoundState2 = afterFlopState.copy(bettingRound = BettingRound.TURN)
+        val updatedBettingRoundState2 = afterFlopState.rebuild(bettingRound = BettingRound.TURN)
 
         val afterTurnState = dealer.dealTurn(updatedBettingRoundState2)
 
@@ -142,7 +143,7 @@ class DealerTest {
                 Card(CardRank.JACK, CardSuit.SPADES)
         ))
 
-        val updatedBettingRoundState3 = afterTurnState.copy(bettingRound = BettingRound.RIVER)
+        val updatedBettingRoundState3 = afterTurnState.rebuild(bettingRound = BettingRound.RIVER)
 
         val afterRiverState = dealer.dealRiver(updatedBettingRoundState3)
 
