@@ -27,8 +27,6 @@ class HandState private constructor(
     val minRaise: Int,
     val extraBet: Int
 ) {
-    fun toBuilder(): ImmutableBuilder = ImmutableBuilder(this)
-
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = lastLegalBet + extraBet
 
@@ -72,21 +70,24 @@ class HandState private constructor(
         )
 
         fun build(): HandState {
+
+            // players, blinds and positions can never be null
             players!!
             assert(players.size > 2)
             assert(players.distinctBy { it.position } == players)
 
-            activePlayer ?: assert(activePlayer in players)
-            lastAggressor ?: assert(lastAggressor in players)
-
             blinds!!
             positions!!
 
-            // default pre-flop state initialization
+            activePlayer ?: assert(activePlayer in players)
+            lastAggressor ?: assert(lastAggressor in players)
+
+            // default pre-flop initialization
             val communityCards = this.communityCards ?: emptyList()
             val bettingRound = this.bettingRound ?: BettingRound.PRE_FLOP
+
             val lastLegalBet = this.lastLegalBet ?: 0
-            val minRaise = this.minRaise ?: (if (bettingRound == BettingRound.PRE_FLOP) blinds.bigBlind else 0)
+            val minRaise = this.minRaise ?: blinds.bigBlind
             val extraBet = this.extraBet ?: 0
 
             return HandState(
