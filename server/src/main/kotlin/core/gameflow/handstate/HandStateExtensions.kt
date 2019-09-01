@@ -41,26 +41,26 @@ fun HandState.updateActivePlayer(playerUpdate: Player): HandState {
 fun HandState.toBuilder(): HandState.ImmutableBuilder = HandState.ImmutableBuilder(this)
 
 fun HandState.rebuild(
-        players: List<Player>? = null,
-        activePlayer: Player? = null,
-        lastAggressor: Player? = null,
-        blinds: Blinds? = null,
-        positions: Positions? = null,
-        communityCards: List<Card>? = null,
-        bettingRound: BettingRound? = null,
-        lastLegalBet: Int? = null,
-        minRaise: Int? = null,
-        extraBet: Int? = null
+        players: List<Player>? = this.players,
+        activePlayer: Player? = this.activePlayer,
+        lastAggressor: Player? = this.lastAggressor,
+        blinds: Blinds? = this.blinds,
+        positions: Positions? = this.positions,
+        communityCards: List<Card>? = this.communityCards,
+        bettingRound: BettingRound? = this.bettingRound,
+        lastLegalBet: Int? = this.lastLegalBet,
+        minRaise: Int? = this.minRaise,
+        extraBet: Int? = this.extraBet
 ): HandState = this.toBuilder()
         .copy(
-                players = players ?: this.players,
-                activePlayer = activePlayer ?: this.activePlayer,
-                lastAggressor = lastAggressor ?: this.lastAggressor,
-                blinds = blinds ?: this.blinds,
-                positions = positions ?: this.positions,
-                communityCards = communityCards ?: this.communityCards,
-                bettingRound = bettingRound ?: this.bettingRound,
-                lastLegalBet = lastLegalBet ?: this.lastLegalBet,
-                minRaise = minRaise ?: this.minRaise,
-                extraBet = extraBet ?: this.extraBet
+                players = players,
+                activePlayer = activePlayer,
+                lastAggressor = lastAggressor,
+                blinds = blinds,
+                positions = positions,
+                communityCards = communityCards,
+                bettingRound = bettingRound,
+                lastLegalBet = lastLegalBet,
+                minRaise = minRaise,
+                extraBet = extraBet
         ).build()
