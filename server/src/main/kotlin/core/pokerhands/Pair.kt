@@ -4,7 +4,7 @@ import core.cards.Card
 
 class Pair(cards: Set<Card>) : PokerHand(HandRank.PAIR, cards) {
 
-    override fun isValidHand(): Boolean = isPair(cards)
+    override fun isValidHand(): Boolean = cards.isPair()
 
     override fun compareWithinRank(other: PokerHand): Int {
         val thisPairRank = this.cards.groupBy { it.rank }.maxBy { it.value.size }!!.key
