@@ -1,7 +1,7 @@
 package core.bettinground
-import core.gameflow.HandState
-import core.gameflow.nextDecisivePlayer
-import core.gameflow.rebuild
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.nextDecisivePlayer
+import core.gameflow.handstate.rebuild
 
 abstract class BettingAction(val type: ActionType) {
 

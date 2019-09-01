@@ -2,6 +2,7 @@ package core.gameflow
 
 import core.cards.Card
 import core.cards.baseDeck
+import core.gameflow.handstate.HandState
 import kotlin.random.Random
 
 class Dealer {

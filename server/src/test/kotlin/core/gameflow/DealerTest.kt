@@ -3,6 +3,7 @@ import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit
 import core.cards.baseDeck
+import core.gameflow.handstate.HandState
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows

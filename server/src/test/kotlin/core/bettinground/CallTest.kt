@@ -1,6 +1,7 @@
 package core.bettinground
 
 import core.gameflow.*
+import core.gameflow.handstate.HandState
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 

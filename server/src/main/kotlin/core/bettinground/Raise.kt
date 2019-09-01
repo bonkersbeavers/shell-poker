@@ -1,8 +1,8 @@
 package core.bettinground
 
-import core.gameflow.HandState
-import core.gameflow.rebuild
-import core.gameflow.updateActivePlayer
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
+import core.gameflow.handstate.updateActivePlayer
 
 class Raise(val size: Int) : BettingAction(ActionType.RAISE) {
 

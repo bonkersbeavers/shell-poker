@@ -1,6 +1,10 @@
-package core.gameflow
+package core.gameflow.handstate
 
 import core.cards.Card
+import core.gameflow.BettingRound
+import core.gameflow.Blinds
+import core.gameflow.Player
+import core.gameflow.Positions
 
 /* Utility methods for manipulating players: */
 
@@ -37,16 +41,16 @@ fun HandState.updateActivePlayer(playerUpdate: Player): HandState {
 fun HandState.toBuilder(): HandState.ImmutableBuilder = HandState.ImmutableBuilder(this)
 
 fun HandState.rebuild(
-    players: List<Player>? = null,
-    activePlayer: Player? = null,
-    lastAggressor: Player? = null,
-    blinds: Blinds? = null,
-    positions: Positions? = null,
-    communityCards: List<Card>? = null,
-    bettingRound: BettingRound? = null,
-    lastLegalBet: Int? = null,
-    minRaise: Int? = null,
-    extraBet: Int? = null
+        players: List<Player>? = null,
+        activePlayer: Player? = null,
+        lastAggressor: Player? = null,
+        blinds: Blinds? = null,
+        positions: Positions? = null,
+        communityCards: List<Card>? = null,
+        bettingRound: BettingRound? = null,
+        lastLegalBet: Int? = null,
+        minRaise: Int? = null,
+        extraBet: Int? = null
 ): HandState = this.toBuilder()
         .copy(
                 players = players ?: this.players,

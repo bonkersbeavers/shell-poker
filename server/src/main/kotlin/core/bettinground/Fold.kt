@@ -1,7 +1,7 @@
 package core.bettinground
 
-import core.gameflow.HandState
-import core.gameflow.updateActivePlayer
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.updateActivePlayer
 
 class Fold : BettingAction(ActionType.FOLD) {
 
