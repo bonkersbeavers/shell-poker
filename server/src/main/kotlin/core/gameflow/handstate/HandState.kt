@@ -83,8 +83,11 @@ class HandState private constructor(
             blinds!!
             positions!!
 
-            activePlayer ?: assert(activePlayer in players)
-            lastAggressor ?: assert(lastAggressor in players)
+            if (activePlayer != null)
+                assert(activePlayer in players)
+
+            if (lastAggressor != null)
+                assert(lastAggressor in players)
 
             // default pre-flop initialization
             val communityCards = this.communityCards ?: emptyList()
