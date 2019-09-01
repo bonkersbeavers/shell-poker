@@ -225,4 +225,17 @@ class HandUtilsTest {
 
         assert(cards.best5CardHand().compareTo(possibleProperHand) == 0)
     }
+
+    @Test
+    fun `calling best5CardHand should throw an exception if the set size is smaller than 5`() {
+
+        val cards = setOf(
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS)
+        )
+
+        assertThrows<AssertionError> { cards.best5CardHand() }
+    }
 }
