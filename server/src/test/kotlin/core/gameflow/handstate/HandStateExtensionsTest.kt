@@ -126,4 +126,29 @@ class HandStateExtensionsTest {
         assert(state.nextDecisivePlayer(0) == player2)
         assert(state.nextDecisivePlayer(3) == player0)
     }
+
+    @Test
+    fun `rebuild should create new HandState with properly updated fields`() {
+
+        val player0 = Player(position = 0, stack = 100)
+        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(position = 2, stack = 100)
+        val player3 = Player(position = 3, stack = 0, lastAction = ActionType.ALL_IN)
+
+        val state = HandState.ImmutableBuilder(
+                players = listOf(player0, player1, player2, player3),
+                blinds = Blinds(50, 100),
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
+                activePlayer = player3
+        ).build()
+
+        val newState = state.rebuild(activePlayer = null, extraBet = 250, minRaise = 700)
+
+        assert(newState.players == state.players)
+        assert(newState.blinds == state.blinds)
+        assert(newState.positions == state.positions)
+        assert(newState.activePlayer == null)
+        assert(newState.extraBet == 250)
+        assert(newState.minRaise == 700)
+    }
 }
