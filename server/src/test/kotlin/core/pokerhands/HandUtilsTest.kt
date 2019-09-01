@@ -12,7 +12,7 @@ import java.lang.AssertionError
 class HandUtilsTest {
 
     @Test
-    fun `makeHand should throw an exception if cards number is different than 5`() {
+    fun `toPokerHand should throw an exception if cards number is different than 5`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -21,12 +21,12 @@ class HandUtilsTest {
         )
 
         assertThrows<AssertionError> {
-            makeHand(cards)
+            cards.toPokerHand()
         }
     }
 
     @Test
-    fun `makeHand should properly identify high card`() {
+    fun `toPokerHand should properly identify high card`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -35,11 +35,11 @@ class HandUtilsTest {
                 Card(CardRank.FIVE, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards) is HighCard)
+        assert(cards.toPokerHand() is HighCard)
     }
 
     @Test
-    fun `makeHand should properly identify pair`() {
+    fun `toPokerHand should properly identify pair`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -48,11 +48,11 @@ class HandUtilsTest {
                 Card(CardRank.QUEEN, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards) is Pair)
+        assert(cards.toPokerHand() is Pair)
     }
 
     @Test
-    fun `makeHand should properly identify two pair`() {
+    fun `toPokerHand should properly identify two pair`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -61,11 +61,11 @@ class HandUtilsTest {
                 Card(CardRank.QUEEN, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards) is TwoPair)
+        assert(cards.toPokerHand() is TwoPair)
     }
 
     @Test
-    fun `makeHand should properly identify three of a kind`() {
+    fun `toPokerHand should properly identify three of a kind`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -74,11 +74,11 @@ class HandUtilsTest {
                 Card(CardRank.ACE, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards) is ThreeOfAKind)
+        assert(cards.toPokerHand() is ThreeOfAKind)
     }
 
     @Test
-    fun `makeHand should properly identify straight`() {
+    fun `toPokerHand should properly identify straight`() {
         val cards1 = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.SPADES),
@@ -87,7 +87,7 @@ class HandUtilsTest {
                 Card(CardRank.TEN, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards1) is Straight)
+        assert(cards1.toPokerHand() is Straight)
 
         val cards2 = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
@@ -97,11 +97,11 @@ class HandUtilsTest {
                 Card(CardRank.FIVE, CardSuit.SPADES)
         )
 
-        assert(makeHand(cards2) is Straight)
+        assert(cards2.toPokerHand() is Straight)
     }
 
     @Test
-    fun `makeHand should properly identify flush`() {
+    fun `toPokerHand should properly identify flush`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.DIAMONDS),
                 Card(CardRank.KING, CardSuit.DIAMONDS),
@@ -110,11 +110,11 @@ class HandUtilsTest {
                 Card(CardRank.NINE, CardSuit.DIAMONDS)
         )
 
-        assert(makeHand(cards) is Flush)
+        assert(cards.toPokerHand() is Flush)
     }
 
     @Test
-    fun `makeHand should properly identify full house`() {
+    fun `toPokerHand should properly identify full house`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.DIAMONDS),
                 Card(CardRank.JACK, CardSuit.HEARTS),
@@ -123,11 +123,11 @@ class HandUtilsTest {
                 Card(CardRank.ACE, CardSuit.CLUBS)
         )
 
-        assert(makeHand(cards) is FullHouse)
+        assert(cards.toPokerHand() is FullHouse)
     }
 
     @Test
-    fun `makeHand should properly identify four of a kind`() {
+    fun `toPokerHand should properly identify four of a kind`() {
         val cards = setOf(
                 Card(CardRank.JACK, CardSuit.DIAMONDS),
                 Card(CardRank.JACK, CardSuit.HEARTS),
@@ -136,11 +136,11 @@ class HandUtilsTest {
                 Card(CardRank.ACE, CardSuit.CLUBS)
         )
 
-        assert(makeHand(cards) is FourOfAKind)
+        assert(cards.toPokerHand() is FourOfAKind)
     }
 
     @Test
-    fun `makeHand should properly identify straight flush`() {
+    fun `toPokerHand should properly identify straight flush`() {
         val cards1 = setOf(
                 Card(CardRank.NINE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.CLUBS),
@@ -149,7 +149,7 @@ class HandUtilsTest {
                 Card(CardRank.TEN, CardSuit.CLUBS)
         )
 
-        assert(makeHand(cards1) is StraightFlush)
+        assert(cards1.toPokerHand() is StraightFlush)
 
         val cards2 = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
@@ -159,11 +159,11 @@ class HandUtilsTest {
                 Card(CardRank.FIVE, CardSuit.CLUBS)
         )
 
-        assert(makeHand(cards2) is StraightFlush)
+        assert(cards2.toPokerHand() is StraightFlush)
     }
 
     @Test
-    fun `makeHand should properly identify royal flush`() {
+    fun `toPokerHand should properly identify royal flush`() {
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.CLUBS),
                 Card(CardRank.KING, CardSuit.CLUBS),
@@ -172,6 +172,57 @@ class HandUtilsTest {
                 Card(CardRank.TEN, CardSuit.CLUBS)
         )
 
-        assert(makeHand(cards) is RoyalFlush)
+        assert(cards.toPokerHand() is RoyalFlush)
+    }
+
+    @Test
+    fun `best5CardHand should create the best poker hand out of given set of cards`() {
+
+        val cards = setOf(
+                Card(CardRank.JACK, CardSuit.HEARTS),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS),
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        )
+
+        val properHandCards = setOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.TWO, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        )
+
+        val hand = cards.best5CardHand()
+
+        assert(hand is TwoPair)
+        assert(hand.cards == properHandCards)
+    }
+
+    @Test
+    fun `best5CardHand should create one of the best hands if multiple choices are possible`() {
+
+        val cards = setOf(
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.DIAMONDS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.KING, CardSuit.DIAMONDS),
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        )
+
+        val possibleProperHand = FullHouse(setOf(
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.ACE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.CLUBS),
+                Card(CardRank.SIX, CardSuit.HEARTS)
+        ))
+
+        assert(cards.best5CardHand().compareTo(possibleProperHand) == 0)
     }
 }
