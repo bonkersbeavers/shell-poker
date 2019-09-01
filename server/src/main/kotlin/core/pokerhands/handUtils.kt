@@ -1,49 +1,65 @@
 package core.pokerhands
 
+import com.marcinmoskala.math.combinations
 import core.cards.Card
 import core.cards.CardRank
 
-fun makeHand(cards: Set<Card>): PokerHand {
+fun Set<Card>.toPokerHand(): PokerHand {
 
-    assert(cards.size == 5)
+    assert(this.size == 5)
 
     return when {
-        isRoyalFlush(cards) -> RoyalFlush(cards)
-        isStraightFlush(cards) -> StraightFlush(cards)
-        isFourOfAKind(cards) -> FourOfAKind(cards)
-        isFullHouse(cards) -> FullHouse(cards)
-        isFlush(cards) -> Flush(cards)
-        isStraight(cards) -> Straight(cards)
-        isThreeOfAKind(cards) -> ThreeOfAKind(cards)
-        isTwoPair(cards) -> TwoPair(cards)
-        isPair(cards) -> Pair(cards)
-        else -> HighCard(cards)
+        this.isRoyalFlush() -> RoyalFlush(this)
+        this.isStraightFlush() -> StraightFlush(this)
+        this.isFourOfAKind() -> FourOfAKind(this)
+        this.isFullHouse() -> FullHouse(this)
+        this.isFlush() -> Flush(this)
+        this.isStraight() -> Straight(this)
+        this.isThreeOfAKind() -> ThreeOfAKind(this)
+        this.isTwoPair() -> TwoPair(this)
+        this.isPair() -> Pair(this)
+        else -> HighCard(this)
     }
 }
 
+fun Set<Card>.best5CardHand(): PokerHand {
+    assert(this.size >= 5)
+
+    val possibleHands = this.combinations(5).map { it.toPokerHand() }
+    return possibleHands.reduce { acc, next -> if (acc > next) acc else next }
+}
+
 /**
- * Following methods check if given list of cards make certain poker hand,
- * cards parameter should always be a valid 5-card hand.
+ * Following methods check if given set of cards make certain poker hand.
  */
 
-fun isPair(cards: Set<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
+fun Set<Card>.isHighCard(): Boolean {
+    assert(this.size == 5)
+    return true
+}
+
+fun Set<Card>.isPair(): Boolean {
+    assert(this.size == 5)
+    val rankCounts = this.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 2 }
 }
 
-fun isTwoPair(cards: Set<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
+fun Set<Card>.isTwoPair(): Boolean {
+    assert(this.size == 5)
+    val rankCounts = this.groupBy { it.rank }.map { it.value.size }
     return rankCounts.count { it == 2 } == 2
 }
 
-fun isThreeOfAKind(cards: Set<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
+fun Set<Card>.isThreeOfAKind(): Boolean {
+    assert(this.size == 5)
+    val rankCounts = this.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 3 }
 }
 
-fun isStraight(cards: Set<Card>): Boolean {
+fun Set<Card>.isStraight(): Boolean {
+    assert(this.size == 5)
 
-    val ranks = cards.map { it.rank }.sorted()
+    val ranks = this.map { it.rank }.sorted()
     val lowest = ranks.first()
 
     if (lowest > CardRank.TEN)
@@ -56,23 +72,32 @@ fun isStraight(cards: Set<Card>): Boolean {
     }
 }
 
-fun isFlush(cards: Set<Card>): Boolean = cards.distinctBy { it.suit }.size == 1
+fun Set<Card>.isFlush(): Boolean {
+    assert(this.size == 5)
+    return this.distinctBy { it.suit }.size == 1
+}
 
-fun isFullHouse(cards: Set<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
+fun Set<Card>.isFullHouse(): Boolean {
+    assert(this.size == 5)
+    val rankCounts = this.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 2 } and rankCounts.any { it == 3 }
 }
 
-fun isFourOfAKind(cards: Set<Card>): Boolean {
-    val rankCounts = cards.groupBy { it.rank }.map { it.value.size }
+fun Set<Card>.isFourOfAKind(): Boolean {
+    assert(this.size == 5)
+    val rankCounts = this.groupBy { it.rank }.map { it.value.size }
     return rankCounts.any { it == 4 }
 }
 
-fun isStraightFlush(cards: Set<Card>): Boolean = isStraight(cards) and isFlush(cards)
+fun Set<Card>.isStraightFlush(): Boolean {
+    assert(this.size == 5)
+    return this.isStraight() and this.isFlush()
+}
 
-fun isRoyalFlush(cards: Set<Card>): Boolean {
-    val isHighestStraight = cards.map { it.rank }.sorted() == (CardRank.TEN..CardRank.ACE).toList()
-    return isFlush(cards) and isHighestStraight
+fun Set<Card>.isRoyalFlush(): Boolean {
+    assert(this.size == 5)
+    val isHighestStraight = this.map { it.rank }.sorted() == (CardRank.TEN..CardRank.ACE).toList()
+    return this.isFlush() and isHighestStraight
 }
 
 /**
