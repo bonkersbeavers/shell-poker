@@ -4,7 +4,7 @@ import core.cards.Card
 
 class FourOfAKind(cards: Set<Card>) : PokerHand(HandRank.FOUR_OF_A_KIND, cards) {
 
-    override fun isValidHand(): Boolean = isFourOfAKind(cards)
+    override fun isValidHand(): Boolean = cards.isFourOfAKind()
 
     override fun compareWithinRank(other: PokerHand): Int {
         val thisQuadRank = this.cards.groupBy { it.rank }.maxBy { it.value.size }!!.key
