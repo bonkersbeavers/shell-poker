@@ -3,7 +3,7 @@ package core.gameflow
 import core.cards.Card
 import core.bettinground.ActionType
 import core.pokerhands.PokerHand
-import core.pokerhands.best5CardHand
+import core.pokerhands.pickBestHand
 
 /**
  * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
@@ -45,6 +45,6 @@ data class Player(
     fun hand(communityCards: List<Card>): PokerHand {
         assert(holeCards.isNotEmpty())
         val cards = (communityCards + holeCards).toSet()
-        return cards.best5CardHand()
+        return cards.pickBestHand()
     }
 }

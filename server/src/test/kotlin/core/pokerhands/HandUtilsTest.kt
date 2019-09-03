@@ -176,7 +176,7 @@ class HandUtilsTest {
     }
 
     @Test
-    fun `best5CardHand should create the best poker hand out of given set of cards`() {
+    fun `pickBestHand should create the best poker hand out of given set of cards`() {
 
         val cards = setOf(
                 Card(CardRank.JACK, CardSuit.HEARTS),
@@ -196,14 +196,14 @@ class HandUtilsTest {
                 Card(CardRank.SIX, CardSuit.HEARTS)
         )
 
-        val hand = cards.best5CardHand()
+        val hand = cards.pickBestHand()
 
         assert(hand is TwoPair)
         assert(hand.cards == properHandCards)
     }
 
     @Test
-    fun `best5CardHand should create one of the best hands if multiple choices are possible`() {
+    fun `pickBestHand should create one of the best hands if multiple choices are possible`() {
 
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.HEARTS),
@@ -223,11 +223,11 @@ class HandUtilsTest {
                 Card(CardRank.SIX, CardSuit.HEARTS)
         ))
 
-        assert(cards.best5CardHand().compareTo(possibleProperHand) == 0)
+        assert(cards.pickBestHand().compareTo(possibleProperHand) == 0)
     }
 
     @Test
-    fun `calling best5CardHand should throw an exception if the set size is smaller than 5`() {
+    fun `calling pickBestHand should throw an exception if the set size is smaller than 5`() {
 
         val cards = setOf(
                 Card(CardRank.ACE, CardSuit.HEARTS),
@@ -236,6 +236,6 @@ class HandUtilsTest {
                 Card(CardRank.SIX, CardSuit.CLUBS)
         )
 
-        assertThrows<AssertionError> { cards.best5CardHand() }
+        assertThrows<AssertionError> { cards.pickBestHand() }
     }
 }

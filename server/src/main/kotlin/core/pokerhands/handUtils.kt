@@ -25,7 +25,7 @@ fun Set<Card>.toPokerHand(): PokerHand = fiveCardsMethod {
     }
 }
 
-fun Set<Card>.best5CardHand(): PokerHand {
+fun Set<Card>.pickBestHand(): PokerHand {
     val possibleHands = this.combinations(5).map { it.toPokerHand() }
     return possibleHands.reduce { acc, next -> if (acc > next) acc else next }
 }
