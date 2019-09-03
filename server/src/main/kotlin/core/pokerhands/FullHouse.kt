@@ -4,7 +4,7 @@ import core.cards.Card
 
 class FullHouse(cards: Set<Card>) : PokerHand(HandRank.FULL_HOUSE, cards) {
 
-    override fun isValidHand(): Boolean = isFullHouse(cards)
+    override fun isValidHand(): Boolean = cards.isFullHouse()
 
     override fun compareWithinRank(other: PokerHand): Int {
         val thisSetRank = this.cards.groupBy { it.rank }.filterValues { it.size == 3 }.keys.first()

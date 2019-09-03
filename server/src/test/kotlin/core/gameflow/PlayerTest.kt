@@ -4,7 +4,6 @@ import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit
 import core.bettinground.ActionType
-import core.pokerhands.FullHouse
 import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -184,35 +183,5 @@ class PlayerTest {
 
         assert(playerHand is TwoPair)
         assert(playerHand.cards == properHandCards)
-    }
-
-    @Test
-    fun `hand member should create one of the best hands if multiple cases are possible`() {
-        val player = Player(
-                position = 0,
-                stack = 0,
-                holeCards = listOf(
-                        Card(CardRank.ACE, CardSuit.SPADES),
-                        Card(CardRank.SIX, CardSuit.HEARTS)
-                )
-        )
-
-        val communityCards = listOf(
-                Card(CardRank.ACE, CardSuit.HEARTS),
-                Card(CardRank.ACE, CardSuit.CLUBS),
-                Card(CardRank.SIX, CardSuit.DIAMONDS),
-                Card(CardRank.SIX, CardSuit.CLUBS),
-                Card(CardRank.KING, CardSuit.DIAMONDS)
-        )
-
-        val possibleProperHand = FullHouse(setOf(
-                Card(CardRank.ACE, CardSuit.SPADES),
-                Card(CardRank.ACE, CardSuit.HEARTS),
-                Card(CardRank.ACE, CardSuit.CLUBS),
-                Card(CardRank.SIX, CardSuit.CLUBS),
-                Card(CardRank.SIX, CardSuit.HEARTS)
-        ))
-
-        assert(player.hand(communityCards).compareTo(possibleProperHand) == 0)
     }
 }
