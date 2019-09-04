@@ -1,5 +1,7 @@
 package core.bettinground
-import core.gameflow.HandState
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.nextDecisivePlayer
+import core.gameflow.handstate.rebuild
 
 abstract class BettingAction(val type: ActionType) {
 
@@ -31,29 +33,29 @@ abstract class BettingAction(val type: ActionType) {
 
         return when {
             /* End action when there are no more decisive players. */
-            nextDecisivePlayer == null -> handState.copy(activePlayer = null)
+            nextDecisivePlayer == null -> handState.rebuild(activePlayer = null)
 
             /* End action when only one player is left in the hand. */
-            handState.playersInGame.size == 1 -> handState.copy(activePlayer = null)
+            handState.playersInGame.size == 1 -> handState.rebuild(activePlayer = null)
 
             /* End action when current action taker is the last decisive player in the hand. */
-            nextDecisivePlayer == handState.activePlayer -> handState.copy(activePlayer = null)
+            nextDecisivePlayer == handState.activePlayer -> handState.rebuild(activePlayer = null)
 
             /* Proceed when next decisive player didn't have a chance to take any action yet. */
             (nextDecisivePlayer.lastAction == null) or (nextDecisivePlayer.lastAction == ActionType.POST) ->
-                handState.copy(activePlayer = nextDecisivePlayer)
+                handState.rebuild(activePlayer = nextDecisivePlayer)
 
             /* End action when no one raised next player's bet. */
             /* Exception: when action gets to BB pre-flop and no one raised, handled in previous case. */
             (handState.totalBet > 0) and (nextDecisivePlayer.bet == handState.totalBet) ->
-                handState.copy(activePlayer = null)
+                handState.rebuild(activePlayer = null)
 
             /* End action when no bet was made and everyone checked or folded. */
             (handState.totalBet == 0) and (nextDecisivePlayer.lastAction == ActionType.CHECK) ->
-                handState.copy(activePlayer = null)
+                handState.rebuild(activePlayer = null)
 
             /* Proceed in other cases. */
-            else -> handState.copy(activePlayer = nextDecisivePlayer)
+            else -> handState.rebuild(activePlayer = nextDecisivePlayer)
         }
     }
 }

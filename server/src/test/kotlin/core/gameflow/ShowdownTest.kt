@@ -4,13 +4,14 @@ import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit
 import core.bettinground.ActionType
+import core.gameflow.handstate.HandState
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ShowdownTest {
 
-    val mockBlinds = Blinds(50, 100)
+    private val mockBlinds = Blinds(50, 100)
 
     @Test
     fun `player can muck his cards if no other players are in the hand`() {
@@ -18,7 +19,7 @@ class ShowdownTest {
         val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
         val player2 = Player(position = 2, stack = 0, lastAction = ActionType.ALL_IN)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = mockBlinds,
                 positions = Positions(0, 1, 2),
@@ -31,7 +32,7 @@ class ShowdownTest {
                 ),
                 lastAggressor = player2,
                 activePlayer = null
-        )
+        ).build()
 
         val showdown = resolveShowdown(state)
         assert(showdown == listOf(MuckCards(player2.id)))
@@ -43,7 +44,7 @@ class ShowdownTest {
         val player1 = Player(position = 1, stack = 0, lastAction = ActionType.ALL_IN)
         val player2 = Player(position = 2, stack = 0, lastAction = ActionType.CALL)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = mockBlinds,
                 positions = Positions(0, 1, 2),
@@ -56,7 +57,7 @@ class ShowdownTest {
                 ),
                 lastAggressor = player1,
                 activePlayer = null
-        )
+        ).build()
 
         val showdown = resolveShowdown(state)
         assert(showdown == listOf(
@@ -100,7 +101,7 @@ class ShowdownTest {
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = mockBlinds,
                 positions = Positions(3, 0, 1),
@@ -114,7 +115,7 @@ class ShowdownTest {
                 ),
                 lastAggressor = player1,
                 activePlayer = null
-        )
+        ).build()
 
         val showdown = resolveShowdown(state)
         assert(showdown == listOf(
@@ -155,7 +156,7 @@ class ShowdownTest {
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = mockBlinds,
                 positions = Positions(3, 0, 1),
@@ -169,7 +170,7 @@ class ShowdownTest {
                 ),
                 lastAggressor = null,
                 activePlayer = null
-        )
+        ).build()
 
         val showdown = resolveShowdown(state)
         assert(showdown == listOf(
@@ -213,7 +214,7 @@ class ShowdownTest {
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = mockBlinds,
                 positions = Positions(3, 0, 1),
@@ -227,7 +228,7 @@ class ShowdownTest {
                 ),
                 lastAggressor = player0,
                 activePlayer = null
-        )
+        ).build()
 
         val showdown = resolveShowdown(state)
         assert(showdown == listOf(

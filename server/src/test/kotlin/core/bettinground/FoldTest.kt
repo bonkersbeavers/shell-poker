@@ -1,6 +1,7 @@
 package core.bettinground
 
 import core.gameflow.*
+import core.gameflow.handstate.HandState
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -14,14 +15,14 @@ class FoldTest {
         val player2 = Player(position = 2, stack = 100, bet = 50, lastAction = ActionType.BET)
         val player3 = Player(position = 3, stack = 100, bet = 0, lastAction = ActionType.FOLD)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.FLOP
-        )
+        ).build()
 
         val fold = Fold()
         val newState = fold.apply(state)
@@ -37,14 +38,14 @@ class FoldTest {
         val player2 = Player(position = 2, stack = 100, bet = 100, lastAction = ActionType.CALL)
         val player3 = Player(position = 3, stack = 100, bet = 0, lastAction = ActionType.CHECK) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player3,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.FLOP
-        )
+        ).build()
 
         val fold = Fold()
         val newState = fold.apply(state)
@@ -60,14 +61,14 @@ class FoldTest {
         val player2 = Player(position = 2, stack = 100, bet = 50, lastAction = ActionType.POST) // SB / active player
         val player3 = Player(position = 3, stack = 100, bet = 100, lastAction = ActionType.POST) // BB
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val fold = Fold()
         val newState = fold.apply(state)
@@ -83,14 +84,14 @@ class FoldTest {
         val player2 = Player(position = 2, stack = 100, bet = 50, lastAction = ActionType.POST) // SB / active player
         val player3 = Player(position = 3, stack = 100, bet = 100, lastAction = ActionType.POST) // BB
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 100,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val fold = Fold()
         val newState = fold.apply(state)
@@ -106,14 +107,14 @@ class FoldTest {
         val player2 = Player(position = 2, stack = 100, bet = 100, lastAction = ActionType.CALL) // SB / active player
         val player3 = Player(position = 3, stack = 100, bet = 200, lastAction = ActionType.RAISE) // BB / aggressor
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 1, smallBlind = 2, bigBlind = 3),
                 activePlayer = player2,
                 lastLegalBet = 200,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val fold = Fold()
         val newState = fold.apply(state)
