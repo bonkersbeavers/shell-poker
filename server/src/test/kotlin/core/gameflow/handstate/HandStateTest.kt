@@ -1,7 +1,7 @@
 package core.gameflow.handstate
 
 import core.gameflow.Blinds
-import core.gameflow.Player
+import core.gameflow.player.Player
 import core.gameflow.Positions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -114,41 +114,5 @@ class HandStateTest {
 
         assert(state.smallBlindPlayer == player3)
         assert(state.bigBlindPlayer == player0)
-    }
-
-    @Test
-    fun `playerAtPosition should find player that the position points to`() {
-
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
-
-        val state = HandState.ImmutableBuilder(
-                players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
-                activePlayer = player3
-        ).build()
-
-        assert(state.playerAtPosition(0) == player0)
-        assert(state.playerAtPosition(3) == player3)
-    }
-
-    @Test
-    fun `playerAtPosition should return null if the position is empty`() {
-
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
-
-        val state = HandState.ImmutableBuilder(
-                players = listOf(player0, player1, player3),
-                blinds = Blinds(50, 100),
-                positions = Positions(button = 0, smallBlind = 1, bigBlind = 3),
-                activePlayer = player3
-        ).build()
-
-        assert(state.playerAtPosition(2) == null)
     }
 }

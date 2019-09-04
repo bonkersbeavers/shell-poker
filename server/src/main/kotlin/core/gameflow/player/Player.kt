@@ -1,4 +1,4 @@
-package core.gameflow
+package core.gameflow.player
 
 import core.cards.Card
 import core.bettinground.ActionType
