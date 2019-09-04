@@ -2,5 +2,5 @@ package core.bettinground
 
 sealed class ActionValidation
 
-class ValidAction : ActionValidation()
+object ValidAction : ActionValidation()
 data class InvalidAction(val reason: String) : ActionValidation()

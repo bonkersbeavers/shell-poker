@@ -4,7 +4,9 @@ import core.gameflow.handstate.HandState
 import core.gameflow.handstate.rebuild
 import core.gameflow.handstate.updateActivePlayer
 
-class Raise(val size: Int) : BettingAction(ActionType.RAISE) {
+data class Raise(val size: Int) : BettingAction() {
+
+    override val type: ActionType = ActionType.RAISE
 
     override fun innerApply(handState: HandState): HandState {
 
@@ -35,7 +37,7 @@ class Raise(val size: Int) : BettingAction(ActionType.RAISE) {
             size < handState.minRaise ->
                 InvalidAction("Raise of size $size smaller than minimum legal raise ${handState.minRaise}")
 
-            else -> ValidAction()
+            else -> ValidAction
         }
     }
 }
