@@ -18,7 +18,7 @@ class BetTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -28,7 +28,7 @@ class BetTest {
                 lastLegalBet = 0,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind
-        )
+        ).build()
 
         val currentStack = startingStack - blindsMock.bigBlind
 
@@ -55,7 +55,7 @@ class BetTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
         val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -65,7 +65,7 @@ class BetTest {
                 lastLegalBet = 300,
                 extraBet = 0,
                 minRaise = 600
-        )
+        ).build()
 
         val bet1 = Bet(650)
         assert(bet1.validate(state) == InvalidAction("Cannot bet when a bet has already been made"))
@@ -78,7 +78,7 @@ class BetTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
         val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -88,7 +88,7 @@ class BetTest {
                 lastLegalBet = blindsMock.bigBlind,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind * 2
-        )
+        ).build()
 
         val bet1 = Bet(blindsMock.bigBlind * 2 + 1)
         assert(bet1.validate(state) == InvalidAction("Cannot bet when a bet has already been made"))
@@ -101,7 +101,7 @@ class BetTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -111,7 +111,7 @@ class BetTest {
                 lastLegalBet = 0,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind
-        )
+        ).build()
 
         val currentStack = startingStack - blindsMock.bigBlind
         val betSize = 500

@@ -17,19 +17,19 @@ import core.gameflow.Positions
  * It should be reset to 0 every time a legal bet / raise is made.
  */
 class HandState private constructor(
-        val players: List<Player>,
-        val activePlayer: Player?,
-        val lastAggressor: Player?,
+    val players: List<Player>,
+    val activePlayer: Player?,
+    val lastAggressor: Player?,
 
-        val blinds: Blinds,
-        val positions: Positions,
+    val blinds: Blinds,
+    val positions: Positions,
 
-        val communityCards: List<Card>,
-        val bettingRound: BettingRound,
+    val communityCards: List<Card>,
+    val bettingRound: BettingRound,
 
-        val lastLegalBet: Int,
-        val minRaise: Int,
-        val extraBet: Int
+    val lastLegalBet: Int,
+    val minRaise: Int,
+    val extraBet: Int
 ) {
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = lastLegalBet + extraBet
@@ -46,19 +46,19 @@ class HandState private constructor(
     val bigBlindPlayer: Player = playerAtPosition(positions.bigBlind)!!
 
     data class ImmutableBuilder(
-            val players: List<Player>? = null,
-            val activePlayer: Player? = null,
-            val lastAggressor: Player? = null,
+        val players: List<Player>? = null,
+        val activePlayer: Player? = null,
+        val lastAggressor: Player? = null,
 
-            val blinds: Blinds? = null,
-            val positions: Positions? = null,
+        val blinds: Blinds? = null,
+        val positions: Positions? = null,
 
-            val communityCards: List<Card>? = null,
-            val bettingRound: BettingRound? = null,
+        val communityCards: List<Card>? = null,
+        val bettingRound: BettingRound? = null,
 
-            val lastLegalBet: Int? = null,
-            val minRaise: Int? = null,
-            val extraBet: Int? = null
+        val lastLegalBet: Int? = null,
+        val minRaise: Int? = null,
+        val extraBet: Int? = null
     ) {
         constructor(handState: HandState) : this(
                 players = handState.players,

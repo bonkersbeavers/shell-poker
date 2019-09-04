@@ -41,16 +41,16 @@ fun HandState.updateActivePlayer(playerUpdate: Player): HandState {
 fun HandState.toBuilder(): HandState.ImmutableBuilder = HandState.ImmutableBuilder(this)
 
 fun HandState.rebuild(
-        players: List<Player>? = this.players,
-        activePlayer: Player? = this.activePlayer,
-        lastAggressor: Player? = this.lastAggressor,
-        blinds: Blinds? = this.blinds,
-        positions: Positions? = this.positions,
-        communityCards: List<Card>? = this.communityCards,
-        bettingRound: BettingRound? = this.bettingRound,
-        lastLegalBet: Int? = this.lastLegalBet,
-        minRaise: Int? = this.minRaise,
-        extraBet: Int? = this.extraBet
+    players: List<Player>? = this.players,
+    activePlayer: Player? = this.activePlayer,
+    lastAggressor: Player? = this.lastAggressor,
+    blinds: Blinds? = this.blinds,
+    positions: Positions? = this.positions,
+    communityCards: List<Card>? = this.communityCards,
+    bettingRound: BettingRound? = this.bettingRound,
+    lastLegalBet: Int? = this.lastLegalBet,
+    minRaise: Int? = this.minRaise,
+    extraBet: Int? = this.extraBet
 ): HandState = this.toBuilder()
         .copy(
                 players = players,

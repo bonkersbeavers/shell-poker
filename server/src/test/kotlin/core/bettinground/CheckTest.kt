@@ -18,7 +18,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack, lastAction = ActionType.CHECK)
         val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -26,7 +26,7 @@ class CheckTest {
                 lastAggressor = null,
                 bettingRound = BettingRound.FLOP,
                 lastLegalBet = 0
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) is ValidAction)
@@ -39,7 +39,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST) // active player / big blind
         val player3 = Player(position = 3, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.CALL)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -47,7 +47,7 @@ class CheckTest {
                 lastAggressor = null,
                 bettingRound = BettingRound.PRE_FLOP,
                 lastLegalBet = blindsMock.bigBlind
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) is ValidAction)
@@ -60,7 +60,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack, lastAction = ActionType.POST) // active player / big blind
         val player3 = Player(position = 3, bet = blindsMock.bigBlind + 200, stack = startingStack, lastAction = ActionType.RAISE)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -68,7 +68,7 @@ class CheckTest {
                 lastAggressor = player3,
                 bettingRound = BettingRound.PRE_FLOP,
                 lastLegalBet = blindsMock.bigBlind + 200
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
@@ -81,7 +81,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
         val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -89,7 +89,7 @@ class CheckTest {
                 lastAggressor = player1,
                 bettingRound = BettingRound.FLOP,
                 lastLegalBet = 500
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
@@ -102,7 +102,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null)
         val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = ActionType.FOLD)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -110,7 +110,7 @@ class CheckTest {
                 lastAggressor = null,
                 bettingRound = BettingRound.FLOP,
                 lastLegalBet = 0
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) is ValidAction)
@@ -132,7 +132,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.CHECK)
         val player3 = Player(position = 3, bet = 0, stack = startingStack - blindsMock.bigBlind, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -140,7 +140,7 @@ class CheckTest {
                 lastAggressor = null,
                 bettingRound = BettingRound.FLOP,
                 lastLegalBet = 0
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) is ValidAction)
@@ -162,7 +162,7 @@ class CheckTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST) // active player / big blind
         val player3 = Player(position = 3, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.RAISE)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = blindsMock,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -171,7 +171,7 @@ class CheckTest {
                 bettingRound = BettingRound.PRE_FLOP,
                 lastLegalBet = blindsMock.bigBlind,
                 minRaise = blindsMock.bigBlind * 2
-        )
+        ).build()
 
         val check = Check()
         assert(check.validate(state) is ValidAction)

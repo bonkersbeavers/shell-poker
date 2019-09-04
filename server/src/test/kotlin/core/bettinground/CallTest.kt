@@ -18,7 +18,7 @@ class CallTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
         val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -28,7 +28,7 @@ class CallTest {
                 lastLegalBet = blindsMock.bigBlind,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind * 2
-        )
+        ).build()
 
         val call = Call()
         assert(call.validate(state) is ValidAction)
@@ -41,7 +41,7 @@ class CallTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
         val player3 = Player(position = 3, bet = 0, stack = startingStack, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -51,7 +51,7 @@ class CallTest {
                 lastLegalBet = blindsMock.bigBlind,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind * 2
-        )
+        ).build()
 
         val call = Call()
         assert(call.validate(state) is ValidAction)
@@ -75,7 +75,7 @@ class CallTest {
         val player2 = Player(position = 2, bet = blindsMock.bigBlind, stack = startingStack - blindsMock.bigBlind, lastAction = ActionType.POST)
         val player3 = Player(position = 3, bet = 0, stack = 100, lastAction = null) // active player
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
@@ -85,7 +85,7 @@ class CallTest {
                 lastLegalBet = blindsMock.bigBlind,
                 extraBet = 0,
                 minRaise = blindsMock.bigBlind * 2
-        )
+        ).build()
 
         val call = Call()
         assert(call.validate(state) is ValidAction)
