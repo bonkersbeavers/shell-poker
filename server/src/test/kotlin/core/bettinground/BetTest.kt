@@ -31,16 +31,16 @@ class BetTest {
         val currentStack = 800
 
         val bet1 = Bet(200)
-        assert(bet1.validate(state) is ValidAction)
+        assert(bet1.validate(state) == ValidAction)
 
         val bet2 = Bet(199)
         assert((bet2.validate(state) == InvalidAction("Bet of size 199 smaller than minimum legal bet 200")))
 
         val bet3 = Bet(currentStack - 1)
-        assert(bet3.validate(state) is ValidAction)
+        assert(bet3.validate(state) == ValidAction)
 
         val bet4 = Bet(currentStack)
-        assert(bet4.validate(state) is ValidAction)
+        assert(bet4.validate(state) == ValidAction)
 
         val bet5 = Bet(currentStack + 1)
         assert(bet5.validate(state) == InvalidAction("Bet of size ${currentStack + 1} larger than player's maximum possible bet $currentStack"))
@@ -115,7 +115,7 @@ class BetTest {
         val betSize = 500
 
         val bet = Bet(betSize)
-        assert(bet.validate(state) is ValidAction)
+        assert(bet.validate(state) == ValidAction)
 
         val newState = bet.apply(state)
 

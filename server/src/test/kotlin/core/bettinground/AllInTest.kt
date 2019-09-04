@@ -31,10 +31,9 @@ class AllInTest {
                 minRaise = 600
         ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)
@@ -63,10 +62,9 @@ class AllInTest {
                 minRaise = 600
         ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)
@@ -95,10 +93,9 @@ class AllInTest {
                 minRaise = 600
         ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)
