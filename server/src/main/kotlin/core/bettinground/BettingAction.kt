@@ -3,7 +3,9 @@ import core.gameflow.handstate.HandState
 import core.gameflow.handstate.nextDecisivePlayer
 import core.gameflow.handstate.rebuild
 
-abstract class BettingAction(val type: ActionType) {
+abstract class BettingAction {
+
+    abstract val type: ActionType
 
     /**
      * This method must not shift the activePlayer pointer as this logic

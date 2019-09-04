@@ -4,7 +4,9 @@ import core.gameflow.handstate.HandState
 import core.gameflow.handstate.rebuild
 import core.gameflow.handstate.updateActivePlayer
 
-class AllIn : BettingAction(ActionType.ALL_IN) {
+object AllIn : BettingAction() {
+
+    override val type: ActionType = ActionType.ALL_IN
 
     override fun innerApply(handState: HandState): HandState {
         val player = handState.activePlayer!!
@@ -39,5 +41,5 @@ class AllIn : BettingAction(ActionType.ALL_IN) {
         }
     }
 
-    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction
 }
