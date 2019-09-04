@@ -27,8 +27,7 @@ class CallTest {
                 minRaise = 400
         ).build()
 
-        val call = Call()
-        assert(call.validate(state) is ValidAction)
+        assert(Call.validate(state) == ValidAction)
     }
 
     @Test
@@ -50,10 +49,9 @@ class CallTest {
                 minRaise = 400
         ).build()
 
-        val call = Call()
-        assert(call.validate(state) is ValidAction)
+        assert(Call.validate(state) == ValidAction)
 
-        val newState = call.apply(state)
+        val newState = Call.apply(state)
 
         assert(newState.players[3].bet == 200)
         assert(newState.players[3].stack == 800)
@@ -84,10 +82,9 @@ class CallTest {
                 minRaise = 400
         ).build()
 
-        val call = Call()
-        assert(call.validate(state) is ValidAction)
+        assert(Call.validate(state) == ValidAction)
 
-        val newState = call.apply(state)
+        val newState = Call.apply(state)
 
         assert(newState.players[3].bet == 100)
         assert(newState.players[3].stack == 0)

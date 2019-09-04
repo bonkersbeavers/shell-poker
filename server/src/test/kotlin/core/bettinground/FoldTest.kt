@@ -24,8 +24,7 @@ class FoldTest {
                 bettingRound = BettingRound.FLOP
         ).build()
 
-        val fold = Fold()
-        val newState = fold.apply(state)
+        val newState = Fold.apply(state)
 
         assert(newState.activePlayer == player2)
         assert(newState.playersInGame.toSet() == setOf(player0, player2))
@@ -47,8 +46,7 @@ class FoldTest {
                 bettingRound = BettingRound.FLOP
         ).build()
 
-        val fold = Fold()
-        val newState = fold.apply(state)
+        val newState = Fold.apply(state)
 
         assert(newState.activePlayer == null)
         assert(newState.playersInGame.toSet() == setOf(player0, player2))
@@ -70,8 +68,7 @@ class FoldTest {
                 bettingRound = BettingRound.PRE_FLOP
         ).build()
 
-        val fold = Fold()
-        val newState = fold.apply(state)
+        val newState = Fold.apply(state)
 
         assert(newState.activePlayer == null)
         assert(newState.playersInGame.toSet() == setOf(player3))
@@ -93,8 +90,7 @@ class FoldTest {
                 bettingRound = BettingRound.PRE_FLOP
         ).build()
 
-        val fold = Fold()
-        val newState = fold.apply(state)
+        val newState = Fold.apply(state)
 
         assert(newState.activePlayer == player3)
         assert(newState.playersInGame.toSet() == setOf(player1, player3))
@@ -116,8 +112,7 @@ class FoldTest {
                 bettingRound = BettingRound.PRE_FLOP
         ).build()
 
-        val fold = Fold()
-        val newState = fold.apply(state)
+        val newState = Fold.apply(state)
 
         assert(newState.activePlayer == null)
         assert(newState.playersInGame.toSet() == setOf(player1, player3))

@@ -25,8 +25,7 @@ class CheckTest {
                 lastLegalBet = 0
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) is ValidAction)
+        assert(Check.validate(state) == ValidAction)
     }
 
     @Test
@@ -46,8 +45,7 @@ class CheckTest {
                 lastLegalBet = 200
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) is ValidAction)
+        assert(Check.validate(state) == ValidAction)
     }
 
     @Test
@@ -67,8 +65,7 @@ class CheckTest {
                 lastLegalBet = 400
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
+        assert(Check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
     }
 
     @Test
@@ -88,8 +85,7 @@ class CheckTest {
                 lastLegalBet = 500
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
+        assert(Check.validate(state) == InvalidAction("Cannot check when there is a bet to call"))
     }
 
     @Test
@@ -109,10 +105,9 @@ class CheckTest {
                 lastLegalBet = 0
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) is ValidAction)
+        assert(Check.validate(state) == ValidAction)
 
-        val newState = check.apply(state)
+        val newState = Check.apply(state)
 
         assert(newState.players[1].bet == 0)
         assert(newState.players[1].lastAction == ActionType.CHECK)
@@ -139,10 +134,9 @@ class CheckTest {
                 lastLegalBet = 0
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) is ValidAction)
+        assert(Check.validate(state) == ValidAction)
 
-        val newState = check.apply(state)
+        val newState = Check.apply(state)
 
         assert(newState.players[3].bet == 0)
         assert(newState.players[3].lastAction == ActionType.CHECK)
@@ -170,10 +164,9 @@ class CheckTest {
                 minRaise = 400
         ).build()
 
-        val check = Check()
-        assert(check.validate(state) is ValidAction)
+        assert(Check.validate(state) == ValidAction)
 
-        val newState = check.apply(state)
+        val newState = Check.apply(state)
 
         assert(newState.players[2].bet == 200)
         assert(newState.players[2].lastAction == ActionType.CHECK)
