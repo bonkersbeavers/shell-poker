@@ -101,7 +101,7 @@ class PositionsTest {
     }
 
     @Test
-    fun `BTN and SB must move forward, even if they are placed at empty seats as a result`() {
+    fun `SB must move forward, even if it is placed at an empty seat as a result`() {
 
         val builder1 = HandState.ImmutableBuilder(
                 players = listOf(
@@ -128,5 +128,54 @@ class PositionsTest {
         )
         val updatedBuilder2 = shiftPositions(builder2, roomSettings)
         assert(updatedBuilder2.positions!! == Positions(2, 3, 0))
+    }
+
+    @Test
+    fun `BTN and SB must be placed according to BB, even if it means that they skip some players`() {
+
+        val builder = HandState.ImmutableBuilder(
+                players = listOf(
+                        Player(position = 0, stack = 500), // BTN
+                        Player(position = 1, stack = 500), // SB
+                        Player(position = 2, stack = 500), // new player
+                        Player(position = 3, stack = 500), // new player
+                        Player(position = 4, stack = 500) // BB
+                ),
+                positions = Positions(0, 1, 4)
+        )
+        val updatedBuilder = shiftPositions(builder, roomSettings)
+        assert(updatedBuilder.positions!! == Positions(3, 4, 0))
+    }
+
+    @Test
+    fun `BTN should stay in place when players number changes from 2 to 3`() {
+
+        val builder = HandState.ImmutableBuilder(
+                players = listOf(
+                        Player(position = 0, stack = 500), // BTN / SB
+                        Player(position = 1, stack = 500), // BB
+                        Player(position = 2, stack = 500) // new player
+                ),
+                positions = Positions(0, 0, 1)
+        )
+        val updatedBuilder = shiftPositions(builder, roomSettings)
+        assert(updatedBuilder.positions!! == Positions(0, 1, 2))
+    }
+
+    @Test
+    fun `BTN and SB may both point to empty seats in some cases`() {
+
+        val builder = HandState.ImmutableBuilder(
+                players = listOf(
+                        // 0 - (empty) SB
+                        // 1 - (empty) BB
+                        Player(position = 2, stack = 500),
+                        Player(position = 3, stack = 500),
+                        Player(position = 4, stack = 500) // BTN
+                ),
+                positions = Positions(4, 0, 1)
+        )
+        val updatedBuilder = shiftPositions(builder, roomSettings)
+        assert(updatedBuilder.positions!! == Positions(0, 1, 2))
     }
 }
