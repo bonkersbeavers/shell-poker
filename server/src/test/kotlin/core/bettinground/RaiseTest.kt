@@ -2,7 +2,7 @@ package core.bettinground
 
 import core.gameflow.Blinds
 import core.gameflow.handstate.HandState
-import core.gameflow.Player
+import core.gameflow.player.Player
 import core.gameflow.Positions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

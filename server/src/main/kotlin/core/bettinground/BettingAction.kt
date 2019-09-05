@@ -1,7 +1,8 @@
 package core.bettinground
 import core.gameflow.handstate.HandState
-import core.gameflow.handstate.nextDecisivePlayer
 import core.gameflow.handstate.rebuild
+import core.gameflow.player.inGame
+import core.gameflow.player.nextDecisive
 
 abstract class BettingAction {
 
@@ -31,14 +32,14 @@ abstract class BettingAction {
     private fun shiftActivePlayer(handState: HandState): HandState {
 
         handState.activePlayer!!
-        val nextDecisivePlayer = handState.nextDecisivePlayer(handState.activePlayer)
+        val nextDecisivePlayer = handState.players.nextDecisive(handState.activePlayer)
 
         return when {
             /* End action when there are no more decisive players. */
             nextDecisivePlayer == null -> handState.rebuild(activePlayer = null)
 
             /* End action when only one player is left in the hand. */
-            handState.playersInGame.size == 1 -> handState.rebuild(activePlayer = null)
+            handState.players.inGame().size == 1 -> handState.rebuild(activePlayer = null)
 
             /* End action when current action taker is the last decisive player in the hand. */
             nextDecisivePlayer == handState.activePlayer -> handState.rebuild(activePlayer = null)

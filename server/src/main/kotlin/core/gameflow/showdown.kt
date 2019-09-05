@@ -1,7 +1,8 @@
 package core.gameflow
 
 import core.gameflow.handstate.HandState
-import core.gameflow.handstate.orderedPlayers
+import core.gameflow.player.Player
+import core.gameflow.player.ordered
 
 sealed class ShowdownAction {
     abstract val playerId: Int
@@ -13,8 +14,8 @@ data class MuckCards(override val playerId: Int) : ShowdownAction()
 fun resolveShowdown(handState: HandState): List<ShowdownAction> {
 
     val orderedPlayers = when {
-        handState.lastAggressor == null -> handState.orderedPlayers(handState.positions.button + 1)
-        else -> handState.orderedPlayers(handState.lastAggressor.position)
+        handState.lastAggressor == null -> handState.players.ordered(handState.positions.button + 1)
+        else -> handState.players.ordered(handState.lastAggressor.position)
     }.filter { it.isInGame }
 
     // Player can muck his cards if he is the only one left in the hand.

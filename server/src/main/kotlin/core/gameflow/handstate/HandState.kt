@@ -3,8 +3,9 @@ package core.gameflow.handstate
 import core.cards.Card
 import core.gameflow.BettingRound
 import core.gameflow.Blinds
-import core.gameflow.Player
+import core.gameflow.player.Player
 import core.gameflow.Positions
+import core.gameflow.player.getByPosition
 
 /**
  * activePlayer set to null indicates that there is no further action possible in given betting round.
@@ -34,16 +35,11 @@ class HandState private constructor(
     val pot: Int = players.sumBy { it.chipsInPot }
     val totalBet: Int = lastLegalBet + extraBet
 
-    val playersInGame: List<Player> = players.filter { it.isInGame }
-    val decisivePlayers: List<Player> = players.filter { it.isDecisive }
-
-    fun playerAtPosition(position: Int): Player? = players.find { it.position == position }
-
     // Small blind position sometimes may point to an empty when players leave the table between hands.
-    val smallBlindPlayer: Player? = playerAtPosition(positions.smallBlind)
+    val smallBlindPlayer: Player? = players.getByPosition(positions.smallBlind)
 
     // Big blind position must always point to some player.
-    val bigBlindPlayer: Player = playerAtPosition(positions.bigBlind)!!
+    val bigBlindPlayer: Player = players.getByPosition(positions.bigBlind)!!
 
     data class ImmutableBuilder(
         val players: List<Player>? = null,
