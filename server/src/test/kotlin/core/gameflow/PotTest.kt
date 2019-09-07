@@ -52,8 +52,8 @@ class PotTest {
         ).build()
 
         val potResults = resolvePot(state)
-        assert(potResults == sequenceOf(
-                PotResult(player2.id, 1300) // player2 should win the whole pot
+        assert(potResults == listOf(
+                PotResult(1300, player2.id) // player2 should win the whole pot
         ))
     }
 
@@ -93,9 +93,9 @@ class PotTest {
         ).build()
 
         val potResults = resolvePot(state)
-        assert(potResults == sequenceOf(
-                PotResult(player2.id, 650), // player2 should win half of the pot
-                PotResult(player0.id, 650) // player0 should win half of the pot
+        assert(potResults == listOf(
+                PotResult(650, player2.id), // player2 should win half of the pot
+                PotResult(650, player0.id) // player0 should win half of the pot
         ))
     }
 
@@ -142,10 +142,10 @@ class PotTest {
         ).build()
 
         val potResults = resolvePot(state)
-        assert(potResults == sequenceOf(
-                PotResult(player1.id, 434), // player1 should win third of the pot + one chip
-                PotResult(player2.id, 434), // player2 should win third of the pot + one chip
-                PotResult(player0.id, 433) // player0 should win third of the pot
+        assert(potResults == listOf(
+                PotResult(434, player1.id), // player1 should win third of the pot + one chip
+                PotResult(434, player2.id), // player2 should win third of the pot + one chip
+                PotResult(433, player0.id) // player0 should win third of the pot
         ))
     }
 
@@ -185,9 +185,9 @@ class PotTest {
         ).build()
 
         val potResults = resolvePot(state)
-        assert(potResults == sequenceOf(
-                PotResult(player2.id, 400, potNumber = 1), // player2 should win the side pot
-                PotResult(player0.id, 900) // player0 should win the main pot
+        assert(potResults == listOf(
+                PotResult(400, player2.id, potNumber = 1), // player2 should win the side pot
+                PotResult(900, player0.id) // player0 should win the main pot
         ))
     }
 
@@ -241,16 +241,16 @@ class PotTest {
         ).build()
 
         val potResults = resolvePot(state)
-        assert(potResults == sequenceOf(
-                PotResult(player2.id, 200, potNumber = 2), // player2 should win third of the 2nd side pot
-                PotResult(player3.id, 200, potNumber = 2), // player3 should win third of the 2nd side pot
-                PotResult(player4.id, 200, potNumber = 2), // player4 should win third of the 2nd side pot
+        assert(potResults == listOf(
+                PotResult(200, player2.id, potNumber = 2), // player2 should win third of the 2nd side pot
+                PotResult(200, player3.id, potNumber = 2), // player3 should win third of the 2nd side pot
+                PotResult(200, player4.id, potNumber = 2), // player4 should win third of the 2nd side pot
 
-                PotResult(player2.id, 267, potNumber = 1), // player2 should win third of the 1st side pot + one chip
-                PotResult(player3.id, 267, potNumber = 1), // player3 should win third of the 1st side pot + one chip
-                PotResult(player4.id, 266, potNumber = 1), // player4 should win third of the 1st side pot
+                PotResult(267, player2.id, potNumber = 1), // player2 should win third of the 1st side pot + one chip
+                PotResult(267, player3.id, potNumber = 1), // player3 should win third of the 1st side pot + one chip
+                PotResult(266, player4.id, potNumber = 1), // player4 should win third of the 1st side pot
 
-                PotResult(player0.id, 500, potNumber = 0) // player0 should win the main pot
+                PotResult(500, player0.id, potNumber = 0) // player0 should win the main pot
         ))
     }
 }
