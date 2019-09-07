@@ -10,6 +10,8 @@ fun List<Player>.ordered(startingPosition: Int): List<Player> {
 fun List<Player>.next(from: Int): Player = ordered(from + 1).first()
 fun List<Player>.next(from: Player): Player = next(from.position)
 
+fun List<Player>.prev(from: Int): Player = ordered(from).last()
+
 fun List<Player>.nextDecisive(from: Int): Player? = ordered(from + 1).find { it.isDecisive }
 fun List<Player>.nextDecisive(from: Player): Player? = nextDecisive(from.position)
 
