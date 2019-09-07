@@ -1,8 +1,11 @@
 package core.bettinground
 
-import core.gameflow.HandState
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.updateActivePlayer
 
-class Call : BettingAction(ActionType.CALL) {
+object Call : BettingAction() {
+
+    override val type: ActionType = ActionType.CALL
 
     override fun innerApply(handState: HandState): HandState {
         val activePlayer = handState.activePlayer!!
@@ -16,9 +19,8 @@ class Call : BettingAction(ActionType.CALL) {
                 .withBet(callAmount)
                 .copy(lastAction = ActionType.CALL)
 
-        return handState
-                .updateActivePlayer(updatedPlayer)
+        return handState.updateActivePlayer(updatedPlayer)
     }
 
-    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction
 }

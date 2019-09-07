@@ -1,10 +1,9 @@
-package core.gameflow
+package core.gameflow.player
 
 import core.cards.Card
-import com.marcinmoskala.math.combinations
 import core.bettinground.ActionType
 import core.pokerhands.PokerHand
-import core.pokerhands.makeHand
+import core.pokerhands.pickBestHand
 
 /**
  * chipsInPot - the amount of player's chips that already went into the pot in previous betting rounds,
@@ -45,8 +44,7 @@ data class Player(
     /* Creates the best possible hand out of player's hole cards and community cards. */
     fun hand(communityCards: List<Card>): PokerHand {
         assert(holeCards.isNotEmpty())
-        val cards = communityCards + holeCards
-        val possibleHands = cards.toSet().combinations(5).map { makeHand(it) }
-        return possibleHands.reduce { acc, next -> if (acc > next) acc else next }
+        val cards = (communityCards + holeCards).toSet()
+        return cards.pickBestHand()
     }
 }

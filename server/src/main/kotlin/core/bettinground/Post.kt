@@ -1,8 +1,12 @@
 package core.bettinground
 
-import core.gameflow.HandState
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
+import core.gameflow.handstate.updateActivePlayer
 
-class Post(val size: Int) : BettingAction(ActionType.POST) {
+data class Post(val size: Int) : BettingAction() {
+
+    override val type: ActionType = ActionType.POST
 
     override fun innerApply(handState: HandState): HandState {
         val activePlayer = handState.activePlayer!!
@@ -25,17 +29,17 @@ class Post(val size: Int) : BettingAction(ActionType.POST) {
             bet >= handState.minRaise -> {
                 val difference = bet - handState.lastLegalBet
                 val newMinRaise = bet + difference
-                newState.copy(lastLegalBet = bet, extraBet = 0, minRaise = newMinRaise)
+                newState.rebuild(lastLegalBet = bet, extraBet = 0, minRaise = newMinRaise)
             }
 
             /* When posted bet is higher than current bet in the hand but not high enough
              * to be considered a legal raise*/
             else -> {
                 val extra = bet - newState.lastLegalBet
-                newState.copy(extraBet = extra)
+                newState.rebuild(extraBet = extra)
             }
         }
     }
 
-    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction
 }

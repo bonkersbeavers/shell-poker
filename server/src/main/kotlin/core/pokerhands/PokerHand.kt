@@ -5,7 +5,6 @@ import core.cards.Card
 abstract class PokerHand(val rank: HandRank, val cards: Set<Card>) {
 
     init {
-        assert(cards.size == 5)
         assert(isValidHand())
     }
 

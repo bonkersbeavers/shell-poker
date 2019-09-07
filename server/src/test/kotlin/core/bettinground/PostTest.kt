@@ -1,9 +1,8 @@
 package core.bettinground
 
-import core.gameflow.BettingRound
-import core.gameflow.Blinds
-import core.gameflow.HandState
-import core.gameflow.Player
+import core.gameflow.*
+import core.gameflow.handstate.HandState
+import core.gameflow.player.Player
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -17,14 +16,14 @@ class PostTest {
         val player2 = Player(position = 2, stack = 600, bet = 0, lastAction = null)
         val player3 = Player(position = 3, stack = 400, bet = 0, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val post = Post(50)
         val newState = post.apply(state)
@@ -40,14 +39,14 @@ class PostTest {
         val player1 = Player(position = 1, stack = 100, bet = 0, lastAction = null) // active player
         val player2 = Player(position = 2, stack = 600, bet = 0, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
                 blinds = Blinds(200, 400),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val post = Post(200)
         val newState = post.apply(state)
@@ -65,15 +64,15 @@ class PostTest {
         val player2 = Player(position = 2, stack = 600, bet = 0, lastAction = null)
         val player3 = Player(position = 3, stack = 400, bet = 0, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 minRaise = 100,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val post = Post(50)
         val newState = post.apply(state)
@@ -90,16 +89,16 @@ class PostTest {
         val player2 = Player(position = 2, stack = 600, bet = 0, lastAction = null) // active player
         val player3 = Player(position = 3, stack = 400, bet = 0, lastAction = null)
 
-        val state = HandState(
+        val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
                 blinds = Blinds(50, 100),
-                buttonPosition = 0,
+                positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
                 activePlayer = player1,
                 lastLegalBet = 0,
                 extraBet = 50,
                 minRaise = 100,
                 bettingRound = BettingRound.PRE_FLOP
-        )
+        ).build()
 
         val post = Post(100)
         val newState = post.apply(state)

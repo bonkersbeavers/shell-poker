@@ -1,13 +1,19 @@
 package core.bettinground
 
 import core.gameflow.Blinds
-import core.gameflow.HandState
-import core.gameflow.Player
+import core.gameflow.handstate.HandState
+import core.gameflow.player.Player
+import core.gameflow.Positions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AllInTest {
+
+    private val baseStateBuilder = HandState.ImmutableBuilder(
+            blinds = Blinds(50, 100),
+            positions = Positions(button = 0, smallBlind = 1, bigBlind = 2)
+    )
 
     @Test
     fun `all in higher or equal to min raise should properly update hand state and player's bet`() {
@@ -16,21 +22,18 @@ class AllInTest {
         val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
         val player3 = Player(position = 3, stack = 900, bet = 0, lastAction = null) // active player
 
-        val state = HandState(
+        val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
                 lastAggressor = player1,
                 activePlayer = player3,
                 lastLegalBet = 300,
                 extraBet = 100,
                 minRaise = 600
-        )
+        ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)
@@ -50,21 +53,18 @@ class AllInTest {
         val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
         val player3 = Player(position = 3, stack = 500, bet = 0, lastAction = null) // active player
 
-        val state = HandState(
+        val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
                 lastAggressor = player1,
                 activePlayer = player3,
                 lastLegalBet = 300,
                 extraBet = 100,
                 minRaise = 600
-        )
+        ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)
@@ -84,21 +84,18 @@ class AllInTest {
         val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
         val player3 = Player(position = 3, stack = 350, bet = 0, lastAction = null) // active player
 
-        val state = HandState(
+        val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),
-                blinds = Blinds(50, 100),
-                buttonPosition = 0,
                 lastAggressor = player1,
                 activePlayer = player3,
                 lastLegalBet = 300,
                 extraBet = 100,
                 minRaise = 600
-        )
+        ).build()
 
-        val allIn = AllIn()
-        assert(allIn.validate(state) is ValidAction)
+        assert(AllIn.validate(state) == ValidAction)
 
-        val newState = allIn.apply(state)
+        val newState = AllIn.apply(state)
         val updatedPlayer = newState.players[3]
 
         assert(updatedPlayer.isAllIn)

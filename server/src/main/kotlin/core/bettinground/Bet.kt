@@ -1,8 +1,12 @@
 package core.bettinground
 
-import core.gameflow.HandState
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
+import core.gameflow.handstate.updateActivePlayer
 
-class Bet(val size: Int) : BettingAction(ActionType.BET) {
+data class Bet(val size: Int) : BettingAction() {
+
+    override val type: ActionType = ActionType.BET
 
     override fun innerApply(handState: HandState): HandState {
         val updatedPlayer = handState
@@ -12,7 +16,7 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
 
         return handState
                 .updateActivePlayer(updatedPlayer)
-                .copy(lastAggressor = updatedPlayer,
+                .rebuild(lastAggressor = updatedPlayer,
                         minRaise = size * 2,
                         lastLegalBet = size,
                         extraBet = 0)
@@ -31,7 +35,7 @@ class Bet(val size: Int) : BettingAction(ActionType.BET) {
             size < handState.minRaise ->
                 InvalidAction("Bet of size $size smaller than minimum legal bet ${handState.minRaise}")
 
-            else -> ValidAction()
+            else -> ValidAction
         }
     }
 }

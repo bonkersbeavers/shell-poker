@@ -1,8 +1,12 @@
 package core.bettinground
 
-import core.gameflow.HandState
+import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
+import core.gameflow.handstate.updateActivePlayer
 
-class AllIn : BettingAction(ActionType.ALL_IN) {
+object AllIn : BettingAction() {
+
+    override val type: ActionType = ActionType.ALL_IN
 
     override fun innerApply(handState: HandState): HandState {
         val player = handState.activePlayer!!
@@ -21,13 +25,13 @@ class AllIn : BettingAction(ActionType.ALL_IN) {
             /* All in higher than previous highest bet, but lower than min raise. */
             betSize < handState.minRaise -> {
                 val betDifference = betSize - handState.lastLegalBet
-                newState.copy(extraBet = betDifference)
+                newState.rebuild(extraBet = betDifference)
             }
 
             /* All in with effect of a regular raise. */
             else -> {
                 val betDifference = betSize - handState.lastLegalBet
-                newState.copy(
+                newState.rebuild(
                         lastLegalBet = betSize,
                         extraBet = 0,
                         minRaise = betSize + betDifference,
@@ -37,5 +41,5 @@ class AllIn : BettingAction(ActionType.ALL_IN) {
         }
     }
 
-    override fun innerValidate(handState: HandState): ActionValidation = ValidAction()
+    override fun innerValidate(handState: HandState): ActionValidation = ValidAction
 }

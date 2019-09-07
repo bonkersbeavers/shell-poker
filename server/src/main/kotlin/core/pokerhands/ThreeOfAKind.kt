@@ -4,7 +4,7 @@ import core.cards.Card
 
 class ThreeOfAKind(cards: Set<Card>) : PokerHand(HandRank.THREE_OF_A_KIND, cards) {
 
-    override fun isValidHand(): Boolean = isThreeOfAKind(cards)
+    override fun isValidHand(): Boolean = cards.isThreeOfAKind()
 
     override fun compareWithinRank(other: PokerHand): Int {
         val thisThreeRank = this.cards.groupBy { it.rank }.maxBy { it.value.size }!!.key
