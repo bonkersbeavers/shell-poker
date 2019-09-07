@@ -7,7 +7,36 @@ import core.gameflow.player.Player
 class GameManager(handState: HandState) {
 
     val dealer: Dealer = Dealer()
-    
+
+    /**
+     * Main loop:
+     *
+     * 1) post blinds (metoda w Blinds)
+     *
+     * init action
+     * pre flop betting
+     * collect bets
+     * if (action ended)
+     *   showdown / end hand
+     * deal flop
+     *
+     * init action
+     * flop betting
+     * collect bets
+     * deal turn
+     *
+     * init action
+     * flop betting
+     * collect bets
+     * deal river
+     *
+     * init action
+     * flop betting
+     * collect bets
+     *
+     *
+     */
+
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
         var activePlayer: Player? = handState.activePlayer
