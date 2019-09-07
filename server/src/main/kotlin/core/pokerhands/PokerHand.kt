@@ -2,13 +2,13 @@ package core.pokerhands
 
 import core.cards.Card
 
-abstract class PokerHand(val rank: HandRank, val cards: Set<Card>) {
+abstract class PokerHand(val rank: HandRank, val cards: Set<Card>) : Comparable<PokerHand> {
 
     init {
         assert(isValidHand())
     }
 
-    operator fun compareTo(other: PokerHand): Int {
+    override operator fun compareTo(other: PokerHand): Int {
         return if (rank != other.rank) rank.strength - other.rank.strength else compareWithinRank(other)
     }
 
