@@ -1,32 +1,41 @@
 package core.gameflow
 
-import core.bettinground.ActionValidation
-import core.bettinground.BettingAction
-import core.bettinground.Fold
-import core.bettinground.ValidAction
+import core.bettinground.*
+import core.gameflow.handstate.HandState
+import core.gameflow.player.Player
 
 class GameManager(handState: HandState) {
 
     val dealer: Dealer = Dealer()
+    
+    private fun bettingRound(startingHandState: HandState): HandState {
+        var handState = startingHandState
+        var activePlayer: Player? = handState.activePlayer
 
-
-    fun bettingRound(handState: HandState) {
-
-        val activePlayer = handState.activePlayer!!
-
-        while(activePlayer != handState.lastAggressor) {
+        while(activePlayer != null) {
             var action: BettingAction
+            var actionValidation: ActionValidation
 
             do {
                 action = getAction(activePlayer)
-                val actionValidation: ActionValidation = action.validate(handState)
-            } while (actionValidation == ValidAction())
+                actionValidation = action.validate(handState)
+                sendValidation(activePlayer, actionValidation)
+            }
+            while(actionValidation != ValidAction)
+
+            handState = action.apply(handState)
+            activePlayer = handState.activePlayer
+
+            sendUpdate(handState)
         }
+
+        return handState
     }
 
     private fun getAction(player: Player): BettingAction {
-        return Fold();
+        return Fold
     }
 
-    private fun sendValidation(player: Player) {}
+    private fun sendUpdate(state: HandState) {}
+    private fun sendValidation(player: Player, action: ActionValidation) {}
 }
