@@ -1,6 +1,7 @@
 package core.gameflow
 
 import core.gameflow.handstate.HandState
+import core.gameflow.handstate.rebuild
 import core.gameflow.player.Player
 import core.gameflow.player.ordered
 import kotlin.math.min
@@ -78,7 +79,20 @@ fun resolvePot(handState: HandState): List<PotResult> {
 fun distributePot(handState: HandState): HandState {
     val potResults = resolvePot(handState)
 
-    // TODO: increase players' stacks based on pot results
+    val totalWinnings = HashMap<Int, Int>()
+    potResults.forEach {
+        val currentWinnings = totalWinnings.getOrDefault(it.playerId, 0)
+        totalWinnings[it.playerId] = currentWinnings + it.chips
+    }
 
-    return handState
+    val newPlayers = handState.players.map { player ->
+        val winnings = totalWinnings.getOrDefault(player.id, 0)
+        val newStack = player.stack + winnings
+        player.copy(
+                chipsInPot = 0,
+                stack = newStack
+        )
+    }
+
+    return handState.rebuild(newPlayers)
 }
