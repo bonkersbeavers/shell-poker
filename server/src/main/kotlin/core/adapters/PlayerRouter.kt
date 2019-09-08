@@ -6,9 +6,9 @@ import core.bettinground.Fold
 import core.gameflow.handstate.HandState
 
 class PlayerRouter {
-    private fun getAction(playerId: Int): BettingAction = Fold
-    private fun update(playerId: Int, actionValidation: ActionValidation) {}
-    private fun update(playerId: Int, handState: HandState) {}
-    private fun broadcast(playerId: Int, action: BettingAction) {}
-    private fun broadcast(handState: HandState) {}
+    fun getAction(playerId: Int): BettingAction = Fold
+    fun sendPrivateUpdate(playerId: Int, actionValidation: ActionValidation) {}
+    fun sendPrivateUpdate(playerId: Int, handState: HandState) {}
+    fun broadcastPlayerAction(playerId: Int, action: BettingAction) {}
+    fun broadcast(handState: HandState) {}
 }
