@@ -3,6 +3,7 @@ package core.gameflow
 import core.gameflow.handstate.HandState
 import core.gameflow.player.Player
 import core.gameflow.player.ordered
+import kotlin.math.min
 
 /**
  * potNumber set to zero indicates, that the chips come from the main pot.
@@ -13,41 +14,32 @@ data class PotResult(val chips: Int, val playerId: Int, val potNumber: Int = 0)
 
 fun HandState.pots(): List<Pot> {
 
-    class RemainingChipsInPot(val player: Player, var chips: Int) {
-
-        fun take(amount: Int): Int {
-            return when {
-                amount > this.chips -> {
-                    val taken = this.chips
-                    this.chips = 0
-                    taken
-                }
-
-                else -> {
-                    this.chips -= amount
-                    amount
-                }
-            }
-        }
-    }
-
-    var remainingChipsList = this.players.map { RemainingChipsInPot(it, it.chipsInPot) }
+    var lastPotChipsLimit = 0
     var pots = emptyList<Pot>()
 
-    while (remainingChipsList.isNotEmpty()) {
-        // Searches for the player that is still in game but has committed the least chips
-        // compared to other players left. This player's remaining chips will dictate
-        // how many chips from each player must go into the currently created side pot.
-        val minRemainingChips = remainingChipsList.filter { it.player.isInGame }.map { it.chips }.min()!!
+    // Continues while there is any side pot left to be created.
+    while(players.any {it.chipsInPot > lastPotChipsLimit}) {
 
-        // Takes previously calculated amount of chips from each remaining player's stack.
-        val nextPotSize = remainingChipsList.sumBy { it.take(minRemainingChips) }
-        val nextPotPlayerIds = remainingChipsList.filter { it.player.isInGame }.map { it.player }.toSet()
+        // Finds all players that participate in the next pot creation.
+        val nextPotCreators = players.filter { it.chipsInPot > lastPotChipsLimit }
+        val nextPotPlayers = nextPotCreators.filter { it.isInGame }
 
-        val nextPot = Pot(nextPotSize, nextPotPlayerIds, pots.size)
-        pots += nextPot
+        // If player's committed chips amount is higher than this limit,
+        // then the excess will be used to create another side pot.
+        val nextPotChipsLimit = nextPotCreators.filter { it.isInGame }.map { it.chipsInPot }.min()!!
 
-        remainingChipsList = remainingChipsList.filter { it.chips > 0 }
+        // Actual chips amount from each player that will form the next pot.
+        // If a player is in game, his chunk will be equal to the difference between last and next pot chips limits.
+        // The only case when player's chunk is lower is when he has folded.
+        val nextPotChunks = nextPotCreators.map { min(it.chipsInPot, nextPotChipsLimit) - lastPotChipsLimit }
+
+        pots += Pot(
+                size = nextPotChunks.sum(),
+                players = nextPotPlayers.toSet(),
+                potNumber = pots.size
+        )
+
+        lastPotChipsLimit = nextPotChipsLimit
     }
 
     return pots
@@ -61,12 +53,15 @@ fun resolvePot(handState: HandState): List<PotResult> {
     val potResults = orderedPots.map { pot ->
         val bestHand = pot.players.map { it.hand(handState.communityCards) }.max()!!
         val potWinnersSet = pot.players.filter { it.hand(handState.communityCards).compareTo(bestHand) == 0 }.toSet()
+
         // if there are multiple winners, they should be awarded in betting order
         val orderedPotWinners = handState.players
                 .ordered(handState.positions.button + 1)
                 .filter { it in potWinnersSet }
 
         val chipsWon = pot.size / potWinnersSet.size
+
+        // If chips cannot be split equally, first players after the button are awarded with an extra chip
         val extraChips = pot.size % potWinnersSet.size
 
         val results = orderedPotWinners.mapIndexed { index, player ->
@@ -78,4 +73,12 @@ fun resolvePot(handState: HandState): List<PotResult> {
     }
 
     return potResults.reduce { acc, list -> acc + list }
+}
+
+fun distributePot(handState: HandState): HandState {
+    val potResults = resolvePot(handState)
+
+    // TODO: increase players' stacks based on pot results
+
+    return handState
 }
