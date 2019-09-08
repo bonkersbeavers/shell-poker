@@ -23,7 +23,7 @@ class BlindsTest {
                 players = listOf(player0, player1, player2, player3, player4),
                 blinds = blinds,
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2),
-                activePlayer = null,
+                activePlayer = player1, // initialized by GameManager in initActivePlayer method
                 bettingRound = BettingRound.PRE_FLOP
         ).build()
 
@@ -33,7 +33,7 @@ class BlindsTest {
         assert(newState.players[2].bet == 100)
 
         assert(newState.players[1].stack == 950)
-        assert(newState.players[1].stack == 900)
+        assert(newState.players[2].stack == 900)
 
         assert(newState.players[1].lastAction == ActionType.POST)
         assert(newState.players[2].lastAction == ActionType.POST)
