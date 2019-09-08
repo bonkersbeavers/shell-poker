@@ -146,13 +146,10 @@ class PotTest {
             assert(players[1].stack == 500)
             assert(players[1].chipsInPot == 0)
 
-            assert(players[2].stack == 1300)
-            assert(players[2].chipsInPot == 100 + 650)
+            assert(players[2].stack == 100 + 650)
+            assert(players[2].chipsInPot == 0)
         }
     }
-
-
-
 
     @Test
     fun `odd chips should be awarded in betting order if the pot cannot be split equally`() {
