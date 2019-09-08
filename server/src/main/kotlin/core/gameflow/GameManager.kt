@@ -39,22 +39,19 @@ class GameManager(handState: HandState) {
 
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
-        var activePlayer: Player? = handState.activePlayer
 
-        while(activePlayer != null) {
+        while(handState.activePlayer != null) {
             var action: BettingAction
             var actionValidation: ActionValidation
 
             do {
-                action = getAction(activePlayer)
+                action = getAction(handState.activePlayer!!)
                 actionValidation = action.validate(handState)
-                sendValidation(activePlayer, actionValidation)
+                sendValidation(handState.activePlayer!!, actionValidation)
             }
             while(actionValidation != ValidAction)
 
             handState = action.apply(handState)
-            activePlayer = handState.activePlayer
-
             sendUpdate(handState)
         }
 
