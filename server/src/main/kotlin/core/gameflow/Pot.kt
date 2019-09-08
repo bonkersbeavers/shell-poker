@@ -22,19 +22,19 @@ fun HandState.pots(): List<Pot> {
     while (players.any { it.chipsInPot > lastPotBetToCover }) {
 
         // Finds all players that participate in the next pot creation.
-        val nextPotCreators = players.filter { it.chipsInPot > lastPotBetToCover }
-        val nextPotPlayers = nextPotCreators.filter { it.isInGame }
+        val nextPotContributors = players.filter { it.chipsInPot > lastPotBetToCover }
+        val nextPotPlayers = nextPotContributors.filter { it.isInGame }
 
         // Obligatory bet for the currently created pot is dictated by the smallest
-        // of the player that is still in game and participates in the pot creation.
-        // If player's committed chips amount is higher than this limit,
+        // bet among all in-game current pot contributors.
+        // If player's committed chips amount is higher than this bet,
         // then the excess will be used to create another side pot.
-        val nextPotBetToCover = nextPotCreators.filter { it.isInGame }.map { it.chipsInPot }.min()!!
+        val nextPotBetToCover = nextPotContributors.filter { it.isInGame }.map { it.chipsInPot }.min()!!
 
         // Actual chips amount from each player that will form the next pot.
-        // If a player is in game, his chunk will be equal to the difference between last and next pot chips limits.
-        // The only case when player's chunk is lower is when he has folded.
-        val nextPotChunks = nextPotCreators.map { min(it.chipsInPot, nextPotBetToCover) - lastPotBetToCover }
+        // If a player is in game, his chunk will be equal to the difference between last and next pot bets.
+        // The only case when player's chunk is smaller is when he has folded.
+        val nextPotChunks = nextPotContributors.map { min(it.chipsInPot, nextPotBetToCover) - lastPotBetToCover }
 
         pots += Pot(
                 size = nextPotChunks.sum(),
