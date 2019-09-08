@@ -15,24 +15,26 @@ data class PotResult(val chips: Int, val playerId: Int, val potNumber: Int = 0)
 
 fun HandState.pots(): List<Pot> {
 
-    var lastPotChipsLimit = 0
+    var lastPotBetToCover = 0
     var pots = emptyList<Pot>()
 
     // Continues while there is any side pot left to be created.
-    while (players.any { it.chipsInPot > lastPotChipsLimit }) {
+    while (players.any { it.chipsInPot > lastPotBetToCover }) {
 
         // Finds all players that participate in the next pot creation.
-        val nextPotCreators = players.filter { it.chipsInPot > lastPotChipsLimit }
+        val nextPotCreators = players.filter { it.chipsInPot > lastPotBetToCover }
         val nextPotPlayers = nextPotCreators.filter { it.isInGame }
 
+        // Obligatory bet for the currently created pot is dictated by the smallest
+        // of the player that is still in game and participates in the pot creation.
         // If player's committed chips amount is higher than this limit,
         // then the excess will be used to create another side pot.
-        val nextPotChipsLimit = nextPotCreators.filter { it.isInGame }.map { it.chipsInPot }.min()!!
+        val nextPotBetToCover = nextPotCreators.filter { it.isInGame }.map { it.chipsInPot }.min()!!
 
         // Actual chips amount from each player that will form the next pot.
         // If a player is in game, his chunk will be equal to the difference between last and next pot chips limits.
         // The only case when player's chunk is lower is when he has folded.
-        val nextPotChunks = nextPotCreators.map { min(it.chipsInPot, nextPotChipsLimit) - lastPotChipsLimit }
+        val nextPotChunks = nextPotCreators.map { min(it.chipsInPot, nextPotBetToCover) - lastPotBetToCover }
 
         pots += Pot(
                 size = nextPotChunks.sum(),
@@ -40,7 +42,7 @@ fun HandState.pots(): List<Pot> {
                 potNumber = pots.size
         )
 
-        lastPotChipsLimit = nextPotChipsLimit
+        lastPotBetToCover = nextPotBetToCover
     }
 
     return pots
