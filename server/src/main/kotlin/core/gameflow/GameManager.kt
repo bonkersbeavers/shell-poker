@@ -1,12 +1,13 @@
 package core.gameflow
 
+import core.adapters.PlayerRouter
 import core.bettinground.*
 import core.gameflow.handstate.HandState
-import core.gameflow.player.Player
 
 class GameManager(handState: HandState) {
 
-    val dealer: Dealer = Dealer()
+    private val dealer: Dealer = Dealer()
+    private val playerRouter = PlayerRouter()
 
     /**
      * Main loop:
@@ -37,6 +38,12 @@ class GameManager(handState: HandState) {
      *
      */
 
+    private fun playHand(startingHandState: HandState): HandState {
+        var handState = startingHandState
+
+        return handState
+    }
+
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
 
@@ -45,23 +52,17 @@ class GameManager(handState: HandState) {
             var actionValidation: ActionValidation
 
             do {
-                action = getAction(handState.activePlayer!!)
+                action = playerRouter.getAction(handState.activePlayer!!.id)
                 actionValidation = action.validate(handState)
-                sendValidation(handState.activePlayer!!, actionValidation)
+                playerRouter.sendPrivateUpdate(handState.activePlayer!!.id, actionValidation)
             }
             while(actionValidation != ValidAction)
 
+            playerRouter.broadcastPlayerAction(handState.activePlayer!!.id, action)
             handState = action.apply(handState)
-            sendUpdate(handState)
+            playerRouter.broadcast(handState)
         }
 
         return handState
     }
-
-    private fun getAction(player: Player): BettingAction {
-        return Fold
-    }
-
-    private fun sendUpdate(state: HandState) {}
-    private fun sendValidation(player: Player, action: ActionValidation) {}
 }
