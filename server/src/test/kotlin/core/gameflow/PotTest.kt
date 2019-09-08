@@ -6,6 +6,8 @@ import core.cards.CardSuit
 import core.bettinground.ActionType
 import core.gameflow.handstate.HandState
 import core.gameflow.player.Player
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
@@ -16,8 +18,10 @@ class PotTest {
             blinds = Blinds(10, 20)
     )
 
-    @Test
-    fun `player with best hand should win the pot`() {
+    @Nested
+    @DisplayName("in simple case with one winner")
+    inner class SimpleCasePot {
+
         val player0 = Player(
                 position = 0, stack = 0,
                 chipsInPot = 500,
@@ -51,30 +55,60 @@ class PotTest {
                 )
         ).build()
 
-        val potResults = resolvePot(state)
-        assert(potResults == listOf(
-                PotResult(1300, player2.id) // player2 should win the whole pot
-        ))
+        @Test
+        fun `there should be only one, main pot`() {
+            val pots = state.pots()
+            assert(pots.size == 1)
+
+            val mainPot = pots.first()
+
+            assert(mainPot.players == setOf(player0, player2))
+            assert(mainPot.size == 1300)
+        }
+
+        @Test
+        fun `player with best hand should win the pot`() {
+            val potResults = resolvePot(state)
+            assert(potResults == listOf(
+                    PotResult(1300, player2.id) // player2 should win the whole pot
+            ))
+        }
+
+        @Test
+        fun `distributing the pot should transfer all chips to the winning player and clear chips in pot`() {
+            val newState = distributePot(state)
+            val players = newState.players
+
+            assert(players[0].stack == 0)
+            assert(players[0].chipsInPot == 0)
+
+            assert(players[1].stack == 0)
+            assert(players[1].chipsInPot == 0)
+
+            assert(players[2].stack == 1300)
+            assert(players[2].chipsInPot == 0)
+        }
     }
 
-    @Test
-    fun `pot should be split if two players have equally strong hands, chips awarding order should be the same as betting order`() {
+    @Nested
+    @DisplayName("when there are multiple winners")
+    inner class BasicSplitPot {
         val player0 = Player(
-                position = 0, stack = 0,
+                position = 0, stack = 200,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.BET
         ) // strongest hand, plays for the whole pot
 
         val player1 = Player(
-                position = 1, stack = 0,
+                position = 1, stack = 500,
                 chipsInPot = 300,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.ACE, CardSuit.SPADES)),
                 lastAction = ActionType.FOLD
         ) // not in game
 
         val player2 = Player(
-                position = 2, stack = 0,
+                position = 2, stack = 100,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.HEARTS), Card(CardRank.KING, CardSuit.SPADES)),
                 lastAction = ActionType.CALL
@@ -92,12 +126,33 @@ class PotTest {
                 )
         ).build()
 
-        val potResults = resolvePot(state)
-        assert(potResults == listOf(
-                PotResult(650, player2.id), // player2 should win half of the pot
-                PotResult(650, player0.id) // player0 should win half of the pot
-        ))
+        @Test
+        fun `pot should be split if two players have equally strong hands, chips awarding order should be the same as betting order`() {
+            val potResults = resolvePot(state)
+            assert(potResults == listOf(
+                    PotResult(650, player2.id), // player2 should win half of the pot
+                    PotResult(650, player0.id) // player0 should win half of the pot
+            ))
+        }
+
+        @Test
+        fun `each player should get the same amount of chips from the main pot`() {
+            val newState = distributePot(state)
+            val players = newState.players
+
+            assert(players[0].stack == 200 + 650)
+            assert(players[0].chipsInPot == 0)
+
+            assert(players[1].stack == 500)
+            assert(players[1].chipsInPot == 0)
+
+            assert(players[2].stack == 1300)
+            assert(players[2].chipsInPot == 100 + 650)
+        }
     }
+
+
+
 
     @Test
     fun `odd chips should be awarded in betting order if the pot cannot be split equally`() {
@@ -191,8 +246,9 @@ class PotTest {
         ))
     }
 
-    @Test
-    fun `case with multiple side pots and non-equally-splittable chips amount`() {
+    @Nested
+    @DisplayName("when there are multiple side pots")
+    inner class MultipleSidePots {
         val player0 = Player(
                 position = 0, stack = 0,
                 chipsInPot = 100,
@@ -240,17 +296,41 @@ class PotTest {
                 )
         ).build()
 
-        val potResults = resolvePot(state)
-        assert(potResults == listOf(
-                PotResult(200, player2.id, potNumber = 2), // player2 should win third of the 2nd side pot
-                PotResult(200, player3.id, potNumber = 2), // player3 should win third of the 2nd side pot
-                PotResult(200, player4.id, potNumber = 2), // player4 should win third of the 2nd side pot
+        @Test
+        fun `there should be main pot and side pots`() {
+            val pots = state.pots()
+            assert(pots.size == 3)
 
-                PotResult(267, player2.id, potNumber = 1), // player2 should win third of the 1st side pot + one chip
-                PotResult(267, player3.id, potNumber = 1), // player3 should win third of the 1st side pot + one chip
-                PotResult(266, player4.id, potNumber = 1), // player4 should win third of the 1st side pot
+            val mainPot = pots.first()
+            assert(mainPot.players == setOf(player0, player1, player2, player3, player4))
+            assert(mainPot.size == 500)
+            assert(mainPot.potNumber == 0)
 
-                PotResult(500, player0.id, potNumber = 0) // player0 should win the main pot
-        ))
+            val firstSidePot = pots[1]
+            assert(firstSidePot.players == setOf(player1, player2, player3, player4))
+            assert(firstSidePot.size == 800)
+            assert(firstSidePot.potNumber == 1)
+
+            val secondSidePot = pots[2]
+            assert(secondSidePot.players == setOf(player2, player3, player4))
+            assert(secondSidePot.size == 600)
+            assert(secondSidePot.potNumber == 2)
+        }
+
+        @Test
+        fun `each side pot should be resolved separately starting from the last one`() {
+            val potResults = resolvePot(state)
+            assert(potResults == listOf(
+                    PotResult(200, player2.id, potNumber = 2), // player2 should win third of the 2nd side pot
+                    PotResult(200, player3.id, potNumber = 2), // player3 should win third of the 2nd side pot
+                    PotResult(200, player4.id, potNumber = 2), // player4 should win third of the 2nd side pot
+
+                    PotResult(267, player2.id, potNumber = 1), // player2 should win third of the 1st side pot + one chip
+                    PotResult(267, player3.id, potNumber = 1), // player3 should win third of the 1st side pot + one chip
+                    PotResult(266, player4.id, potNumber = 1), // player4 should win third of the 1st side pot
+
+                    PotResult(500, player0.id, potNumber = 0) // player0 should win the main pot
+            ))
+        }
     }
 }

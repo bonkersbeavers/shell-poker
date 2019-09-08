@@ -18,7 +18,7 @@ fun HandState.pots(): List<Pot> {
     var pots = emptyList<Pot>()
 
     // Continues while there is any side pot left to be created.
-    while(players.any {it.chipsInPot > lastPotChipsLimit}) {
+    while (players.any { it.chipsInPot > lastPotChipsLimit }) {
 
         // Finds all players that participate in the next pot creation.
         val nextPotCreators = players.filter { it.chipsInPot > lastPotChipsLimit }
