@@ -61,6 +61,19 @@ class PlayersListExtensionsTest {
     }
 
     @Test
+    fun `prev should find the first player before given position`() {
+
+        val player0 = Player(position = 0, stack = 100)
+        val player1 = Player(position = 1, stack = 100)
+        val player3 = Player(position = 3, stack = 100)
+
+        val players = listOf(player0, player1, player3)
+
+        assert(players.prev(0) == player3)
+        assert(players.prev(2) == player1)
+    }
+
+    @Test
     fun `nextDecisive should find the first decisive player after given position`() {
 
         val player0 = Player(position = 0, stack = 100)
