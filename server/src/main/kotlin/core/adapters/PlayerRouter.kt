@@ -2,7 +2,6 @@ package core.adapters
 
 import core.bettinground.ActionValidation
 import core.bettinground.BettingAction
-import core.bettinground.Fold
 import core.gameflow.handstate.HandState
 
 class PlayerRouter(val adapters: List<IPlayerAdapter>) {

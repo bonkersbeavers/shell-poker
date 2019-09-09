@@ -35,8 +35,7 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
 
             if (player == null) {
                 playerStringBuilder.append("(empty)")
-            }
-            else {
+            } else {
                 playerStringBuilder.append("stack: ${player.stack},\t")
 
                 if (player.lastAction != null)
@@ -72,7 +71,6 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
                 println("error, maybe you forgot some arguments")
             }
         }
-
     }
 
     private fun parseAction(command: String): BettingAction {
