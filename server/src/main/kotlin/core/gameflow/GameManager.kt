@@ -41,16 +41,15 @@ class GameManager(handState: HandState) {
 //        //RIVER
 //        handState = bettingRound(handState)
 
-        while( (handState.bettingRound != BettingRound.RIVER) or handState.players.decisive().isNotEmpty() ) {
+        while ((handState.bettingRound != BettingRound.RIVER) or handState.players.decisive().isNotEmpty()) {
             handState = prepareForNextBettingRound(handState)
             playerRouter.broadcast(handState)
             handState = bettingRound(handState)
         }
 
-        if(handState.players.decisive().isEmpty()) {
-            //deal missing cards
+        if (handState.players.decisive().isEmpty()) {
+            // deal missing cards
         }
-
 
         var showdownOrder = resolveShowdown(handState)
 
@@ -61,11 +60,11 @@ class GameManager(handState: HandState) {
         return handState
     }
 
-    //TODO : Test
+    // TODO : Test
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
 
-        while(handState.activePlayer != null) {
+        while (handState.activePlayer != null) {
             var action: BettingAction
             var actionValidation: ActionValidation
 
@@ -74,7 +73,7 @@ class GameManager(handState: HandState) {
                 actionValidation = action.validate(handState)
 //                playerRouter.sendPrivateUpdate(handState.activePlayer!!.id, actionValidation)
             }
-            while(actionValidation != ValidAction)
+            while (actionValidation != ValidAction)
 
 //            playerRouter.broadcastPlayerAction(handState.activePlayer!!.id, action)
             handState = action.apply(handState)
@@ -84,9 +83,9 @@ class GameManager(handState: HandState) {
         return handState
     }
 
-    //TODO : Test
+    // TODO : Test
     private fun initializeBettingRound(handState: HandState): HandState {
-        val newHandState = when(handState.bettingRound) {
+        val newHandState = when (handState.bettingRound) {
             BettingRound.PRE_FLOP ->
                 postBlinds(handState.rebuild(activePlayer = handState.smallBlindPlayer))
             else ->
@@ -96,18 +95,18 @@ class GameManager(handState: HandState) {
         return dealer.deal(newHandState)
     }
 
-    //TODO : Completely change xd
+    // TODO : Completely change xd
     private fun postBlinds(handState: HandState): HandState {
         return Post(handState.blinds.bigBlind).apply(
                 Post(handState.blinds.smallBlind).apply(handState)
         )
     }
 
-    //TODO : Test
+    // TODO : Test
     private fun finalizeBettingRound(handState: HandState): HandState {
         return handState.rebuild(
                 players = handState.players.map { it.moveBetToPot() },
-                bettingRound = handState.bettingRound + 1, //would be nice to implement
+                bettingRound = handState.bettingRound + 1, // would be nice to implement
                 lastAggressor = null,
                 lastLegalBet = 0,
                 minRaise = handState.blinds.bigBlind,

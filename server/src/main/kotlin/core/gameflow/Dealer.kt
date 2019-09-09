@@ -9,9 +9,9 @@ import kotlin.random.Random
 class Dealer {
     private var deckIterator: ListIterator<Card>? = null
 
-    //TODO : Test
+    // TODO : Test
     fun deal(handState: HandState): HandState {
-        return when(handState.bettingRound) {
+        return when (handState.bettingRound) {
             BettingRound.PRE_FLOP -> dealHoleCards(handState)
             BettingRound.FLOP -> dealFlop(handState)
             BettingRound.TURN -> dealTurn(handState)
