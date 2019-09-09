@@ -3,6 +3,7 @@ package core.gameflow
 import core.adapters.PlayerRouter
 import core.bettinground.*
 import core.gameflow.handstate.HandState
+import core.gameflow.player.decisive
 
 class GameManager(handState: HandState) {
 
@@ -10,36 +11,53 @@ class GameManager(handState: HandState) {
     private val playerRouter = PlayerRouter()
 
     /**
-     * Main loop:
-     *
-     * 1) post blinds (metoda w Blinds)
-     *
-     * init action
-     * pre flop betting
-     * collect bets
-     * if (action ended)
-     *   showdown / end hand
-     * deal flop
-     *
-     * init action
-     * flop betting
-     * collect bets
-     * deal turn
-     *
-     * init action
-     * flop betting
-     * collect bets
-     * deal river
-     *
-     * init action
-     * flop betting
-     * collect bets
-     *
+     * input: clean initial handState with default pre-flop initialization and:
+     * players (by UPDATE PLAYERS IN PLAYER rOUTER OR WAITING ROOM)
+     * active_player == null
+     * last aggressor = null
+     * blinds(by GAME SETTINGS)
+     * positions(by Game SETTINGS)
      *
      */
-
     private fun playHand(startingHandState: HandState): HandState {
         var handState = startingHandState
+
+//        //PRE_GAME
+//        handState = prepareForNextBettingRound(handState) //should post blinds here and deal hole cards
+//
+//        //PRE_FLOP
+//        handState = bettingRound(handState)
+//        handState = prepareForNextBettingRound(handState) //should should deal flop and so on
+//
+//        //FLOP
+//        handState = bettingRound(handState)
+//        handState = prepareForNextBettingRound(handState) //should should deal turn and so on
+//
+//        //TURN
+//        handState = bettingRound(handState)
+//        handState = prepareForNextBettingRound(handState) //should should deal river and so on
+//
+//        //RIVER
+//        handState = bettingRound(handState)
+
+        while( (handState.bettingRound != BettingRound.RIVER) or handState.players.decisive().isNotEmpty() ) {
+            handState = prepareForNextBettingRound(handState)
+            playerRouter.broadcast(handState)
+            handState = bettingRound(handState)
+        }
+
+        if(handState.players.decisive().isEmpty()) {
+            //deal missing cards
+        }
+
+
+        var showdownOrder = resolveShowdown(handState)
+
+        playerRouter.broadcast(showdownOrder)
+
+        handState = distributePot(handState)
+
+
 
         return handState
     }
@@ -63,6 +81,22 @@ class GameManager(handState: HandState) {
             playerRouter.broadcast(handState)
         }
 
+        return handState
+    }
+
+    /**
+     * should:
+     * init active player
+     * collect bets (for each player: transfer chips from bet to chipsInPot)
+     * set next betting round
+     * reset last aggressor
+     * reset last legal bet
+     * reset min raise
+     * reset extra bet
+     * possibly post blinds and ante if called pre_Game
+     * deal proper cards
+     */
+    private fun prepareForNextBettingRound(handState: HandState): HandState {
         return handState
     }
 }
