@@ -8,6 +8,10 @@ import core.gameflow.pots
 class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
 
     override fun sendHandUpdate(handState: HandState) {
+
+        println("=============== PLAYER $playerId ==============================")
+
+
         println("table: ${handState.communityCards.joinToString(", ")}")
         handState.pots().forEach { pot ->
             val prefix = if (pot.potNumber > 0) "side pot ${pot.potNumber}" else "main pot"
@@ -49,7 +53,13 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
             }
 
             println(playerStringBuilder.toString())
+
+
         }
+
+        println("===============================================================")
+        println()
+        println()
     }
 
     override fun sendActionValidation(validation: ActionValidation) {
@@ -59,7 +69,7 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
     override fun requestAction(): BettingAction {
 
         while (true) {
-            print("your action > ")
+            print("your action ($playerId) > ")
             try {
                 val command = readLine()!!
                 return parseAction(command)
