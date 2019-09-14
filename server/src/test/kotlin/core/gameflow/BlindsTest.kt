@@ -80,7 +80,7 @@ class BlindsTest {
         val player0 = Player(position = 0, stack = 1000) // dealer
         val player1 = Player(position = 1, stack = 1000) // small blind / new player
         val player2 = Player(position = 2, stack = 1000) // big blind
-        val player3 = Player(position = 3, stack = 1000) // big blind / new player
+        val player3 = Player(position = 3, stack = 1000) // new player
 
         val blinds = Blinds(50, 100, ante = 200)
 
