@@ -3,7 +3,11 @@ package core.gameflow
 import core.bettinground.ActionType
 import core.gameflow.handstate.HandState
 
-fun postBlindsAndAnte(stateBuilder: HandState.ImmutableBuilder, newPlayersIds: Set<Int>): HandState.ImmutableBuilder {
+fun postBlindsAndAnte(
+        stateBuilder: HandState.ImmutableBuilder,
+        newPlayersIds: Set<Int> = emptySet()
+): HandState.ImmutableBuilder {
+
     val players = stateBuilder.players!!
     val blinds = stateBuilder.blinds!!
     val positions = stateBuilder.positions!!
