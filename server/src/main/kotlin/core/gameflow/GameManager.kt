@@ -8,26 +8,45 @@ import core.gameflow.handstate.rebuild
 import core.gameflow.handstate.toBuilder
 import core.gameflow.player.*
 
-class GameManager(private val initialHandState: HandState, val playerRouter: PlayerRouter, val roomSettings: RoomSettings) {
+class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings) {
 
     private val dealer: Dealer = Dealer()
+    private var handNumber = 0
 
     fun run() {
-        var handCounter = 0
-        var state = initialHandState
+
+        var stateBuilder = createStartingStateBuilder()
+
         while (true) {
-            println("Hand number $handCounter")
-            state = cleanState(state)
-            state = playHand(state)
+            handNumber += 1
+
+            val initialBuilder = this.initializeHand(stateBuilder)
+            val initialState = initialBuilder.build()
+            val finalState = playHand(initialState)
+
+
         }
     }
 
-    private fun cleanState(state: HandState): HandState {
+    private fun createStartingStateBuilder(): HandState.ImmutableBuilder {
         return HandState.ImmutableBuilder(
-                players = state.players,
-                blinds = state.blinds,
-                positions = state.positions
-        ).build()
+                blinds = Blinds(50, 100, 0),
+                positions = Positions(0, 1, 2)
+        )
+
+        TODO("create based on room settings")
+    }
+
+    private fun initializeHand(stateBuilder: HandState.ImmutableBuilder): HandState.ImmutableBuilder {
+        var newBuilder = stateBuilder
+
+        val playersUpdate = this.playerRouter.getPlayers()
+
+        newBuilder = newBuilder.copy(players = playersUpdate.players)
+        newBuilder = postBlindsAndAnte(newBuilder, playersUpdate.newPlayersIds)
+        newBuilder = setFirstActivePlayer(newBuilder)
+
+        return newBuilder
     }
 
     /**
@@ -89,6 +108,19 @@ class GameManager(private val initialHandState: HandState, val playerRouter: Pla
         return handState
     }
 
+    private fun cleanState(state: HandState): HandState {
+        return HandState.ImmutableBuilder(
+                players = state.players,
+                blinds = state.blinds,
+                positions = state.positions
+        ).build()
+    }
+
+
+
+
+
+
     // TODO : Test
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
@@ -122,13 +154,6 @@ class GameManager(private val initialHandState: HandState, val playerRouter: Pla
         }
 
         return dealer.deal(newHandState)
-    }
-
-    // TODO : Completely change xd
-    private fun postBlinds(handState: HandState): HandState {
-        return Post(handState.blinds.bigBlind).apply(
-                Post(handState.blinds.smallBlind).apply(handState)
-        )
     }
 
     // TODO : Test
