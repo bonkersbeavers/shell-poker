@@ -1,21 +1,34 @@
 package core.adapters
 
-import core.bettinground.ActionValidation
 import core.bettinground.BettingAction
-import core.gameflow.handstate.HandState
+import core.gameflow.RoomSettings
+import core.gameflow.player.Player
 
-class PlayerRouter(val adapters: List<IPlayerAdapter>) {
+data class PlayersUpdate(val players: List<Player>, val newPlayersIds: Set<Int>)
 
-    private val idToAdapter: Map<Int, IPlayerAdapter> = adapters.associateBy { it.playerId }
+class PlayerRouter(val roomSettings: RoomSettings) {
 
-    fun requestAction(playerId: Int): BettingAction = idToAdapter.getValue(playerId).requestAction()
+    fun registerPlayer(position: Int, stack: Int) {
+        TODO()
+    }
 
-    fun sendActionValidation(playerId: Int, actionValidation: ActionValidation) =
-            idToAdapter.getValue(playerId).sendActionValidation(actionValidation)
+    fun getPlayers(): PlayersUpdate {
+        TODO()
+    }
 
-//    fun broadcastPlayerAction(playerId: Int, action: BettingAction) {}
+    fun requestBettingAction(playerId: Int): BettingAction {
+        TODO()
+    }
 
-    fun broadcastHandState(handState: HandState) {
-        idToAdapter.values.forEach { it.sendHandUpdate(handState) }
+    fun requestShowdownAction(playerId: Int): BettingAction {
+        TODO()
+    }
+
+    fun sendUpdate(playerId: Int, update: Any) {
+        TODO()
+    }
+
+    fun broadcastUpdate(update: Any) {
+        TODO()
     }
 }
