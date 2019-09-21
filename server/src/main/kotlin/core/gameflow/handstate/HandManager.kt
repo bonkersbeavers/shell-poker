@@ -1,52 +1,44 @@
-package core.gameflow
+package core.gameflow.handstate
 
-import core.adapters.IPlayerAdapter
-import core.adapters.PlayerRouter
+import core.adapters.Communicator
 import core.bettinground.*
-import core.gameflow.handstate.HandState
-import core.gameflow.handstate.rebuild
-import core.gameflow.handstate.toBuilder
+import core.gameflow.*
+import core.gameflow.gamestate.GameState
+import core.gameflow.gamestate.PlayerInfo
 import core.gameflow.player.*
 
-class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings) {
+class HandManager(val communicator: Communicator, val roomSettings: RoomSettings) {
 
     private val dealer: Dealer = Dealer()
-    private var handNumber = 0
+    fun playHand(gameState: GameState, newPlayersIds: Set<Int>): GameState {
 
-    fun run() {
+        var handState = initializeHand(gameState, newPlayersIds)
 
-        var stateBuilder = createStartingStateBuilder()
+        // betting rounds etc.
 
-        while (true) {
-            handNumber += 1
-
-            val initialBuilder = this.initializeHand(stateBuilder)
-            val initialState = initialBuilder.build()
-            val finalState = playHand(initialState)
-
-
-        }
+        return finalizeHand(handState)
     }
 
-    private fun createStartingStateBuilder(): HandState.ImmutableBuilder {
-        return HandState.ImmutableBuilder(
-                blinds = Blinds(50, 100, 0),
-                positions = Positions(0, 1, 2)
+    private fun initializeHand(gameState: GameState, newPlayersIds: Set<Int>): HandState {
+        val players = gameState.playersInfo.map { Player(position = it.position, stack = it.stack) }
+
+        var initialStateBuilder = HandState.ImmutableBuilder(
+                players = players,
+                positions = gameState.positions,
+                blinds = gameState.blinds
         )
 
-        TODO("create based on room settings")
+        initialStateBuilder = postBlindsAndAnte(initialStateBuilder, newPlayersIds)
+        return initialStateBuilder.build()
     }
 
-    private fun initializeHand(stateBuilder: HandState.ImmutableBuilder): HandState.ImmutableBuilder {
-        var newBuilder = stateBuilder
-
-        val playersUpdate = this.playerRouter.getPlayers()
-
-        newBuilder = newBuilder.copy(players = playersUpdate.players)
-        newBuilder = postBlindsAndAnte(newBuilder, playersUpdate.newPlayersIds)
-        newBuilder = setFirstActivePlayer(newBuilder)
-
-        return newBuilder
+    private fun finalizeHand(handState: HandState): GameState {
+        val playersInfo = handState.players.map { PlayerInfo(it.position, it.stack) }
+        return GameState(
+                playersInfo = playersInfo,
+                positions = handState.positions,
+                blinds = handState.blinds
+        )
     }
 
     /**
@@ -58,7 +50,7 @@ class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings
      * positions(by Game SETTINGS)
      *
      */
-    private fun playHand(startingHandState: HandState): HandState {
+    private fun playHandHelper(startingHandState: HandState): HandState {
         val initialBuilder = startingHandState.toBuilder()
         var handState = shiftPositions(initialBuilder, roomSettings).build()
         this.dealer.shuffle()
@@ -85,10 +77,10 @@ class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings
 
         while ((handState.bettingRound != BettingRound.RIVER) and (handState.players.decisive().size > 1)) {
             handState = initializeBettingRound(handState)
-            playerRouter.broadcastHandState(handState)
+            communicator.broadcastHandState(handState)
             handState = bettingRound(handState)
             handState = finalizeBettingRound(handState)
-            playerRouter.broadcastHandState(handState)
+            communicator.broadcastHandState(handState)
         }
 
         val showdownOrder = resolveShowdown(handState)
@@ -103,7 +95,7 @@ class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings
         }
 
         handState = distributePot(handState)
-        playerRouter.broadcastHandState(handState)
+        communicator.broadcastHandState(handState)
 
         return handState
     }
@@ -118,10 +110,6 @@ class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings
 
 
 
-
-
-
-    // TODO : Test
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
 
@@ -130,33 +118,30 @@ class GameManager(val playerRouter: PlayerRouter, val roomSettings: RoomSettings
             var actionValidation: ActionValidation
 
             do {
-                action = playerRouter.requestAction(handState.activePlayer!!.id)
+                action = communicator.requestAction(handState.activePlayer!!.id)
                 actionValidation = action.validate(handState)
-                playerRouter.sendActionValidation(handState.activePlayer!!.id, actionValidation)
+                communicator.sendActionValidation(handState.activePlayer!!.id, actionValidation)
             }
             while (actionValidation != ValidAction)
 
-//            playerRouter.broadcastPlayerAction(handState.activePlayer!!.id, action)
+//            communicator.broadcastPlayerAction(handState.activePlayer!!.id, action)
             handState = action.apply(handState)
-            playerRouter.broadcastHandState(handState)
+            communicator.broadcastHandState(handState)
         }
 
         return handState
     }
 
-    // TODO : Test
     private fun initializeBettingRound(handState: HandState): HandState {
-        val newHandState = when (handState.bettingRound) {
-            BettingRound.PRE_FLOP ->
-                postBlinds(handState.rebuild(activePlayer = handState.smallBlindPlayer))
-            else ->
-                handState.rebuild(activePlayer = handState.players.nextDecisive(handState.positions.button))
+
+        val firstActivePlayer = when (handState.bettingRound) {
+            BettingRound.PRE_FLOP -> handState.players.nextDecisive(handState.positions.bigBlind)
+            else -> handState.players.nextDecisive(handState.positions.button)
         }
 
-        return dealer.deal(newHandState)
+        return dealer.deal(handState).rebuild(activePlayer = firstActivePlayer)
     }
 
-    // TODO : Test
     private fun finalizeBettingRound(handState: HandState): HandState {
         return handState.rebuild(
                 players = handState.players.map { it.moveBetToPot() },

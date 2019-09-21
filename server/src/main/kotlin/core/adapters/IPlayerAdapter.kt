@@ -1,14 +1,13 @@
 package core.adapters
 
-import core.bettinground.ActionValidation
 import core.bettinground.BettingAction
-import core.gameflow.handstate.HandState
+import core.gameflow.ShowdownAction
 
 interface IPlayerAdapter {
 
     val playerId: Int
 
-    fun sendHandUpdate(handState: HandState)
-    fun sendActionValidation(validation: ActionValidation)
-    fun requestAction(): BettingAction
+    fun sendUpdate(update: Any) // TODO
+    fun requestBettingAction(): BettingAction
+    fun requestShowdownAction(): ShowdownAction?
 }
