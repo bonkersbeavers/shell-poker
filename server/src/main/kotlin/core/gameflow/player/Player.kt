@@ -39,7 +39,6 @@ data class Player(
         )
     }
 
-    // TODO: need tests???? XD
     fun moveBetToPot(): Player = this.copy(chipsInPot = this.chipsInPot + this.bet, bet = 0)
 
     fun withCards(newCards: List<Card>): Player = this.copy(holeCards = newCards)
