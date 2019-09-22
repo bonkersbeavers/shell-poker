@@ -14,7 +14,7 @@ class HandManager(val communicator: Communicator, val roomSettings: RoomSettings
 
         var handState = initializeHand(gameState, newPlayersIds)
 
-        // betting rounds etc.
+        handState = mainLoop(handState)
 
         return finalizeHand(handState)
     }
@@ -41,52 +41,21 @@ class HandManager(val communicator: Communicator, val roomSettings: RoomSettings
         )
     }
 
-    /**
-     * input: clean initial handState with default pre-flop initialization and:
-     * players (by UPDATE PLAYERS IN PLAYER rOUTER OR WAITING ROOM)
-     * active_player == null
-     * last aggressor = null
-     * blinds(by GAME SETTINGS)
-     * positions(by Game SETTINGS)
-     *
-     */
-    private fun playHandHelper(startingHandState: HandState): HandState {
+    private fun mainLoop(startingHandState: HandState): HandState {
         val initialBuilder = startingHandState.toBuilder()
         var handState = shiftPositions(initialBuilder, roomSettings).build()
         this.dealer.shuffle()
 
-
-
-//        //PRE_GAME
-//        handState = prepareForNextBettingRound(handState) //should post blinds here and deal hole cards
-//
-//        //PRE_FLOP
-//        handState = bettingRound(handState)
-//        handState = prepareForNextBettingRound(handState) //should should deal flop and so on
-//
-//        //FLOP
-//        handState = bettingRound(handState)
-//        handState = prepareForNextBettingRound(handState) //should should deal turn and so on
-//
-//        //TURN
-//        handState = bettingRound(handState)
-//        handState = prepareForNextBettingRound(handState) //should should deal river and so on
-//
-//        //RIVER
-//        handState = bettingRound(handState)
-
         while ((handState.bettingRound != BettingRound.RIVER) and (handState.players.decisive().size > 1)) {
             handState = initializeBettingRound(handState)
-            communicator.broadcastHandState(handState)
+//            communicator.broadcastHandState(handState)
             handState = bettingRound(handState)
             handState = finalizeBettingRound(handState)
-            communicator.broadcastHandState(handState)
+//            communicator.broadcastHandState(handState)
         }
 
         val showdownOrder = resolveShowdown(handState)
-        println("XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
         println(showdownOrder)
-        println("XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
         // TODO: broadcast showdown
 
         if (handState.players.inGame().size > 1) {
@@ -95,20 +64,10 @@ class HandManager(val communicator: Communicator, val roomSettings: RoomSettings
         }
 
         handState = distributePot(handState)
-        communicator.broadcastHandState(handState)
+//        communicator.broadcastHandState(handState)
 
         return handState
     }
-
-    private fun cleanState(state: HandState): HandState {
-        return HandState.ImmutableBuilder(
-                players = state.players,
-                blinds = state.blinds,
-                positions = state.positions
-        ).build()
-    }
-
-
 
     private fun bettingRound(startingHandState: HandState): HandState {
         var handState = startingHandState
@@ -118,22 +77,21 @@ class HandManager(val communicator: Communicator, val roomSettings: RoomSettings
             var actionValidation: ActionValidation
 
             do {
-                action = communicator.requestAction(handState.activePlayer!!.id)
+                action = communicator.requestBettingAction(handState.activePlayer!!.id)
                 actionValidation = action.validate(handState)
-                communicator.sendActionValidation(handState.activePlayer!!.id, actionValidation)
+                communicator.sendUpdate(handState.activePlayer!!.id, actionValidation) // TODO: Send action validation to player
             }
             while (actionValidation != ValidAction)
 
-//            communicator.broadcastPlayerAction(handState.activePlayer!!.id, action)
+            communicator.broadcastUpdate(action) // TODO: Broadcast player action
             handState = action.apply(handState)
-            communicator.broadcastHandState(handState)
+            communicator.broadcastUpdate(handState) // TODO: Broadcast new stacks, bets, new activePlayer etc.
         }
 
         return handState
     }
 
     private fun initializeBettingRound(handState: HandState): HandState {
-
         val firstActivePlayer = when (handState.bettingRound) {
             BettingRound.PRE_FLOP -> handState.players.nextDecisive(handState.positions.bigBlind)
             else -> handState.players.nextDecisive(handState.positions.button)
@@ -145,7 +103,7 @@ class HandManager(val communicator: Communicator, val roomSettings: RoomSettings
     private fun finalizeBettingRound(handState: HandState): HandState {
         return handState.rebuild(
                 players = handState.players.map { it.moveBetToPot() },
-                bettingRound = handState.bettingRound.next(), // would be nice to implement
+                bettingRound = handState.bettingRound.next(),
                 lastAggressor = null,
                 lastLegalBet = 0,
                 minRaise = handState.blinds.bigBlind,
