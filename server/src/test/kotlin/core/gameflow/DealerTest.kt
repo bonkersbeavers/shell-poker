@@ -3,6 +3,7 @@ import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit
 import core.cards.baseDeck
+import core.gameflow.dealer.Dealer
 import core.gameflow.handstate.HandState
 import core.gameflow.handstate.rebuild
 import core.gameflow.player.Player

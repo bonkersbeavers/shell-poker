@@ -7,7 +7,7 @@ interface IPlayerAdapter {
 
     val playerId: Int
 
-    fun sendUpdate(update: Any) // TODO
+    fun sendUpdate(update: GameUpdate)
     fun requestBettingAction(): BettingAction
-    fun requestShowdownAction(): ShowdownAction?
+    fun requestShowdownAction(): ShowdownAction? = null
 }

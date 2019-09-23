@@ -7,7 +7,27 @@ import core.gameflow.pots
 
 class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
 
-    override fun sendHandUpdate(handState: HandState) {
+    override fun sendUpdate(update: GameUpdate) {
+        when (update) {
+            is HandStateUpdate -> this.sendHandUpdate(update.newHandState)
+            is ActionValidationUpdate -> this.sendActionValidation(update.validation)
+            is ShowdownActionUpdate -> println(update)
+            is PotResultUpdate -> println(update)
+        }
+    }
+
+    var lastHandState: HandState? = null
+
+    private fun sendHandUpdate(handState: HandState) {
+        this.lastHandState = handState
+    }
+
+    private fun printHandUpdate() {
+
+        if (lastHandState == null)
+            return
+
+        val handState = lastHandState!!
 
         println("=============== PLAYER $playerId ==============================")
 
@@ -62,11 +82,12 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
         println()
     }
 
-    override fun sendActionValidation(validation: ActionValidation) {
+    private fun sendActionValidation(validation: ActionValidation) {
         println(validation)
     }
 
-    override fun requestAction(): BettingAction {
+    override fun requestBettingAction(): BettingAction {
+        printHandUpdate()
 
         while (true) {
             print("your action ($playerId) > ")

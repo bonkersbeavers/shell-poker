@@ -5,12 +5,17 @@ import core.adapters.IPlayerAdapter
 import core.bettinground.*
 import core.gameflow.*
 import core.gameflow.handstate.HandManager
+import core.gameflow.handstate.IHandManager
 import core.gameflow.player.*
 
-class GameManager(initialState: GameState, val communicator: Communicator, val roomSettings: RoomSettings) {
+class GameManager(
+        val handManager: IHandManager,
+        val communicator: Communicator,
+        val roomSettings: RoomSettings,
+        initialState: GameState
+) {
 
     private var currentGameState: GameState = initialState
-    private val handManager: HandManager = HandManager(communicator, roomSettings)
 
     private var pendingPlayersBuffer: MutableSet<PlayerInfo> = mutableSetOf()
 
@@ -36,10 +41,10 @@ class GameManager(initialState: GameState, val communicator: Communicator, val r
     fun registerNewPlayer(playerInfo: PlayerInfo, adapter: IPlayerAdapter) {
         /*
          * TODO:
-         *  - update communicator's state
          *  - broadcast update about new player
          */
         this.pendingPlayersBuffer.add(playerInfo)
+        this.communicator.addAdapter(adapter)
     }
 
     private fun updatePlayers(gameState: GameState): GameState {
