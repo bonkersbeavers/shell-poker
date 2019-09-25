@@ -7,9 +7,7 @@ import core.gameflow.dealer.Dealer
 import core.gameflow.handstate.HandState
 import core.gameflow.handstate.rebuild
 import core.gameflow.player.Player
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DealerTest {
@@ -68,6 +66,37 @@ class DealerTest {
                 Card(CardRank.FIVE, CardSuit.CLUBS),
                 Card(CardRank.SIX, CardSuit.HEARTS)
         ))
+    }
+
+    @Test
+    fun `automatic deal should properly determine which street should be dealt`() {
+        val players = listOf(
+                Player(position = 0, stack = 500),
+                Player(position = 1, stack = 500),
+                Player(position = 2, stack = 500)
+        )
+
+        val initialState = HandState.ImmutableBuilder(
+                players = players,
+                blinds = Blinds(10, 20),
+                positions = Positions(0, 1, 2),
+                bettingRound = BettingRound.PRE_FLOP
+        ).build()
+
+        val dealer = Dealer()
+        dealer.shuffle()
+
+        val preFlopState = dealer.deal(initialState)
+        val flopState = dealer.deal(preFlopState.rebuild(bettingRound = BettingRound.FLOP))
+        val turnState = dealer.deal(flopState.rebuild(bettingRound = BettingRound.TURN))
+        val riverState = dealer.deal(turnState.rebuild(bettingRound = BettingRound.RIVER))
+
+        assert(preFlopState.players.all { it.holeCards.size == 2} )
+        assert(preFlopState.communityCards.isEmpty())
+
+        assert(flopState.communityCards.size == 3)
+        assert(turnState.communityCards.size == 4)
+        assert(riverState.communityCards.size == 5)
     }
 
     @Test

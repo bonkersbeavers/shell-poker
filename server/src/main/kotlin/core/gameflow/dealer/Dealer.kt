@@ -10,7 +10,6 @@ import kotlin.random.Random
 class Dealer : IDealer {
     private var deckIterator: ListIterator<Card>? = null
 
-    // TODO : Test
     override fun deal(handState: HandState): HandState {
         return when (handState.bettingRound) {
             BettingRound.PRE_FLOP -> dealHoleCards(handState)
