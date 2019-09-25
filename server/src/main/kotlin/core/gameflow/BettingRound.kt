@@ -12,7 +12,7 @@ enum class BettingRound {
             PRE_FLOP -> FLOP
             FLOP -> TURN
             TURN -> RIVER
-            else -> TODO()
+            RIVER -> throw NoSuchElementException("There is no betting round after river")
         }
     }
 }
