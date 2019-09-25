@@ -9,7 +9,7 @@ import core.gameflow.gamestate.GameState
 import core.gameflow.gamestate.PlayerInfo
 import core.gameflow.player.*
 
-class HandManager(val dealer: IDealer, val communicator: Communicator, val roomSettings: RoomSettings) : IHandManager {
+class HandManager(val dealer: IDealer, val communicator: ICommunicator, val roomSettings: RoomSettings) : IHandManager {
 
     override fun playHand(gameState: GameState, newPlayersIds: Set<Int>): GameState = gameState
             .initializeHand(newPlayersIds)
