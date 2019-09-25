@@ -8,7 +8,7 @@ import core.gameflow.Blinds
 import core.gameflow.Positions
 import core.gameflow.RoomSettings
 import core.gameflow.gamestate.GameState
-import core.gameflow.gamestate.PlayerInfo
+import core.gameflow.gamestate.PlayerStatus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import fake.FakeCommunicator
@@ -26,7 +26,7 @@ class HandManagerTest {
                 (buttonPosition + 1) % playersNumber,
                 (buttonPosition + 2) % playersNumber
         )
-        val players = (0 until playersNumber).map { PlayerInfo(position = it, stack = stackSize) }
+        val players = (0 until playersNumber).map { PlayerStatus(position = it, stack = stackSize) }
         return GameState(
                 playersInfo = players,
                 blinds = blinds,
@@ -82,10 +82,10 @@ class HandManagerTest {
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersInfo == listOf(
-                PlayerInfo(0, 1000),
-                PlayerInfo(1, 200),
-                PlayerInfo(2, 900),
-                PlayerInfo(3, 1900)
+                PlayerStatus(0, 1000),
+                PlayerStatus(1, 200),
+                PlayerStatus(2, 900),
+                PlayerStatus(3, 1900)
         ))
 
         // check that dealer has dealt hole cards and all three streets
@@ -143,10 +143,10 @@ class HandManagerTest {
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersInfo == listOf(
-                PlayerInfo(0, 1000),
-                PlayerInfo(1, 400),
-                PlayerInfo(2, 900),
-                PlayerInfo(3, 1700)
+                PlayerStatus(0, 1000),
+                PlayerStatus(1, 400),
+                PlayerStatus(2, 900),
+                PlayerStatus(3, 1700)
         ))
 
         // check that dealer has dealt hole cards and exactly two streets
@@ -197,10 +197,10 @@ class HandManagerTest {
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersInfo == listOf(
-                PlayerInfo(0, 1000),
-                PlayerInfo(1, 0),
-                PlayerInfo(2, 900),
-                PlayerInfo(3, 2100)
+                PlayerStatus(0, 1000),
+                PlayerStatus(1, 0),
+                PlayerStatus(2, 900),
+                PlayerStatus(3, 2100)
         ))
 
         // check that dealer has dealt hole cards and all three streets
@@ -254,10 +254,10 @@ class HandManagerTest {
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersInfo == listOf(
-                PlayerInfo(0, 1000),
-                PlayerInfo(1, 0),
-                PlayerInfo(2, 900),
-                PlayerInfo(3, 2100)
+                PlayerStatus(0, 1000),
+                PlayerStatus(1, 0),
+                PlayerStatus(2, 900),
+                PlayerStatus(3, 2100)
         ))
 
         // check that dealer has dealt hole cards and all three streets

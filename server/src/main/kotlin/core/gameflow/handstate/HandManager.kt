@@ -3,10 +3,9 @@ package core.gameflow.handstate
 import core.adapters.*
 import core.bettinground.*
 import core.gameflow.*
-import core.gameflow.dealer.Dealer
 import core.gameflow.dealer.IDealer
 import core.gameflow.gamestate.GameState
-import core.gameflow.gamestate.PlayerInfo
+import core.gameflow.gamestate.PlayerStatus
 import core.gameflow.player.*
 
 class HandManager(val dealer: IDealer, val communicator: ICommunicator, val roomSettings: RoomSettings) : IHandManager {
@@ -45,7 +44,7 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
         while (true) {
             handState = dealer.deal(handState)
             communicator.broadcastUpdate(HandStateUpdate(handState))
-            handState = bettingRound(handState)
+            handState = runBettingRound(handState)
             communicator.broadcastUpdate(HandStateUpdate(handState))
 
             if ((handState.bettingRound == BettingRound.RIVER) or (handState.players.decisive().size < 2))
@@ -93,7 +92,7 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
     }
 
     private fun HandState.finalizeHand(): GameState {
-        val playersInfo = this.players.map { PlayerInfo(it.position, it.stack) }
+        val playersInfo = this.players.map { PlayerStatus(it.position, it.stack) }
         return GameState(
                 playersInfo = playersInfo,
                 positions = this.positions,
@@ -105,7 +104,7 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
     // Low level helpers
     // ---------------------------
 
-    private fun bettingRound(startingHandState: HandState): HandState {
+    private fun runBettingRound(startingHandState: HandState): HandState {
         var handState = initializeBettingRound(startingHandState)
 
         while (handState.activePlayer != null) {

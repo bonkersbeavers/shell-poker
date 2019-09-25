@@ -186,7 +186,7 @@ class PlayerTest {
     }
 
     @Test
-    fun `moveBetToPot should move a playrs bet to pot`() {
+    fun `moveBetToPot should move player's bet to pot`() {
         val player = Player(
                 chipsInPot = 100,
                 position = 0,
