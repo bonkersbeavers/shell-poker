@@ -35,6 +35,71 @@ class HandManagerTest {
     }
 
     @Test
+    fun `classic showdown after river`() {
+
+        val holeCards = listOf(
+                Pair(Card(CardRank.KING, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.DIAMONDS)),
+                Pair(Card(CardRank.JACK, CardSuit.HEARTS), Card(CardRank.SIX, CardSuit.HEARTS)),
+                Pair(Card(CardRank.SEVEN, CardSuit.CLUBS), Card(CardRank.FOUR, CardSuit.HEARTS)),
+                Pair(Card(CardRank.QUEEN, CardSuit.CLUBS), Card(CardRank.TEN, CardSuit.SPADES))
+        )
+        val communityCards = listOf(
+                Card(CardRank.QUEEN, CardSuit.DIAMONDS),
+                Card(CardRank.NINE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.THREE, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.HEARTS)
+        )
+        val fakeDealerSpy = spyk(FakeHoldemDealer(holeCards, communityCards))
+
+        val preFlopActions = listOf(
+                Raise(300), // player 3
+                Fold, // player 0
+                Call, // player 1
+                Fold // player 2
+        )
+        val flopActions = listOf(
+                Check, // player 1
+                Bet(300), // player 3
+                Call // player 1
+        )
+        val turnActions = listOf(
+                Check, // player 1
+                Bet(200), // player 3
+                Call // player 1
+        )
+        val riverActions = listOf(
+                Check, // player 1
+                Check // player 3, end of action
+        )
+        val fakeCommunicator = FakeCommunicator(preFlopActions + flopActions + turnActions + riverActions)
+
+        val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
+        val roomSettings = RoomSettings(tableSeatsNumber = 4)
+
+        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+
+        assert(finalState.positions == Positions(0, 1, 2))
+        assert(finalState.playersInfo == listOf(
+                PlayerInfo(0, 1000),
+                PlayerInfo(1, 200),
+                PlayerInfo(2, 900),
+                PlayerInfo(3, 1900)
+        ))
+
+        // check that dealer has dealt hole cards and all three streets
+        verifySequence {
+            fakeDealerSpy.shuffle()
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+        }
+    }
+
+
+    @Test
     fun `everyone folded after one player's bet`() {
 
         val holeCards = listOf(
@@ -66,7 +131,7 @@ class HandManagerTest {
         val turnActions = listOf(
                 Check, // player 1
                 AllIn, // player 3
-                Fold    // player 1, end of action
+                Fold // player 1, end of action
         )
         val fakeCommunicator = FakeCommunicator(preFlopActions + flopActions + turnActions)
 
@@ -93,5 +158,115 @@ class HandManagerTest {
         }
     }
 
+    @Test
+    fun `all-ins before river`() {
 
+        val holeCards = listOf(
+                Pair(Card(CardRank.KING, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.DIAMONDS)),
+                Pair(Card(CardRank.JACK, CardSuit.HEARTS), Card(CardRank.SIX, CardSuit.HEARTS)),
+                Pair(Card(CardRank.SEVEN, CardSuit.CLUBS), Card(CardRank.FOUR, CardSuit.HEARTS)),
+                Pair(Card(CardRank.QUEEN, CardSuit.CLUBS), Card(CardRank.TEN, CardSuit.SPADES))
+        )
+        val communityCards = listOf(
+                Card(CardRank.QUEEN, CardSuit.DIAMONDS),
+                Card(CardRank.NINE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.THREE, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.HEARTS)
+        )
+        val fakeDealerSpy = spyk(FakeHoldemDealer(holeCards, communityCards))
+
+        val preFlopActions = listOf(
+                Raise(300), // player 3
+                Fold, // player 0
+                Call, // player 1
+                Fold // player 2
+        )
+        val flopActions = listOf(
+                Check, // player 1
+                AllIn, // player 3
+                Call // player 1
+        )
+        val fakeCommunicator = FakeCommunicator(preFlopActions + flopActions)
+
+        val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
+        val roomSettings = RoomSettings(tableSeatsNumber = 4)
+
+        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+
+        assert(finalState.positions == Positions(0, 1, 2))
+        assert(finalState.playersInfo == listOf(
+                PlayerInfo(0, 1000),
+                PlayerInfo(1, 0),
+                PlayerInfo(2, 900),
+                PlayerInfo(3, 2100)
+        ))
+
+        // check that dealer has dealt hole cards and all three streets
+        verifySequence {
+            fakeDealerSpy.shuffle()
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+        }
+    }
+
+    @Test
+    fun `invalid actions requested during the hand`() {
+
+        val holeCards = listOf(
+                Pair(Card(CardRank.KING, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.DIAMONDS)),
+                Pair(Card(CardRank.JACK, CardSuit.HEARTS), Card(CardRank.SIX, CardSuit.HEARTS)),
+                Pair(Card(CardRank.SEVEN, CardSuit.CLUBS), Card(CardRank.FOUR, CardSuit.HEARTS)),
+                Pair(Card(CardRank.QUEEN, CardSuit.CLUBS), Card(CardRank.TEN, CardSuit.SPADES))
+        )
+        val communityCards = listOf(
+                Card(CardRank.QUEEN, CardSuit.DIAMONDS),
+                Card(CardRank.NINE, CardSuit.HEARTS),
+                Card(CardRank.ACE, CardSuit.SPADES),
+                Card(CardRank.THREE, CardSuit.CLUBS),
+                Card(CardRank.TWO, CardSuit.HEARTS)
+        )
+        val fakeDealerSpy = spyk(FakeHoldemDealer(holeCards, communityCards))
+
+        val preFlopActions = listOf(
+                Raise(300), // player 3
+                Check, // player 0, invalid
+                Fold, // player 0
+                Call, // player 1
+                Fold // player 2
+        )
+        val flopActions = listOf(
+                Check, // player 1
+                AllIn, // player 3
+                Raise(2000), // player 1, invalid
+                Call // player 1
+        )
+        val fakeCommunicator = FakeCommunicator(preFlopActions + flopActions)
+
+        val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
+        val roomSettings = RoomSettings(tableSeatsNumber = 4)
+
+        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+
+        assert(finalState.positions == Positions(0, 1, 2))
+        assert(finalState.playersInfo == listOf(
+                PlayerInfo(0, 1000),
+                PlayerInfo(1, 0),
+                PlayerInfo(2, 900),
+                PlayerInfo(3, 2100)
+        ))
+
+        // check that dealer has dealt hole cards and all three streets
+        verifySequence {
+            fakeDealerSpy.shuffle()
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+            fakeDealerSpy.deal(any())
+        }
+    }
 }
