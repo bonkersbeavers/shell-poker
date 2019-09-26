@@ -11,10 +11,10 @@ import core.gameflow.gamestate.GameState
 import core.gameflow.gamestate.PlayerStatus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import fake.FakeCommunicator
+import testutil.fake.FakeCommunicator
 import io.mockk.spyk
 import io.mockk.verifySequence
-import mock.FakeHoldemDealer
+import testutil.fake.FakeHoldemDealer
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HandManagerTest {
@@ -97,7 +97,6 @@ class HandManagerTest {
             fakeDealerSpy.deal(any())
         }
     }
-
 
     @Test
     fun `everyone folded after one player's bet`() {

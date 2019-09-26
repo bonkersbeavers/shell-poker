@@ -197,7 +197,6 @@ class PlayerTest {
 
         val playerAfterMovingBetsToPot = player.moveBetToPot()
 
-
         assert(playerAfterMovingBetsToPot.bet == 0)
         assert(playerAfterMovingBetsToPot.chipsInPot == 900)
     }

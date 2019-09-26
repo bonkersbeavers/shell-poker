@@ -1,4 +1,4 @@
-package mock
+package testutil.fake
 
 import core.cards.Card
 import core.gameflow.BettingRound

@@ -1,4 +1,4 @@
-package fake
+package testutil.fake
 
 import core.adapters.GameUpdate
 import core.adapters.ICommunicator

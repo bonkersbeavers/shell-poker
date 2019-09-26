@@ -8,8 +8,8 @@ data class PlayerStatus(val position: Int, val stack: Int) {
 }
 
 data class GameState(
-        val playersInfo: List<PlayerStatus>,
-        val positions: Positions,
-        val blinds: Blinds,
-        val handsPlayed: Int = 0
+    val playersInfo: List<PlayerStatus>,
+    val positions: Positions,
+    val blinds: Blinds,
+    val handsPlayed: Int = 0
 )

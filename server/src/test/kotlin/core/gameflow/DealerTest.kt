@@ -91,7 +91,7 @@ class DealerTest {
         val turnState = dealer.deal(flopState.rebuild(bettingRound = BettingRound.TURN))
         val riverState = dealer.deal(turnState.rebuild(bettingRound = BettingRound.RIVER))
 
-        assert(preFlopState.players.all { it.holeCards.size == 2} )
+        assert(preFlopState.players.all { it.holeCards.size == 2 })
         assert(preFlopState.communityCards.isEmpty())
 
         assert(flopState.communityCards.size == 3)

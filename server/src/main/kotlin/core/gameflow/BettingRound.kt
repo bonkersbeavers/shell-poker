@@ -6,9 +6,8 @@ enum class BettingRound {
     TURN,
     RIVER;
 
-
     fun next(): BettingRound {
-        return when(this) {
+        return when (this) {
             PRE_FLOP -> FLOP
             FLOP -> TURN
             TURN -> RIVER

@@ -31,7 +31,6 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
 
         println("=============== PLAYER $playerId ==============================")
 
-
         println("table: ${handState.communityCards.joinToString(", ")}")
         handState.pots().forEach { pot ->
             val prefix = if (pot.potNumber > 0) "side pot ${pot.potNumber}" else "main pot"
@@ -73,8 +72,6 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
             }
 
             println(playerStringBuilder.toString())
-
-
         }
 
         println("===============================================================")

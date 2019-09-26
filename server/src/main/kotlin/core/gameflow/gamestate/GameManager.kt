@@ -6,10 +6,10 @@ import core.gameflow.*
 import core.gameflow.handstate.IHandManager
 
 class GameManager(
-        val handManager: IHandManager,
-        val communicator: Communicator,
-        val roomSettings: RoomSettings,
-        initialState: GameState
+    val handManager: IHandManager,
+    val communicator: Communicator,
+    val roomSettings: RoomSettings,
+    initialState: GameState
 ) {
 
     private var currentGameState: GameState = initialState
