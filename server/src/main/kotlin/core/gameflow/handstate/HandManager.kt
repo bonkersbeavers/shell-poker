@@ -5,13 +5,13 @@ import core.bettinground.*
 import core.gameflow.*
 import core.gameflow.dealer.IDealer
 import core.gameflow.gamestate.GameState
-import core.gameflow.gamestate.PlayerStatus
+import core.gameflow.player.PlayerStatus
 import core.gameflow.player.*
 
 class HandManager(val dealer: IDealer, val communicator: ICommunicator, val roomSettings: RoomSettings) : IHandManager {
 
-    override fun playHand(gameState: GameState, newPlayersIds: Set<Int>): GameState = gameState
-            .initializeHand(newPlayersIds)
+    override fun playHand(gameState: GameState): GameState = gameState
+            .initializeHand()
             .handleAction()
             .handleShowdown()
             .handlePotDistribution()
@@ -21,10 +21,10 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
     // High level hand flow components
     // ---------------------------
 
-    private fun GameState.initializeHand(newPlayersIds: Set<Int>): HandState {
+    private fun GameState.initializeHand(): HandState {
         dealer.shuffle()
 
-        val players = this.playersInfo.map { Player(position = it.position, stack = it.stack) }
+        val players = this.playersStatuli.map { Player(position = it.position, stack = it.stack) }
 
         var initialStateBuilder = HandState.ImmutableBuilder(
                 players = players,
@@ -33,7 +33,7 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
         )
 
         initialStateBuilder = shiftPositions(initialStateBuilder, roomSettings)
-        initialStateBuilder = postBlindsAndAnte(initialStateBuilder, newPlayersIds)
+        initialStateBuilder = postBlindsAndAnte(initialStateBuilder, this.newPlayersIds)
 
         return initialStateBuilder.build()
     }
@@ -94,9 +94,10 @@ class HandManager(val dealer: IDealer, val communicator: ICommunicator, val room
     private fun HandState.finalizeHand(): GameState {
         val playersInfo = this.players.map { PlayerStatus(it.position, it.stack) }
         return GameState(
-                playersInfo = playersInfo,
+                playersStatuli = playersInfo,
                 positions = this.positions,
-                blinds = this.blinds
+                blinds = this.blinds,
+                newPlayersIds = emptyList()
         )
     }
 

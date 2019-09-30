@@ -28,7 +28,7 @@ class HandManagerTest {
         )
         val players = (0 until playersNumber).map { PlayerStatus(position = it, stack = stackSize) }
         return GameState(
-                playersInfo = players,
+                playersStatuli = players,
                 blinds = blinds,
                 positions = positions
         )
@@ -81,7 +81,7 @@ class HandManagerTest {
         val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
 
         assert(finalState.positions == Positions(0, 1, 2))
-        assert(finalState.playersInfo == listOf(
+        assert(finalState.playersStatuli == listOf(
                 PlayerStatus(0, 1000),
                 PlayerStatus(1, 200),
                 PlayerStatus(2, 900),
@@ -141,7 +141,7 @@ class HandManagerTest {
         val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
 
         assert(finalState.positions == Positions(0, 1, 2))
-        assert(finalState.playersInfo == listOf(
+        assert(finalState.playersStatuli == listOf(
                 PlayerStatus(0, 1000),
                 PlayerStatus(1, 400),
                 PlayerStatus(2, 900),
@@ -195,7 +195,7 @@ class HandManagerTest {
         val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
 
         assert(finalState.positions == Positions(0, 1, 2))
-        assert(finalState.playersInfo == listOf(
+        assert(finalState.playersStatuli == listOf(
                 PlayerStatus(0, 1000),
                 PlayerStatus(1, 0),
                 PlayerStatus(2, 900),
@@ -252,7 +252,7 @@ class HandManagerTest {
         val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
 
         assert(finalState.positions == Positions(0, 1, 2))
-        assert(finalState.playersInfo == listOf(
+        assert(finalState.playersStatuli == listOf(
                 PlayerStatus(0, 1000),
                 PlayerStatus(1, 0),
                 PlayerStatus(2, 900),

@@ -4,6 +4,7 @@ import core.adapters.Communicator
 import core.adapters.IPlayerAdapter
 import core.gameflow.*
 import core.gameflow.handstate.IHandManager
+import core.gameflow.table.TableManager
 
 class GameManager(
     val handManager: IHandManager,
@@ -12,9 +13,8 @@ class GameManager(
     initialState: GameState
 ) {
 
+    private val tableManager: TableManager = TableManager()
     private var currentGameState: GameState = initialState
-
-    private var pendingPlayersBuffer: MutableSet<PlayerStatus> = mutableSetOf()
 
     fun start() {
 
@@ -22,42 +22,20 @@ class GameManager(
 
             // TODO: send hand start update
 
-            // TODO: protect this CRITICAL SECTION
-            // START OF CRITICAL SECTION
-            currentGameState = updatePlayers(currentGameState)
-            val newPlayersIds = pendingPlayersBuffer.map { it.id }.toSet()
-            // END OF CRITICAL SECTION
-
-            currentGameState = handManager.playHand(currentGameState, newPlayersIds)
+            currentGameState = tableManager.getUpdatedGameState(currentGameState)
+            currentGameState = handManager.playHand(currentGameState)
             currentGameState = currentGameState.copy(handsPlayed = currentGameState.handsPlayed + 1)
 
             // TODO: send state after completed hand update
         }
     }
 
-    fun registerNewPlayer(playerInfo: PlayerStatus, adapter: IPlayerAdapter) {
-        /*
-         * TODO:
-         *  - broadcast update about new player
-         */
-        this.pendingPlayersBuffer.add(playerInfo)
+    fun registerNewPlayer(position: Int, adapter: IPlayerAdapter) {
+        this.tableManager.registerNewPlayer(position)
         this.communicator.addAdapter(adapter)
     }
 
-    private fun updatePlayers(gameState: GameState): GameState {
-        /*
-         * TODO:
-         *  - add pending players to game state
-         *  - delete players that lost the game / lost the connection
-         */
-        return gameState
-    }
-
-    private fun clearPendingPlayersBuffer() {
-        /*
-         * TODO:
-         *  - add synchronization to buffer clearing
-         */
-        this.pendingPlayersBuffer.clear()
+    fun unregisterPlayer(position: Int) {
+        TODO()
     }
 }
