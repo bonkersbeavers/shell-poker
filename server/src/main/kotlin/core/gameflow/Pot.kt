@@ -54,25 +54,31 @@ fun resolvePot(handState: HandState): List<PotResult> {
     val orderedPots = handState.pots().reversed()
 
     val potResults = orderedPots.map { pot ->
-        val bestHand = pot.players.map { it.hand(handState.communityCards) }.max()!!
-        val potWinnersSet = pot.players.filter { it.hand(handState.communityCards).compareTo(bestHand) == 0 }.toSet()
-
-        // if there are multiple winners, they should be awarded in betting order
-        val orderedPotWinners = handState.players
-                .ordered(handState.positions.button + 1)
-                .filter { it in potWinnersSet }
-
-        val chipsWon = pot.size / potWinnersSet.size
-
-        // If chips cannot be split equally, first players after the button are awarded with an extra chip
-        val extraChips = pot.size % potWinnersSet.size
-
-        val results = orderedPotWinners.mapIndexed { index, player ->
-            val chips = chipsWon + (if (index < extraChips) 1 else 0)
-            PotResult(chips, player.id, pot.potNumber)
+        if (pot.players.size == 1) {
+            val winner = pot.players.first()
+            listOf(PotResult(pot.size, winner.id, pot.potNumber))
         }
+        else {
+            val bestHand = pot.players.map { it.hand(handState.communityCards) }.max()!!
+            val potWinnersSet = pot.players.filter { it.hand(handState.communityCards).compareTo(bestHand) == 0 }.toSet()
 
-        results
+            // if there are multiple winners, they should be awarded in betting order
+            val orderedPotWinners = handState.players
+                    .ordered(handState.positions.button + 1)
+                    .filter { it in potWinnersSet }
+
+            val chipsWon = pot.size / potWinnersSet.size
+
+            // If chips cannot be split equally, first players after the button are awarded with an extra chip
+            val extraChips = pot.size % potWinnersSet.size
+
+            val results = orderedPotWinners.mapIndexed { index, player ->
+                val chips = chipsWon + (if (index < extraChips) 1 else 0)
+                PotResult(chips, player.id, pot.potNumber)
+            }
+
+            results
+        }
     }
 
     return potResults.reduce { acc, list -> acc + list }
