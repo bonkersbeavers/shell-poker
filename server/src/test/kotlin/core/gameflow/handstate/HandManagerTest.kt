@@ -268,4 +268,34 @@ class HandManagerTest {
             fakeDealerSpy.deal(any())
         }
     }
+
+    @Test
+    fun `new player's ids list should be cleared after playing hand`() {
+
+        val holeCards = listOf(
+                Pair(Card(CardRank.KING, CardSuit.SPADES), Card(CardRank.SIX, CardSuit.DIAMONDS)),
+                Pair(Card(CardRank.JACK, CardSuit.HEARTS), Card(CardRank.SIX, CardSuit.HEARTS)),
+                Pair(Card(CardRank.SEVEN, CardSuit.CLUBS), Card(CardRank.FOUR, CardSuit.HEARTS))
+        )
+        val communityCards = emptyList<Card>()
+        val fakeDealer = FakeHoldemDealer(holeCards, communityCards)
+
+        val preFlopActions = listOf(
+                Fold,
+                Fold,
+                Fold
+        )
+
+        val fakeCommunicator = FakeCommunicator(preFlopActions)
+
+        val startingState = getSampleGameState(playersNumber = 3, stackSize = 1000, buttonPosition = 3)
+                .copy(newPlayersIds = listOf(0, 2))
+
+        val roomSettings = RoomSettings(tableSeatsNumber = 4)
+
+        val handManager = HandManager(fakeDealer, fakeCommunicator, roomSettings)
+        val finalState = handManager.playHand(startingState)
+
+        assert(finalState.newPlayersIds.isEmpty())
+    }
 }
