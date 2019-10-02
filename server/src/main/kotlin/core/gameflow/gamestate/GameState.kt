@@ -6,8 +6,8 @@ import core.gameflow.player.PlayerStatus
 
 data class GameState(
     val playersStatuli: List<PlayerStatus>,
-    val newPlayersIds: List<Int>,
     val positions: Positions,
     val blinds: Blinds,
+    val newPlayersIds: List<Int> = emptyList(),
     val handsPlayed: Int = 0
 )

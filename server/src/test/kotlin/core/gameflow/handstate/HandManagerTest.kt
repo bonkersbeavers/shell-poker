@@ -8,7 +8,7 @@ import core.gameflow.Blinds
 import core.gameflow.Positions
 import core.gameflow.RoomSettings
 import core.gameflow.gamestate.GameState
-import core.gameflow.gamestate.PlayerStatus
+import core.gameflow.player.PlayerStatus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import testutil.fake.FakeCommunicator
@@ -78,7 +78,7 @@ class HandManagerTest {
         val roomSettings = RoomSettings(tableSeatsNumber = 4)
 
         val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
-        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+        val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersStatuli == listOf(
@@ -138,7 +138,7 @@ class HandManagerTest {
         val roomSettings = RoomSettings(tableSeatsNumber = 4)
 
         val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
-        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+        val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersStatuli == listOf(
@@ -192,7 +192,7 @@ class HandManagerTest {
         val roomSettings = RoomSettings(tableSeatsNumber = 4)
 
         val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
-        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+        val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersStatuli == listOf(
@@ -249,7 +249,7 @@ class HandManagerTest {
         val roomSettings = RoomSettings(tableSeatsNumber = 4)
 
         val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
-        val finalState = handManager.playHand(startingState, newPlayersIds = emptySet())
+        val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
         assert(finalState.playersStatuli == listOf(
