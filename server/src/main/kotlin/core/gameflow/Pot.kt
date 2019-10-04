@@ -29,7 +29,7 @@ fun HandState.pots(): List<Pot> {
         // bet among all in-game current pot contributors.
         // If player's committed chips amount is higher than this bet,
         // then the excess will be used to create another side pot.
-        val nextPotBetToCover = nextPotContributors.filter { it.isInGame }.map { it.chipsInPot }.min()!!
+        val nextPotBetToCover = nextPotPlayers.map { it.chipsInPot }.min()!!
 
         // Actual chips amount from each player that will form the next pot.
         // If a player is in game, his chunk will be equal to the difference between last and next pot bets.
@@ -57,8 +57,7 @@ fun resolvePot(handState: HandState): List<PotResult> {
         if (pot.players.size == 1) {
             val winner = pot.players.first()
             listOf(PotResult(pot.size, winner.id, pot.potNumber))
-        }
-        else {
+        } else {
             val bestHand = pot.players.map { it.hand(handState.communityCards) }.max()!!
             val potWinnersSet = pot.players.filter { it.hand(handState.communityCards).compareTo(bestHand) == 0 }.toSet()
 

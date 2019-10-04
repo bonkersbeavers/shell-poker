@@ -330,4 +330,39 @@ class PotTest {
             ))
         }
     }
+
+    @Test
+    fun `pot should be successfully resolved when there is only one player left in game and there are no community cards`() {
+        val player0 = Player(
+                position = 0, stack = 0,
+                chipsInPot = 100,
+                holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
+                lastAction = ActionType.ALL_IN
+        )
+
+        val player1 = Player(
+                position = 1, stack = 0,
+                chipsInPot = 10,
+                holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.JACK, CardSuit.HEARTS)),
+                lastAction = ActionType.FOLD
+        )
+
+        val player2 = Player(
+                position = 2, stack = 0,
+                chipsInPot = 20,
+                holeCards = listOf(Card(CardRank.ACE, CardSuit.CLUBS), Card(CardRank.JACK, CardSuit.CLUBS)),
+                lastAction = ActionType.FOLD
+        )
+
+        val state = baseBuilder.copy(
+                players = listOf(player0, player1, player2),
+                positions = Positions(0, 1, 2),
+                communityCards = emptyList()
+        ).build()
+
+        val potResults = resolvePot(state)
+        assert(potResults == listOf(
+                PotResult(130, player0.id, potNumber = 0) // player0 should win all chips
+        ))
+    }
 }
