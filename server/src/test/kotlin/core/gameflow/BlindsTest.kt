@@ -90,7 +90,7 @@ class BlindsTest {
                 positions = Positions(button = 0, smallBlind = 1, bigBlind = 2)
         )
 
-        val newBuilder = postBlindsAndAnte(stateBuilder, newPlayersIds = setOf(1, 3))
+        val newBuilder = postBlindsAndAnte(stateBuilder, newPlayersIds = listOf(1, 3))
         val players = newBuilder.players!!
 
         assert(players[0].chipsInPot == 200)

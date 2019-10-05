@@ -7,8 +7,7 @@ import core.gameflow.player.Player
 import core.gameflow.Positions
 
 fun HandState.updateActivePlayer(playerUpdate: Player): HandState {
-
-    assert(activePlayer != null)
+    activePlayer!!
 
     val newPlayers = players.map {
         when (it) {

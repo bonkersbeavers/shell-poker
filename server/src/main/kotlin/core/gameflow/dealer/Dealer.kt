@@ -1,13 +1,23 @@
-package core.gameflow
+package core.gameflow.dealer
 
 import core.cards.Card
 import core.cards.baseDeck
+import core.gameflow.BettingRound
 import core.gameflow.handstate.HandState
 import core.gameflow.handstate.rebuild
 import kotlin.random.Random
 
-class Dealer {
+class Dealer : IDealer {
     private var deckIterator: ListIterator<Card>? = null
+
+    override fun deal(handState: HandState): HandState {
+        return when (handState.bettingRound) {
+            BettingRound.PRE_FLOP -> dealHoleCards(handState)
+            BettingRound.FLOP -> dealFlop(handState)
+            BettingRound.TURN -> dealTurn(handState)
+            BettingRound.RIVER -> dealRiver(handState)
+        }
+    }
 
     fun dealHoleCards(handState: HandState): HandState {
         deckIterator!!
@@ -45,7 +55,7 @@ class Dealer {
         return handState.rebuild(communityCards = handState.communityCards + riverCard)
     }
 
-    fun shuffle(seed: Int? = null) {
+    override fun shuffle(seed: Int?) {
         deckIterator = when (seed) {
             null -> baseDeck.shuffled().listIterator()
             else -> baseDeck.shuffled(Random(seed)).listIterator()

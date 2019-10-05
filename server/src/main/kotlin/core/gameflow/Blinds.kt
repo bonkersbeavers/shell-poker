@@ -5,7 +5,7 @@ import core.gameflow.handstate.HandState
 
 fun postBlindsAndAnte(
     stateBuilder: HandState.ImmutableBuilder,
-    newPlayersIds: Set<Int> = emptySet()
+    newPlayersIds: List<Int> = emptyList()
 ): HandState.ImmutableBuilder {
 
     val players = stateBuilder.players!!

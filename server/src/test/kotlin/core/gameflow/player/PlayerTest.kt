@@ -184,4 +184,20 @@ class PlayerTest {
         assert(playerHand is TwoPair)
         assert(playerHand.cards == properHandCards)
     }
+
+    @Test
+    fun `moveBetToPot should move player's bet to pot`() {
+        val player = Player(
+                chipsInPot = 100,
+                position = 0,
+                stack = 1000,
+                bet = 800,
+                lastAction = ActionType.BET
+        )
+
+        val playerAfterMovingBetsToPot = player.moveBetToPot()
+
+        assert(playerAfterMovingBetsToPot.bet == 0)
+        assert(playerAfterMovingBetsToPot.chipsInPot == 900)
+    }
 }
