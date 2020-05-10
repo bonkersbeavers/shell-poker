@@ -1,10 +1,10 @@
 package testutil.fake
 
 import core.cards.Card
-import core.gameflow.BettingRound
-import core.gameflow.dealer.IDealer
-import core.gameflow.handstate.HandState
-import core.gameflow.handstate.rebuild
+import core.flowUtils.BettingRound
+import core.dealer.IDealer
+import core.handflow.HandState
+import core.handflow.rebuild
 
 class FakeHoldemDealer(val holeCards: List<Pair<Card, Card>>, val communityCards: List<Card>) : IDealer {
 

@@ -1,10 +1,10 @@
 package testutil.fake
 
-import core.adapters.GameUpdate
-import core.adapters.ICommunicator
-import core.adapters.IPlayerAdapter
-import core.bettinground.BettingAction
-import core.gameflow.ShowdownAction
+import gameControl.adapters.GameUpdate
+import gameControl.adapters.ICommunicator
+import gameControl.adapters.IPlayerAdapter
+import core.betting.BettingAction
+import core.flowUtils.ShowdownAction
 
 class FakeCommunicator(actions: List<BettingAction>) : ICommunicator {
 
