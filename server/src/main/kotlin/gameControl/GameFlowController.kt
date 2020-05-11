@@ -4,12 +4,12 @@ import core.RoomSettings
 import core.betting.AllIn
 import core.flowUtils.Blinds
 import core.handflow.HandFlowActionType
-import core.handflow.NewHandManager
+import core.handflow.HandManager
 import core.player.PlayerStatus
 
 class GameFlowController(val settings: RoomSettings) {
     fun run() {
-        val handManager = NewHandManager(settings)
+        val handManager = HandManager(settings)
 
         val players = emptyList<PlayerStatus>() // mock players
         val blinds = Blinds(50, 100) // mock blinds

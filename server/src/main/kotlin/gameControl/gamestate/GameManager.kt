@@ -3,11 +3,11 @@ package gameControl.gamestate
 import core.RoomSettings
 import gameControl.adapters.Communicator
 import gameControl.adapters.IPlayerAdapter
-import core.handflow.IHandManager
+import core.handflow.IDeprecatedHandManager
 import gameControl.table.TableManager
 
 class GameManager(
-        val handManager: IHandManager,
+        val handManager: IDeprecatedHandManager,
         val communicator: Communicator,
         val roomSettings: RoomSettings,
         initialState: GameState

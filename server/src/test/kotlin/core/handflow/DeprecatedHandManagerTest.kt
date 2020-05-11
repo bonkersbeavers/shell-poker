@@ -17,7 +17,7 @@ import io.mockk.verifySequence
 import testutil.fake.FakeHoldemDealer
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class HandManagerTest {
+class DeprecatedHandManagerTest {
 
     private fun getSampleGameState(playersNumber: Int, stackSize: Int, buttonPosition: Int): GameState {
         val blinds = Blinds(50, 100)
@@ -77,7 +77,7 @@ class HandManagerTest {
         val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
         val roomSettings = RoomSettings(seatsNumber = 4)
 
-        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val handManager = DeprecatedHandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
         val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
@@ -137,7 +137,7 @@ class HandManagerTest {
         val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
         val roomSettings = RoomSettings(seatsNumber = 4)
 
-        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val handManager = DeprecatedHandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
         val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
@@ -191,7 +191,7 @@ class HandManagerTest {
         val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
         val roomSettings = RoomSettings(seatsNumber = 4)
 
-        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val handManager = DeprecatedHandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
         val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
@@ -248,7 +248,7 @@ class HandManagerTest {
         val startingState = getSampleGameState(playersNumber = 4, stackSize = 1000, buttonPosition = 3)
         val roomSettings = RoomSettings(seatsNumber = 4)
 
-        val handManager = HandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
+        val handManager = DeprecatedHandManager(fakeDealerSpy, fakeCommunicator, roomSettings)
         val finalState = handManager.playHand(startingState)
 
         assert(finalState.positions == Positions(0, 1, 2))
@@ -293,7 +293,7 @@ class HandManagerTest {
 
         val roomSettings = RoomSettings(seatsNumber = 4)
 
-        val handManager = HandManager(fakeDealer, fakeCommunicator, roomSettings)
+        val handManager = DeprecatedHandManager(fakeDealer, fakeCommunicator, roomSettings)
         val finalState = handManager.playHand(startingState)
 
         assert(finalState.newPlayersIds.isEmpty())

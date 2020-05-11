@@ -2,6 +2,6 @@ package core.handflow
 
 import gameControl.gamestate.GameState
 
-interface IHandManager {
+interface IDeprecatedHandManager {
     fun playHand(gameState: GameState): GameState
 }

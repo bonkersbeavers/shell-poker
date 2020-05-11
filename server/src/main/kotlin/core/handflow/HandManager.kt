@@ -1,170 +1,91 @@
 package core.handflow
 
+import core.betting.BettingAction
 import core.RoomSettings
-import gameControl.adapters.*
-import core.betting.*
+import core.betting.InvalidAction
+import core.dealer.Dealer
 import core.flowUtils.*
-import core.dealer.IDealer
-import gameControl.gamestate.GameState
 import core.player.PlayerStatus
-import core.player.*
+import core.player.decisive
+import core.player.inGame
 
-class HandManager(val dealer: IDealer, val communicator: ICommunicator, val roomSettings: RoomSettings) : IHandManager {
+class HandManager(settings: RoomSettings) {
+    private val dealer = Dealer()
+    var currentState: HandState? = null
+        private set
+    private var nextPlayerAction: BettingAction? = null
 
-    override fun playHand(gameState: GameState): GameState = gameState
-            .initializeHand()
-            .handleAction()
-            .handleShowdown()
-            .handlePotDistribution()
-            .finalizeHand()
-
-    // ---------------------------
-    // High level hand flow components
-    // ---------------------------
-
-    private fun GameState.initializeHand(): HandState {
-        dealer.shuffle()
-
-        val players = this.playersStatuli.map { Player(position = it.position, stack = it.stack) }
-
-        var initialStateBuilder = HandState.ImmutableBuilder(
-                players = players,
-                positions = this.positions,
-                blinds = this.blinds
-        )
-
-        initialStateBuilder = shiftPositions(initialStateBuilder, roomSettings)
-        initialStateBuilder = postBlindsAndAnte(initialStateBuilder, this.newPlayersIds)
-
-        return initialStateBuilder.build()
+    fun startNewHand(
+            players: List<PlayerStatus>,
+            newPlayersIds: Collection<Int>,
+            blinds: Blinds,
+            randomPositions: Boolean = false) {
+        TODO()
+        /**
+         * initializes hand state by setting correct positions (random or shifted from previous state),
+         * applying all blinds / ante posts to players and dealing hole cards
+         */
     }
 
-    private fun HandState.handleAction(): HandState {
-        var handState = this
-
-        while (true) {
-            handState = dealer.deal(handState)
-            communicator.broadcastUpdate(HandStateUpdate(handState))
-            handState = runBettingRound(handState)
-            communicator.broadcastUpdate(HandStateUpdate(handState))
-
-            if ((handState.bettingRound == BettingRound.RIVER) or (handState.players.decisive().size < 2))
-                break
-
-            handState = handState.rebuild(bettingRound = handState.bettingRound.next())
-        }
-
-        return handState
+    val nextActionType: HandFlowActionType? = when {
+        currentState == null -> throw HandFlowException("hand state has not been initialized")
+        currentState!!.activePlayer == null -> HandFlowActionType.PLAYER_ACTION
+        currentState!!.bettingRound != BettingRound.RIVER -> HandFlowActionType.GAME_ACTION
+        else -> null
     }
 
-    private fun HandState.handleShowdown(): HandState {
-        val showdownOrder = resolveShowdown(this)
+    fun setNextPlayerAction(action: BettingAction) {
+        if (nextActionType != HandFlowActionType.PLAYER_ACTION)
+            throw HandFlowException("cannot set player's action when next action is not taken by player")
 
-        showdownOrder.forEach { defaultAction ->
-            val playerShowdownDecision = communicator.requestShowdownAction(defaultAction.playerId)
-            val action = playerShowdownDecision ?: defaultAction
-            communicator.broadcastUpdate(ShowdownActionUpdate(action))
-        }
+        val actionValidation = action.validate(currentState!!)
+        if (actionValidation is InvalidAction)
+            throw HandFlowException("attempt to set invalid player's action, reason is: ${actionValidation.reason}")
 
-        var newState = this
-
-        if (this.players.inGame().size > 1) {
-            while (newState.bettingRound != BettingRound.RIVER) {
-                newState = newState.rebuild(bettingRound = newState.bettingRound.next())
-                newState = dealer.deal(newState)
-                communicator.broadcastUpdate(HandStateUpdate(newState))
-            }
-        }
-
-        return newState
+        this.nextPlayerAction = action
     }
 
-    private fun HandState.handlePotDistribution(): HandState {
-        val potResults = resolvePot(this)
+    fun takeAction() {
+        if (handIsOver)
+            throw HandFlowException("no further action possible in hand")
 
-        potResults.forEach { result ->
-            communicator.broadcastUpdate(PotResultUpdate(result))
+        if (nextActionType == HandFlowActionType.PLAYER_ACTION && nextPlayerAction == null)
+            throw HandFlowException("next player's action is not set")
+
+        when (nextActionType) {
+            HandFlowActionType.PLAYER_ACTION -> currentState = nextPlayerAction!!.apply(currentState!!)
+            HandFlowActionType.GAME_ACTION -> currentState = dealer.deal(currentState!!)
         }
-
-        val newState = distributePot(this)
-        communicator.broadcastUpdate(HandStateUpdate(newState))
-
-        return newState
     }
 
-    private fun HandState.finalizeHand(): GameState {
-        val playersInfo = this.players.map { PlayerStatus(it.position, it.stack) }
-        return GameState(
-                playersStatuli = playersInfo,
-                positions = this.positions,
-                blinds = this.blinds,
-                newPlayersIds = emptyList()
-        )
+    val playersInteractionIsOver: Boolean = currentState?.let {
+        handIsOver or (it.players.decisive().count() < 2)
+    } ?: false
+
+    val handIsOver: Boolean = currentState?.let {
+        (it.bettingRound == BettingRound.RIVER && it.activePlayer == null) or (it.players.inGame().count() < 2)
+    } ?: false
+
+    val showdownResults: List<ShowdownAction> = run {
+        if (playersInteractionIsOver.not())
+            throw HandFlowException("cannot resolve showdown while some players can still take actions")
+
+        resolveShowdown(currentState!!)
     }
 
-    // ---------------------------
-    // Low level helpers
-    // ---------------------------
+    val potResults: List<PotResult> = run {
+        if (handIsOver.not())
+            throw HandFlowException("cannot resolve pot while hand is not over")
 
-    private fun runBettingRound(startingHandState: HandState): HandState {
-        var handState = initializeBettingRound(startingHandState)
-
-        while (handState.activePlayer != null) {
-            val activePlayer = handState.activePlayer!!
-
-            var action: BettingAction
-            var actionValidation: ActionValidation
-
-            do {
-                action = communicator.requestBettingAction(activePlayer.id)
-                actionValidation = action.validate(handState)
-                communicator.sendUpdate(activePlayer.id, ActionValidationUpdate(actionValidation))
-            }
-            while (actionValidation != ValidAction)
-
-            communicator.broadcastUpdate(PlayerActionUpdate(activePlayer.id, action))
-            handState = action.apply(handState)
-            communicator.broadcastUpdate(HandStateUpdate(handState))
-        }
-
-        return finalizeBettingRound(handState)
+        resolvePot(currentState!!)
     }
 
-    private fun initializeBettingRound(handState: HandState): HandState {
-        val firstActivePlayer = when (handState.bettingRound) {
-            BettingRound.PRE_FLOP -> handState.players.nextDecisive(handState.positions.bigBlind)
-            else -> handState.players.nextDecisive(handState.positions.button)
-        }
-
-        val lastLegalBet = when (handState.bettingRound) {
-            BettingRound.PRE_FLOP -> handState.blinds.bigBlind
-            else -> 0
-        }
-
-        val minRaise = when (handState.bettingRound) {
-            BettingRound.PRE_FLOP -> handState.blinds.bigBlind * 2
-            else -> handState.blinds.bigBlind
-        }
-
-        return handState.rebuild(
-                activePlayer = firstActivePlayer,
-                lastLegalBet = lastLegalBet,
-                minRaise = minRaise
-        )
-    }
-
-    private fun finalizeBettingRound(handState: HandState): HandState {
-        val newPlayers = handState.players.map {
-            val newPlayer = it.moveBetToPot()
-            if (newPlayer.isDecisive) newPlayer.copy(lastAction = null) else newPlayer
-        }
-
-        return handState.rebuild(
-                players = newPlayers,
-                lastAggressor = null,
-                lastLegalBet = 0,
-                minRaise = handState.blinds.bigBlind,
-                extraBet = 0
-        )
+    fun finalizeHand() {
+        TODO()
+        /**
+         * udpates hand state by applying pot results to the players
+         *
+         * throws HandFlowException if the action in current hand is not over
+         */
     }
 }
