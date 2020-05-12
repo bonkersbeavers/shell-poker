@@ -13,10 +13,10 @@ class HandStateExtensionsTest {
     @Test
     fun `updateActivePlayer should properly substitute active player in players list`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -34,10 +34,10 @@ class HandStateExtensionsTest {
     @Test
     fun `rebuild should create new HandState with properly updated fields`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 0, lastAction = ActionType.ALL_IN)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 0, lastAction = ActionType.ALL_IN)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),

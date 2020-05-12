@@ -11,10 +11,10 @@ class CheckTest {
 
     @Test
     fun `checking should be legal if everyone before active player has checked after pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
-        val player1 = Player(position = 1, bet = 0, stack = 1000, lastAction = ActionType.CHECK)
-        val player2 = Player(position = 2, bet = 0, stack = 1000, lastAction = ActionType.CHECK)
-        val player3 = Player(position = 3, bet = 0, stack = 1000, lastAction = null) // active player
+        val player0 = Player(seat = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
+        val player1 = Player(seat = 1, bet = 0, stack = 1000, lastAction = ActionType.CHECK)
+        val player2 = Player(seat = 2, bet = 0, stack = 1000, lastAction = ActionType.CHECK)
+        val player3 = Player(seat = 3, bet = 0, stack = 1000, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -31,10 +31,10 @@ class CheckTest {
 
     @Test
     fun `checking should be legal as a big blind when big blind is called in pre flop`() {
-        val player0 = Player(position = 0, bet = 200, stack = 800, lastAction = ActionType.CALL)
-        val player1 = Player(position = 1, bet = 200, stack = 800, lastAction = ActionType.CALL)
-        val player2 = Player(position = 2, bet = 200, stack = 800, lastAction = ActionType.POST) // active player / big blind
-        val player3 = Player(position = 3, bet = 200, stack = 800, lastAction = ActionType.CALL)
+        val player0 = Player(seat = 0, bet = 200, stack = 800, lastAction = ActionType.CALL)
+        val player1 = Player(seat = 1, bet = 200, stack = 800, lastAction = ActionType.CALL)
+        val player2 = Player(seat = 2, bet = 200, stack = 800, lastAction = ActionType.POST) // active player / big blind
+        val player3 = Player(seat = 3, bet = 200, stack = 800, lastAction = ActionType.CALL)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -51,10 +51,10 @@ class CheckTest {
 
     @Test
     fun `checking should be illegal as a big blind when big blind is raised in pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
-        val player1 = Player(position = 1, bet = 400, stack = 1000, lastAction = ActionType.CALL)
-        val player2 = Player(position = 2, bet = 200, stack = 1000, lastAction = ActionType.POST) // active player / big blind
-        val player3 = Player(position = 3, bet = 400, stack = 1000, lastAction = ActionType.RAISE)
+        val player0 = Player(seat = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
+        val player1 = Player(seat = 1, bet = 400, stack = 1000, lastAction = ActionType.CALL)
+        val player2 = Player(seat = 2, bet = 200, stack = 1000, lastAction = ActionType.POST) // active player / big blind
+        val player3 = Player(seat = 3, bet = 400, stack = 1000, lastAction = ActionType.RAISE)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -71,10 +71,10 @@ class CheckTest {
 
     @Test
     fun `checking should be illegal when a bet is made after pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
-        val player1 = Player(position = 1, bet = 500, stack = 300, lastAction = ActionType.BET)
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = null) // active player
-        val player3 = Player(position = 3, bet = 0, stack = 800, lastAction = null)
+        val player0 = Player(seat = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
+        val player1 = Player(seat = 1, bet = 500, stack = 300, lastAction = ActionType.BET)
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = null) // active player
+        val player3 = Player(seat = 3, bet = 0, stack = 800, lastAction = null)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -91,10 +91,10 @@ class CheckTest {
 
     @Test
     fun `applying check normally after pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 800, lastAction = null)
-        val player1 = Player(position = 1, bet = 0, stack = 800, lastAction = null) // active player
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = null)
-        val player3 = Player(position = 3, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
+        val player0 = Player(seat = 0, bet = 0, stack = 800, lastAction = null)
+        val player1 = Player(seat = 1, bet = 0, stack = 800, lastAction = null) // active player
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = null)
+        val player3 = Player(seat = 3, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -120,10 +120,10 @@ class CheckTest {
 
     @Test
     fun `applying check and it should end the round after pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
-        val player1 = Player(position = 1, bet = 100, stack = 900, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = ActionType.CHECK)
-        val player3 = Player(position = 3, bet = 0, stack = 800, lastAction = null) // active player
+        val player0 = Player(seat = 0, bet = 0, stack = 1000, lastAction = ActionType.FOLD)
+        val player1 = Player(seat = 1, bet = 100, stack = 900, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = ActionType.CHECK)
+        val player3 = Player(seat = 3, bet = 0, stack = 800, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -149,10 +149,10 @@ class CheckTest {
 
     @Test
     fun `applying check as a big blind in pre flop`() {
-        val player0 = Player(position = 0, bet = 200, stack = 800, lastAction = ActionType.CALL)
-        val player1 = Player(position = 1, bet = 100, stack = 900, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, bet = 200, stack = 800, lastAction = ActionType.POST) // active player / big blind
-        val player3 = Player(position = 3, bet = 200, stack = 800, lastAction = ActionType.RAISE)
+        val player0 = Player(seat = 0, bet = 200, stack = 800, lastAction = ActionType.CALL)
+        val player1 = Player(seat = 1, bet = 100, stack = 900, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, bet = 200, stack = 800, lastAction = ActionType.POST) // active player / big blind
+        val player3 = Player(seat = 3, bet = 200, stack = 800, lastAction = ActionType.RAISE)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),

@@ -10,10 +10,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `getByPosition should find player that the position points to`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player2, player3)
 
@@ -24,9 +24,9 @@ class PlayersListExtensionsTest {
     @Test
     fun `getByPosition should return null if the position is empty`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player3)
 
@@ -36,10 +36,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `ordered should return players list in clockwise order`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player2, player3)
 
@@ -49,10 +49,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `next should find the first player after given position`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player2, player3)
 
@@ -63,9 +63,9 @@ class PlayersListExtensionsTest {
     @Test
     fun `prev should find the first player before given position`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player3)
 
@@ -76,10 +76,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `nextDecisive should find the first decisive player after given position`() {
 
-        val player0 = Player(position = 0, stack = 100)
-        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 0, lastAction = ActionType.ALL_IN)
+        val player0 = Player(seat = 0, stack = 100)
+        val player1 = Player(seat = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 0, lastAction = ActionType.ALL_IN)
 
         val players = listOf(player0, player1, player2, player3)
 
@@ -90,10 +90,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `inGame should find all players that haven't folded yet`() {
 
-        val player0 = Player(position = 0, stack = 0, lastAction = ActionType.ALL_IN)
-        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 0, lastAction = ActionType.ALL_IN)
+        val player1 = Player(seat = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player2, player3)
 
@@ -103,10 +103,10 @@ class PlayersListExtensionsTest {
     @Test
     fun `decisivePlayers should find all players that can potentially make decisions`() {
 
-        val player0 = Player(position = 0, stack = 0, lastAction = ActionType.ALL_IN)
-        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, stack = 100)
-        val player3 = Player(position = 3, stack = 100)
+        val player0 = Player(seat = 0, stack = 0, lastAction = ActionType.ALL_IN)
+        val player1 = Player(seat = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, stack = 100)
+        val player3 = Player(seat = 3, stack = 100)
 
         val players = listOf(player0, player1, player2, player3)
 

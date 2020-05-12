@@ -16,9 +16,9 @@ class ShowdownTest {
 
     @Test
     fun `player can muck his cards if no other players are in the hand`() {
-        val player0 = Player(position = 0, stack = 100, lastAction = ActionType.FOLD)
-        val player1 = Player(position = 1, stack = 100, lastAction = ActionType.FOLD)
-        val player2 = Player(position = 2, stack = 0, lastAction = ActionType.ALL_IN)
+        val player0 = Player(seat = 0, stack = 100, lastAction = ActionType.FOLD)
+        val player1 = Player(seat = 1, stack = 100, lastAction = ActionType.FOLD)
+        val player2 = Player(seat = 2, stack = 0, lastAction = ActionType.ALL_IN)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
@@ -41,9 +41,9 @@ class ShowdownTest {
 
     @Test
     fun `all players show their hands in proper order after all-ins before the river`() {
-        val player0 = Player(position = 0, stack = 0, lastAction = ActionType.CALL)
-        val player1 = Player(position = 1, stack = 0, lastAction = ActionType.ALL_IN)
-        val player2 = Player(position = 2, stack = 0, lastAction = ActionType.CALL)
+        val player0 = Player(seat = 0, stack = 0, lastAction = ActionType.CALL)
+        val player1 = Player(seat = 1, stack = 0, lastAction = ActionType.ALL_IN)
+        val player2 = Player(seat = 2, stack = 0, lastAction = ActionType.CALL)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
@@ -71,7 +71,7 @@ class ShowdownTest {
     @Test
     fun `players should show their cards only if they are winning in regular scenario`() {
         val player0 = Player(
-                position = 0, stack = 500,
+                seat = 0, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.CALL,
                 holeCards = listOf(
                         Card(CardRank.TWO, CardSuit.SPADES),
@@ -80,7 +80,7 @@ class ShowdownTest {
         )
 
         val player1 = Player(
-                position = 1, stack = 500,
+                seat = 1, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.BET,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.DIAMONDS),
@@ -89,7 +89,7 @@ class ShowdownTest {
         )
 
         val player2 = Player(
-                position = 2, stack = 500,
+                seat = 2, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.CALL,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.CLUBS),
@@ -98,7 +98,7 @@ class ShowdownTest {
         )
 
         val player3 = Player(
-                position = 3, stack = 500,
+                seat = 3, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 
@@ -129,7 +129,7 @@ class ShowdownTest {
     @Test
     fun `showdown order should be the same as betting order if no bet was made on the river`() {
         val player0 = Player(
-                position = 0, stack = 500, lastAction = ActionType.CHECK,
+                seat = 0, stack = 500, lastAction = ActionType.CHECK,
                 holeCards = listOf(
                         Card(CardRank.TWO, CardSuit.SPADES),
                         Card(CardRank.THREE, CardSuit.SPADES)
@@ -137,7 +137,7 @@ class ShowdownTest {
         )
 
         val player1 = Player(
-                position = 1, stack = 500, lastAction = ActionType.CHECK,
+                seat = 1, stack = 500, lastAction = ActionType.CHECK,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.DIAMONDS),
                         Card(CardRank.JACK, CardSuit.SPADES)
@@ -145,7 +145,7 @@ class ShowdownTest {
         )
 
         val player2 = Player(
-                position = 2, stack = 500, lastAction = ActionType.CHECK,
+                seat = 2, stack = 500, lastAction = ActionType.CHECK,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.CLUBS),
                         Card(CardRank.TEN, CardSuit.CLUBS)
@@ -153,7 +153,7 @@ class ShowdownTest {
         )
 
         val player3 = Player(
-                position = 3, stack = 500,
+                seat = 3, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 
@@ -184,7 +184,7 @@ class ShowdownTest {
     @Test
     fun `players should show their cards even if they are losing, but to someone who put less chips into the pot`() {
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 500, lastAction = ActionType.ALL_IN,
                 holeCards = listOf(
                         Card(CardRank.SIX, CardSuit.CLUBS),
@@ -193,7 +193,7 @@ class ShowdownTest {
         )
 
         val player1 = Player(
-                position = 1, stack = 200,
+                seat = 1, stack = 200,
                 chipsInPot = 700, lastAction = ActionType.CALL,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.DIAMONDS),
@@ -202,7 +202,7 @@ class ShowdownTest {
         )
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 700, lastAction = ActionType.ALL_IN,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.CLUBS),
@@ -211,7 +211,7 @@ class ShowdownTest {
         )
 
         val player3 = Player(
-                position = 3, stack = 500,
+                seat = 3, stack = 500,
                 chipsInPot = 500, lastAction = ActionType.FOLD
         ) // not in hand
 

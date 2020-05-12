@@ -17,10 +17,10 @@ class AllInTest {
 
     @Test
     fun `all in higher or equal to min raise should properly update hand state and player's bet`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
-        val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
-        val player3 = Player(position = 3, stack = 900, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
+        val player2 = Player(seat = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
+        val player3 = Player(seat = 3, stack = 900, bet = 0, lastAction = null) // active player
 
         val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),
@@ -48,10 +48,10 @@ class AllInTest {
 
     @Test
     fun `all in lower than min raise but higher than total bet should update extraBet field`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
-        val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
-        val player3 = Player(position = 3, stack = 500, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
+        val player2 = Player(seat = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
+        val player3 = Player(seat = 3, stack = 500, bet = 0, lastAction = null) // active player
 
         val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),
@@ -79,10 +79,10 @@ class AllInTest {
 
     @Test
     fun `all in lower than current total bet should only update player's stack and bet`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
-        val player2 = Player(position = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
-        val player3 = Player(position = 3, stack = 350, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 300, lastAction = ActionType.BET)
+        val player2 = Player(seat = 2, stack = 0, bet = 400, lastAction = ActionType.ALL_IN)
+        val player3 = Player(seat = 3, stack = 350, bet = 0, lastAction = null) // active player
 
         val state = baseStateBuilder.copy(
                 players = listOf(player0, player1, player2, player3),

@@ -10,12 +10,12 @@ import core.pokerhands.pickBestHand
  *      not including the chips in player's current bet
  */
 data class Player(
-    val position: Int,
-    val stack: Int,
-    val holeCards: List<Card> = emptyList(),
-    val bet: Int = 0,
-    val chipsInPot: Int = 0,
-    val lastAction: ActionType? = null
+        val seat: Int,
+        val stack: Int,
+        val holeCards: List<Card> = emptyList(),
+        val bet: Int = 0,
+        val chipsInPot: Int = 0,
+        val lastAction: ActionType? = null
 ) {
     init {
         assert(stack >= 0)
@@ -23,7 +23,7 @@ data class Player(
         assert(chipsInPot >= 0)
     }
 
-    val id: Int = position
+    val id: Int = seat
 
     val isInGame: Boolean = lastAction != ActionType.FOLD
     val isAllIn: Boolean = (stack == 0) and isInGame

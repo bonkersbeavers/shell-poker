@@ -12,10 +12,10 @@ class RaiseTest {
 
     @Test
     fun `raise is invalid if it is lower than current min raise`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
-        val player2 = Player(position = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
-        val player3 = Player(position = 3, stack = 400, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
+        val player2 = Player(seat = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
+        val player3 = Player(seat = 3, stack = 400, bet = 0, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -33,10 +33,10 @@ class RaiseTest {
 
     @Test
     fun `raise is invalid if it is higher than player's stack`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
-        val player2 = Player(position = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
-        val player3 = Player(position = 3, stack = 500, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
+        val player2 = Player(seat = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
+        val player3 = Player(seat = 3, stack = 500, bet = 0, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -54,10 +54,10 @@ class RaiseTest {
 
     @Test
     fun `raise is invalid if there wasn't any legal bet made yet`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
-        val player2 = Player(position = 2, stack = 0, bet = 60, lastAction = ActionType.ALL_IN)
-        val player3 = Player(position = 3, stack = 500, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
+        val player2 = Player(seat = 2, stack = 0, bet = 60, lastAction = ActionType.ALL_IN)
+        val player3 = Player(seat = 3, stack = 500, bet = 0, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -76,10 +76,10 @@ class RaiseTest {
 
     @Test
     fun `regular raise should transfer chips between player's stack and bet and update hand state`() {
-        val player0 = Player(position = 0, stack = 500, bet = 0, lastAction = null) // BTN
-        val player1 = Player(position = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
-        val player2 = Player(position = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
-        val player3 = Player(position = 3, stack = 800, bet = 0, lastAction = null) // active player
+        val player0 = Player(seat = 0, stack = 500, bet = 0, lastAction = null) // BTN
+        val player1 = Player(seat = 1, stack = 200, bet = 0, lastAction = ActionType.CHECK)
+        val player2 = Player(seat = 2, stack = 600, bet = 300, lastAction = ActionType.BET)
+        val player3 = Player(seat = 3, stack = 800, bet = 0, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),

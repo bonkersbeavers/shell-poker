@@ -5,37 +5,54 @@ import core.RoomSettings
 import core.betting.InvalidAction
 import core.dealer.Dealer
 import core.flowUtils.*
-import core.player.PlayerStatus
-import core.player.decisive
-import core.player.inGame
+import core.player.*
 
-class HandManager(settings: RoomSettings) {
+class HandManager(val settings: RoomSettings) {
     private val dealer = Dealer()
     var currentState: HandState? = null
         private set
     private var nextPlayerAction: BettingAction? = null
 
     fun startNewHand(
-            players: List<PlayerStatus>,
+            playersStatuses: List<PlayerStatus>,
             newPlayersIds: Collection<Int>,
             blinds: Blinds,
             randomPositions: Boolean = false) {
-        TODO()
-        /**
-         * initializes hand state by setting correct positions (random or shifted from previous state),
-         * applying all blinds / ante posts to players and dealing hole cards
-         */
+
+        dealer.shuffle()
+
+        val players = playersStatuses.map { Player(seat = it.seat, stack = it.stack) }
+
+        var stateBuilder = HandState.ImmutableBuilder(
+                players = players,
+                blinds = blinds
+        )
+
+        stateBuilder = when (randomPositions) {
+            true -> setRandomPositions(stateBuilder, settings)
+            false -> shiftPositions(stateBuilder.copy(positions = currentState!!.positions), settings)
+        }
+
+        stateBuilder = postBlindsAndAnte(stateBuilder, newPlayersIds)
+
+        var state = stateBuilder.build()
+        state = dealer.deal(state)
+
+        this.currentState = state
+        initializeActivePlayer()
     }
 
-    val nextActionType: HandFlowActionType? = when {
-        currentState == null -> throw HandFlowException("hand state has not been initialized")
-        currentState!!.activePlayer == null -> HandFlowActionType.PLAYER_ACTION
-        currentState!!.bettingRound != BettingRound.RIVER -> HandFlowActionType.GAME_ACTION
-        else -> null
+    fun getNextActionType(): HandFlowActionType? {
+        return when {
+            currentState == null -> throw HandFlowException("hand state has not been initialized")
+            currentState!!.activePlayer != null -> HandFlowActionType.PLAYER_ACTION
+            currentState!!.bettingRound != BettingRound.RIVER -> HandFlowActionType.GAME_ACTION
+            else -> null
+        }
     }
 
     fun setNextPlayerAction(action: BettingAction) {
-        if (nextActionType != HandFlowActionType.PLAYER_ACTION)
+        if (getNextActionType() != HandFlowActionType.PLAYER_ACTION)
             throw HandFlowException("cannot set player's action when next action is not taken by player")
 
         val actionValidation = action.validate(currentState!!)
@@ -49,12 +66,16 @@ class HandManager(settings: RoomSettings) {
         if (handIsOver)
             throw HandFlowException("no further action possible in hand")
 
-        if (nextActionType == HandFlowActionType.PLAYER_ACTION && nextPlayerAction == null)
+        if (getNextActionType() == HandFlowActionType.PLAYER_ACTION && nextPlayerAction == null)
             throw HandFlowException("next player's action is not set")
 
-        when (nextActionType) {
+        when (getNextActionType()) {
             HandFlowActionType.PLAYER_ACTION -> currentState = nextPlayerAction!!.apply(currentState!!)
-            HandFlowActionType.GAME_ACTION -> currentState = dealer.deal(currentState!!)
+            HandFlowActionType.GAME_ACTION -> {
+                currentState = dealer.deal(currentState!!)
+                if (playersInteractionIsOver.not())
+                    initializeActivePlayer()
+            }
         }
     }
 
@@ -66,26 +87,34 @@ class HandManager(settings: RoomSettings) {
         (it.bettingRound == BettingRound.RIVER && it.activePlayer == null) or (it.players.inGame().count() < 2)
     } ?: false
 
-    val showdownResults: List<ShowdownAction> = run {
+    fun getShowdownResults(): List<ShowdownAction> {
         if (playersInteractionIsOver.not())
             throw HandFlowException("cannot resolve showdown while some players can still take actions")
 
-        resolveShowdown(currentState!!)
+        return resolveShowdown(currentState!!)
     }
 
-    val potResults: List<PotResult> = run {
+    fun getPotResults(): List<PotResult> {
         if (handIsOver.not())
             throw HandFlowException("cannot resolve pot while hand is not over")
 
-        resolvePot(currentState!!)
+        return resolvePot(currentState!!)
     }
 
     fun finalizeHand() {
-        TODO()
-        /**
-         * udpates hand state by applying pot results to the players
-         *
-         * throws HandFlowException if the action in current hand is not over
-         */
+        if (handIsOver.not())
+            throw HandFlowException("cannot finalize hand while hand is not over")
+
+        this.currentState = distributePot(this.currentState!!)
+    }
+
+    private fun initializeActivePlayer() {
+        val state = currentState!!
+        val firstActivePlayer = when (state.bettingRound) {
+            BettingRound.PRE_FLOP -> state.players.nextDecisive(state.positions.bigBlind)
+            else -> state.players.nextDecisive(state.positions.button)
+        }
+
+        this.currentState = currentState!!.rebuild(activePlayer = firstActivePlayer)
     }
 }

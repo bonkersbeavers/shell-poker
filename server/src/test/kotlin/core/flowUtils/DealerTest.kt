@@ -15,9 +15,9 @@ class DealerTest {
 
     @Test
     fun `Dealer should shuffle deck and reset its iterator`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0)
-        val player2 = Player(position = 2, stack = 0)
+        val player0 = Player(seat = 0, stack = 0)
+        val player1 = Player(seat = 1, stack = 0)
+        val player2 = Player(seat = 2, stack = 0)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
@@ -71,9 +71,9 @@ class DealerTest {
     @Test
     fun `automatic deal should properly determine which street should be dealt`() {
         val players = listOf(
-                Player(position = 0, stack = 500),
-                Player(position = 1, stack = 500),
-                Player(position = 2, stack = 500)
+                Player(seat = 0, stack = 500),
+                Player(seat = 1, stack = 500),
+                Player(seat = 2, stack = 500)
         )
 
         val initialState = HandState.ImmutableBuilder(
@@ -101,9 +101,9 @@ class DealerTest {
 
     @Test
     fun `Dealer setColdDeck should set a pre arranged deck as a deckIterator`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0)
-        val player2 = Player(position = 2, stack = 0)
+        val player0 = Player(seat = 0, stack = 0)
+        val player1 = Player(seat = 1, stack = 0)
+        val player2 = Player(seat = 2, stack = 0)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),
@@ -136,9 +136,9 @@ class DealerTest {
 
     @Test
     fun `Dealer deal streets methods should act accordingly`() {
-        val player0 = Player(position = 0, stack = 0)
-        val player1 = Player(position = 1, stack = 0)
-        val player2 = Player(position = 2, stack = 0)
+        val player0 = Player(seat = 0, stack = 0)
+        val player1 = Player(seat = 1, stack = 0)
+        val player2 = Player(seat = 2, stack = 0)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2),

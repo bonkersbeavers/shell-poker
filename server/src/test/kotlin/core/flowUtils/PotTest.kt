@@ -23,21 +23,21 @@ class PotTest {
     inner class SimpleCasePot {
 
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.FIVE, CardSuit.HEARTS), Card(CardRank.FIVE, CardSuit.SPADES)),
                 lastAction = ActionType.BET
         ) // weak hand, plays for the whole pot
 
         val player1 = Player(
-                position = 1, stack = 0,
+                seat = 1, stack = 0,
                 chipsInPot = 300,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.ACE, CardSuit.SPADES)),
                 lastAction = ActionType.FOLD
         ) // not in game
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.HEARTS), Card(CardRank.KING, CardSuit.SPADES)),
                 lastAction = ActionType.CALL
@@ -94,21 +94,21 @@ class PotTest {
     @DisplayName("when there are multiple winners")
     inner class BasicSplitPot {
         val player0 = Player(
-                position = 0, stack = 200,
+                seat = 0, stack = 200,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.BET
         ) // strongest hand, plays for the whole pot
 
         val player1 = Player(
-                position = 1, stack = 500,
+                seat = 1, stack = 500,
                 chipsInPot = 300,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.ACE, CardSuit.SPADES)),
                 lastAction = ActionType.FOLD
         ) // not in game
 
         val player2 = Player(
-                position = 2, stack = 100,
+                seat = 2, stack = 100,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.HEARTS), Card(CardRank.KING, CardSuit.SPADES)),
                 lastAction = ActionType.CALL
@@ -154,28 +154,28 @@ class PotTest {
     @Test
     fun `odd chips should be awarded in betting order if the pot cannot be split equally`() {
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 400,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.BET
         ) // strongest hand, plays for the whole pot
 
         val player1 = Player(
-                position = 1, stack = 0,
+                seat = 1, stack = 0,
                 chipsInPot = 400,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.DIAMONDS), Card(CardRank.QUEEN, CardSuit.CLUBS)),
                 lastAction = ActionType.CALL
         ) // strongest hand, plays for the whole pot
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 400,
                 holeCards = listOf(Card(CardRank.JACK, CardSuit.DIAMONDS), Card(CardRank.JACK, CardSuit.CLUBS)),
                 lastAction = ActionType.CALL
         ) // strongest hand, plays for the whole pot
 
         val player3 = Player(
-                position = 3, stack = 0,
+                seat = 3, stack = 0,
                 chipsInPot = 101,
                 holeCards = listOf(Card(CardRank.TEN, CardSuit.DIAMONDS), Card(CardRank.TEN, CardSuit.CLUBS)),
                 lastAction = ActionType.FOLD
@@ -204,21 +204,21 @@ class PotTest {
     @Test
     fun `when there are side pots, they should be resolved from the last one to the main one`() {
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 300,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.ALL_IN
         ) // strongest hand, plays for the main pot
 
         val player1 = Player(
-                position = 1, stack = 0,
+                seat = 1, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.FIVE, CardSuit.SPADES)),
                 lastAction = ActionType.BET
         ) // weakest hand, plays for the whole pot
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.JACK, CardSuit.HEARTS), Card(CardRank.JACK, CardSuit.SPADES)),
                 lastAction = ActionType.CALL
@@ -247,35 +247,35 @@ class PotTest {
     @DisplayName("when there are multiple side pots")
     inner class MultipleSidePots {
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 100,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.ALL_IN
         ) // strongest hand, plays for the main pot
 
         val player1 = Player(
-                position = 1, stack = 0,
+                seat = 1, stack = 0,
                 chipsInPot = 300,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.JACK, CardSuit.HEARTS)),
                 lastAction = ActionType.ALL_IN
         ) // weakest hand, plays for the main pot and 1st side pot
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.ACE, CardSuit.CLUBS), Card(CardRank.JACK, CardSuit.CLUBS)),
                 lastAction = ActionType.ALL_IN
         ) // medium hand, plays for the main pot, 1st side pot and 2nd side pot
 
         val player3 = Player(
-                position = 3, stack = 0,
+                seat = 3, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.ACE, CardSuit.DIAMONDS), Card(CardRank.JACK, CardSuit.DIAMONDS)),
                 lastAction = ActionType.ALL_IN
         ) // medium hand, plays for the main pot, 1st side pot and 2nd side pot
 
         val player4 = Player(
-                position = 4, stack = 0,
+                seat = 4, stack = 0,
                 chipsInPot = 500,
                 holeCards = listOf(Card(CardRank.ACE, CardSuit.SPADES), Card(CardRank.JACK, CardSuit.SPADES)),
                 lastAction = ActionType.ALL_IN
@@ -334,21 +334,21 @@ class PotTest {
     @Test
     fun `pot should be successfully resolved when there is only one player left in game and there are no community cards`() {
         val player0 = Player(
-                position = 0, stack = 0,
+                seat = 0, stack = 0,
                 chipsInPot = 100,
                 holeCards = listOf(Card(CardRank.KING, CardSuit.DIAMONDS), Card(CardRank.KING, CardSuit.CLUBS)),
                 lastAction = ActionType.ALL_IN
         )
 
         val player1 = Player(
-                position = 1, stack = 0,
+                seat = 1, stack = 0,
                 chipsInPot = 10,
                 holeCards = listOf(Card(CardRank.QUEEN, CardSuit.HEARTS), Card(CardRank.JACK, CardSuit.HEARTS)),
                 lastAction = ActionType.FOLD
         )
 
         val player2 = Player(
-                position = 2, stack = 0,
+                seat = 2, stack = 0,
                 chipsInPot = 20,
                 holeCards = listOf(Card(CardRank.ACE, CardSuit.CLUBS), Card(CardRank.JACK, CardSuit.CLUBS)),
                 lastAction = ActionType.FOLD

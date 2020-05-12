@@ -5,10 +5,31 @@ import core.handflow.HandState
 import core.player.getByPosition
 import core.player.next
 import core.player.prev
+import kotlin.random.Random
 
 data class Positions(val button: Int, val smallBlind: Int, val bigBlind: Int)
 
 private fun previousPosition(from: Int, maxPosition: Int): Int = if (from == 0) maxPosition else (from - 1)
+
+fun setRandomPositions(builder: HandState.ImmutableBuilder, setting: RoomSettings): HandState.ImmutableBuilder {
+    val playersSeats = builder.players!!.map { it.seat }.sorted()
+    assert(playersSeats.count() >= 2)
+
+    val positions = when (playersSeats.count()) {
+        2 -> {
+            val shuffledSeats = playersSeats.shuffled()
+            Positions(button = shuffledSeats[0], smallBlind = shuffledSeats[0], bigBlind = shuffledSeats[1])
+        }
+
+        else -> {
+            val randomShift = Random.nextInt(playersSeats.count())
+            val shiftedSeats = playersSeats.drop(randomShift) + playersSeats.take(randomShift)
+            Positions(button = shiftedSeats[0], smallBlind = shiftedSeats[1], bigBlind = shiftedSeats[2])
+        }
+    }
+
+    return builder.copy(positions = positions)
+}
 
 fun shiftPositions(builder: HandState.ImmutableBuilder, setting: RoomSettings): HandState.ImmutableBuilder {
     val players = builder.players!!
@@ -19,14 +40,14 @@ fun shiftPositions(builder: HandState.ImmutableBuilder, setting: RoomSettings): 
     val maxPosition = setting.seatsNumber - 1
 
     // Big blind always moves to the next player.
-    val newBigBlindPosition = players.next(oldPositions.bigBlind).position
+    val newBigBlindPosition = players.next(oldPositions.bigBlind).seat
 
     // In heads up game, button and small blind always point to the other player.
     if (builder.players.size == 2) {
         val otherPlayer = players.next(newBigBlindPosition)
         val newPositions = Positions(
-                button = otherPlayer.position,
-                smallBlind = otherPlayer.position,
+                button = otherPlayer.seat,
+                smallBlind = otherPlayer.seat,
                 bigBlind = newBigBlindPosition
         )
         return builder.copy(positions = newPositions)
@@ -44,13 +65,13 @@ fun shiftPositions(builder: HandState.ImmutableBuilder, setting: RoomSettings): 
         null -> previousPosition(newBigBlindPosition, maxPosition)
 
         // Otherwise small blind always takes the previous big blind's position.
-        else -> oldBigBlindPlayer.position
+        else -> oldBigBlindPlayer.seat
     }
 
     // 2) button position is determined at the end
 
     val playerAfterOldButton = players.next(oldPositions.button)
-    val newButtonPosition = when (playerAfterOldButton.position) {
+    val newButtonPosition = when (playerAfterOldButton.seat) {
 
         // If moving the button to the next player results in button pointing to the same seat
         // as small blind, the button should be placed right before the small blind.
@@ -62,7 +83,7 @@ fun shiftPositions(builder: HandState.ImmutableBuilder, setting: RoomSettings): 
 
         // In any other case the button should point to the player that is seated right before
         // the small blind.
-        else -> players.prev(newSmallBlindPosition).position
+        else -> players.prev(newSmallBlindPosition).seat
     }
 
     val newPositions = Positions(

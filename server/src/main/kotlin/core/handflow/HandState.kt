@@ -74,7 +74,7 @@ class HandState private constructor(
             // players, blinds and positions can never be null
             players!!
             assert(players.size > 2)
-            assert(players.distinctBy { it.position } == players)
+            assert(players.distinctBy { it.seat } == players)
 
             blinds!!
             positions!!

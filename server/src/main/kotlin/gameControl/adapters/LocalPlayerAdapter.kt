@@ -5,72 +5,46 @@ import core.handflow.HandState
 import core.player.getByPosition
 import core.flowUtils.pots
 
-class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
+class LocalPlayerAdapter() {
 
-    override fun sendUpdate(update: GameUpdate) {
-        when (update) {
-            is HandStateUpdate -> this.sendHandUpdate(update.newHandState)
-            is ActionValidationUpdate -> this.sendActionValidation(update.validation)
-            is ShowdownActionUpdate -> println(update)
-            is PotResultUpdate -> println(update)
-        }
-    }
+    fun update(handState: HandState) {
 
-    var lastHandState: HandState? = null
-
-    private fun sendHandUpdate(handState: HandState) {
-        this.lastHandState = handState
-    }
-
-    private fun printHandUpdate() {
-
-        if (lastHandState == null)
-            return
-
-        val handState = lastHandState!!
-
-        println("=============== PLAYER $playerId ==============================")
+        println("===============================================================")
 
         println("table: ${handState.communityCards.joinToString(", ")}")
         handState.pots().forEach { pot ->
             val prefix = if (pot.potNumber > 0) "side pot ${pot.potNumber}" else "main pot"
             println("$prefix: ${pot.size}")
         }
-        println("seats:")
+        println("players:")
+        for (player in handState.players.sortedBy { it.seat }) {
 
-        val maxPosition = handState.players.map { it.position }.max()!!
-        for (i in 0..maxPosition) {
+            val playerStringBuilder = StringBuilder()
 
-            var playerStringBuilder = StringBuilder().append("$i: ")
+            if (player == handState.activePlayer)
+                playerStringBuilder.append("!")
 
-            if (i == handState.positions.button)
+            playerStringBuilder.append("${player.seat}: ")
+
+            if (player.seat == handState.positions.button)
                 playerStringBuilder.append("D ")
 
-            if (i == handState.positions.smallBlind)
+            if (player.seat == handState.positions.smallBlind)
                 playerStringBuilder.append("SB ")
 
-            if (i == handState.positions.bigBlind)
+            if (player.seat == handState.positions.bigBlind)
                 playerStringBuilder.append("BB ")
 
             playerStringBuilder.append("\t")
+            playerStringBuilder.append("stack: ${player.stack},\t")
 
-            val player = handState.players.getByPosition(i)
+            if (player.lastAction != null)
+                playerStringBuilder.append("${player.lastAction} ")
 
-            if (player == null) {
-                playerStringBuilder.append("(empty)")
-            } else {
-                playerStringBuilder.append("stack: ${player.stack},\t")
+            if (player.bet > 0)
+                playerStringBuilder.append("${player.bet}\t")
 
-                if (player.lastAction != null)
-                    playerStringBuilder.append("${player.lastAction} ")
-
-                if (player.bet > 0)
-                    playerStringBuilder.append("${player.bet}\t")
-
-                if (player.id == this.playerId)
-                    playerStringBuilder.append("\tcards: ${player.holeCards.joinToString(", ")}")
-            }
-
+            playerStringBuilder.append("\tcards: ${player.holeCards.joinToString(", ")}")
             println(playerStringBuilder.toString())
         }
 
@@ -79,15 +53,10 @@ class LocalPlayerAdapter(override val playerId: Int) : IPlayerAdapter {
         println()
     }
 
-    private fun sendActionValidation(validation: ActionValidation) {
-        println(validation)
-    }
-
-    override fun requestBettingAction(): BettingAction {
-        printHandUpdate()
+    fun requestBettingAction(): BettingAction {
 
         while (true) {
-            print("your action ($playerId) > ")
+            print("your action > ")
             try {
                 val command = readLine()!!
                 return parseAction(command)

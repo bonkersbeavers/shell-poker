@@ -5,7 +5,7 @@ import core.handflow.HandState
 
 fun postBlindsAndAnte(
     stateBuilder: HandState.ImmutableBuilder,
-    newPlayersIds: List<Int> = emptyList()
+    newPlayersIds: Collection<Int> = emptyList()
 ): HandState.ImmutableBuilder {
 
     val players = stateBuilder.players!!
@@ -22,8 +22,8 @@ fun postBlindsAndAnte(
     val playersWithAnteAndBlinds = playersWithAnte.map { player ->
         val chipsToPost = when {
             player.id in newPlayersIds -> blinds.bigBlind
-            player.position == positions.bigBlind -> blinds.bigBlind
-            player.position == positions.smallBlind -> blinds.smallBlind
+            player.seat == positions.bigBlind -> blinds.bigBlind
+            player.seat == positions.smallBlind -> blinds.smallBlind
             else -> 0
         }
 
@@ -36,7 +36,11 @@ fun postBlindsAndAnte(
         playerAfterPost.copy(lastAction = lastAction)
     }
 
-    return stateBuilder.copy(players = playersWithAnteAndBlinds)
+    return stateBuilder.copy(
+            players = playersWithAnteAndBlinds,
+            lastLegalBet = blinds.bigBlind,
+            minRaise = blinds.bigBlind * 2
+            )
 }
 
 data class Blinds(val smallBlind: Int, val bigBlind: Int, val ante: Int = 0)

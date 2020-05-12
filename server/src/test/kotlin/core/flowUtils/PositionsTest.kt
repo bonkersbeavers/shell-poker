@@ -16,10 +16,10 @@ class PositionsTest {
 
         val builder = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
-                        Player(position = 1, stack = 500), // SB
-                        Player(position = 2, stack = 500), // BB
-                        Player(position = 3, stack = 500)
+                        Player(seat = 0, stack = 500), // BTN
+                        Player(seat = 1, stack = 500), // SB
+                        Player(seat = 2, stack = 500), // BB
+                        Player(seat = 3, stack = 500)
                 ),
                 positions = Positions(0, 1, 2)
         )
@@ -36,8 +36,8 @@ class PositionsTest {
 
         val builder = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN + SB
-                        Player(position = 1, stack = 500) // BB
+                        Player(seat = 0, stack = 500), // BTN + SB
+                        Player(seat = 1, stack = 500) // BB
                 ),
                 positions = Positions(0, 0, 1)
         )
@@ -54,9 +54,9 @@ class PositionsTest {
 
         val builder1 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
+                        Player(seat = 0, stack = 500), // BTN
                         // 1 - (empty) SB
-                        Player(position = 2, stack = 500) // BB
+                        Player(seat = 2, stack = 500) // BB
                 ),
                 positions = Positions(0, 1, 2)
         )
@@ -65,8 +65,8 @@ class PositionsTest {
 
         val builder2 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
-                        Player(position = 1, stack = 500) // SB
+                        Player(seat = 0, stack = 500), // BTN
+                        Player(seat = 1, stack = 500) // SB
                         // 2 - (empty) BB
                 ),
                 positions = Positions(0, 1, 2)
@@ -80,9 +80,9 @@ class PositionsTest {
 
         val builder1 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
+                        Player(seat = 0, stack = 500), // BTN
                         // 1 - (empty) SB
-                        Player(position = 2, stack = 500) // BB
+                        Player(seat = 2, stack = 500) // BB
                 ),
                 positions = Positions(0, 1, 2)
         )
@@ -91,8 +91,8 @@ class PositionsTest {
 
         val builder2 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
-                        Player(position = 1, stack = 500) // SB
+                        Player(seat = 0, stack = 500), // BTN
+                        Player(seat = 1, stack = 500) // SB
                         // 2 - (empty) BB
                 ),
                 positions = Positions(0, 1, 2)
@@ -106,10 +106,10 @@ class PositionsTest {
 
         val builder1 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500),
+                        Player(seat = 0, stack = 500),
                         // 1 - (empty)
-                        Player(position = 2, stack = 500), // BTN
-                        Player(position = 3, stack = 500) // SB
+                        Player(seat = 2, stack = 500), // BTN
+                        Player(seat = 3, stack = 500) // SB
                         // 4 - (empty) BB
                 ),
                 positions = Positions(2, 3, 4)
@@ -119,10 +119,10 @@ class PositionsTest {
 
         val builder2 = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500),
-                        Player(position = 1, stack = 500), // BTN
+                        Player(seat = 0, stack = 500),
+                        Player(seat = 1, stack = 500), // BTN
                         // 2 - (empty) SB
-                        Player(position = 3, stack = 500) // BB
+                        Player(seat = 3, stack = 500) // BB
                         // 4 - (empty)
                 ),
                 positions = Positions(1, 2, 3)
@@ -136,11 +136,11 @@ class PositionsTest {
 
         val builder = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN
-                        Player(position = 1, stack = 500), // SB
-                        Player(position = 2, stack = 500), // new player
-                        Player(position = 3, stack = 500), // new player
-                        Player(position = 4, stack = 500) // BB
+                        Player(seat = 0, stack = 500), // BTN
+                        Player(seat = 1, stack = 500), // SB
+                        Player(seat = 2, stack = 500), // new player
+                        Player(seat = 3, stack = 500), // new player
+                        Player(seat = 4, stack = 500) // BB
                 ),
                 positions = Positions(0, 1, 4)
         )
@@ -153,9 +153,9 @@ class PositionsTest {
 
         val builder = HandState.ImmutableBuilder(
                 players = listOf(
-                        Player(position = 0, stack = 500), // BTN / SB
-                        Player(position = 1, stack = 500), // BB
-                        Player(position = 2, stack = 500) // new player
+                        Player(seat = 0, stack = 500), // BTN / SB
+                        Player(seat = 1, stack = 500), // BB
+                        Player(seat = 2, stack = 500) // new player
                 ),
                 positions = Positions(0, 0, 1)
         )
@@ -170,9 +170,9 @@ class PositionsTest {
                 players = listOf(
                         // 0 - (empty) SB
                         // 1 - (empty) BB
-                        Player(position = 2, stack = 500),
-                        Player(position = 3, stack = 500),
-                        Player(position = 4, stack = 500) // BTN
+                        Player(seat = 2, stack = 500),
+                        Player(seat = 3, stack = 500),
+                        Player(seat = 4, stack = 500) // BTN
                 ),
                 positions = Positions(4, 0, 1)
         )

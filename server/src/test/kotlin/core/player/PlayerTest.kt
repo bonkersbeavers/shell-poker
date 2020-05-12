@@ -17,7 +17,7 @@ class PlayerTest {
     fun `withBet method should properly transfer chips from player's stack to their bet`() {
         val player = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 1000,
                 bet = 0
         )
@@ -35,7 +35,7 @@ class PlayerTest {
     fun `maxBet should properly calculate the maximum amount a player can bet`() {
         val player = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 1000,
                 bet = 800
         )
@@ -48,7 +48,7 @@ class PlayerTest {
         assertThrows<AssertionError> {
             Player(
                     chipsInPot = -40,
-                    position = 0,
+                    seat = 0,
                     stack = 50
             )
         }
@@ -56,7 +56,7 @@ class PlayerTest {
         assertThrows<AssertionError> {
             Player(
                     chipsInPot = 0,
-                    position = 0,
+                    seat = 0,
                     stack = -100
             )
         }
@@ -64,7 +64,7 @@ class PlayerTest {
         assertThrows<AssertionError> {
             Player(
                     chipsInPot = 100,
-                    position = 0,
+                    seat = 0,
                     stack = 50,
                     bet = -5
             )
@@ -75,7 +75,7 @@ class PlayerTest {
     fun `isInGame should check if player has folded`() {
         val playerNotInGame = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 1000,
                 bet = 800,
                 lastAction = ActionType.FOLD
@@ -84,7 +84,7 @@ class PlayerTest {
 
         val playerInGame = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 1000,
                 bet = 800,
                 lastAction = ActionType.CALL
@@ -96,7 +96,7 @@ class PlayerTest {
     fun `isAllIn should check if player hasn't folded and his stack is empty`() {
         val playerAllIn = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 0,
                 bet = 800,
                 lastAction = ActionType.CALL
@@ -105,7 +105,7 @@ class PlayerTest {
 
         val foldPlayer = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 0,
                 bet = 800,
                 lastAction = ActionType.FOLD
@@ -114,7 +114,7 @@ class PlayerTest {
 
         val betPlayer = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 200,
                 bet = 800,
                 lastAction = ActionType.BET
@@ -126,7 +126,7 @@ class PlayerTest {
     fun `isDecisive should check if player is able to make any decision in game`() {
         val playerAllIn = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 0,
                 bet = 800,
                 lastAction = ActionType.CALL
@@ -135,7 +135,7 @@ class PlayerTest {
 
         val foldPlayer = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 0,
                 bet = 800,
                 lastAction = ActionType.FOLD
@@ -144,7 +144,7 @@ class PlayerTest {
 
         val betPlayer = Player(
                 chipsInPot = 500,
-                position = 0,
+                seat = 0,
                 stack = 200,
                 bet = 800,
                 lastAction = ActionType.BET
@@ -155,7 +155,7 @@ class PlayerTest {
     @Test
     fun `hand member should create the best poker hand out of hole cards and community cards`() {
         val player = Player(
-                position = 0,
+                seat = 0,
                 stack = 0,
                 holeCards = listOf(
                         Card(CardRank.ACE, CardSuit.SPADES),
@@ -189,7 +189,7 @@ class PlayerTest {
     fun `moveBetToPot should move player's bet to pot`() {
         val player = Player(
                 chipsInPot = 100,
-                position = 0,
+                seat = 0,
                 stack = 1000,
                 bet = 800,
                 lastAction = ActionType.BET

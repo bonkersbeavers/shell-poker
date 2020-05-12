@@ -11,10 +11,10 @@ class BetTest {
 
     @Test
     fun `bet should be valid if a player has bet above minRaise and he has enough chips`() {
-        val player0 = Player(position = 0, bet = 0, stack = 800, lastAction = null)
-        val player1 = Player(position = 1, bet = 0, stack = 800, lastAction = null) // active player
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = null)
-        val player3 = Player(position = 3, bet = 0, stack = 800, lastAction = null)
+        val player0 = Player(seat = 0, bet = 0, stack = 800, lastAction = null)
+        val player1 = Player(seat = 1, bet = 0, stack = 800, lastAction = null) // active player
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = null)
+        val player3 = Player(seat = 3, bet = 0, stack = 800, lastAction = null)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -48,10 +48,10 @@ class BetTest {
 
     @Test
     fun `bet should be invalid if a bet has already been made after pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 800, lastAction = null)
-        val player1 = Player(position = 1, bet = 300, stack = 500, lastAction = ActionType.BET)
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = null) // active player
-        val player3 = Player(position = 3, bet = 0, stack = 800, lastAction = null)
+        val player0 = Player(seat = 0, bet = 0, stack = 800, lastAction = null)
+        val player1 = Player(seat = 1, bet = 300, stack = 500, lastAction = ActionType.BET)
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = null) // active player
+        val player3 = Player(seat = 3, bet = 0, stack = 800, lastAction = null)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -71,10 +71,10 @@ class BetTest {
 
     @Test
     fun `bet should be valid if a bet has already been made in pre flop`() {
-        val player0 = Player(position = 0, bet = 0, stack = 800, lastAction = null)
-        val player1 = Player(position = 1, bet = 100, stack = 900, lastAction = ActionType.POST)
-        val player2 = Player(position = 2, bet = 200, stack = 800, lastAction = ActionType.POST)
-        val player3 = Player(position = 3, bet = 0, stack = 1000, lastAction = null) // active player
+        val player0 = Player(seat = 0, bet = 0, stack = 800, lastAction = null)
+        val player1 = Player(seat = 1, bet = 100, stack = 900, lastAction = ActionType.POST)
+        val player2 = Player(seat = 2, bet = 200, stack = 800, lastAction = ActionType.POST)
+        val player3 = Player(seat = 3, bet = 0, stack = 1000, lastAction = null) // active player
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
@@ -94,10 +94,10 @@ class BetTest {
 
     @Test
     fun `applying bet normally`() {
-        val player0 = Player(position = 0, bet = 0, stack = 800, lastAction = null)
-        val player1 = Player(position = 1, bet = 0, stack = 800, lastAction = null) // active player
-        val player2 = Player(position = 2, bet = 0, stack = 800, lastAction = null)
-        val player3 = Player(position = 3, bet = 0, stack = 800, lastAction = null)
+        val player0 = Player(seat = 0, bet = 0, stack = 800, lastAction = null)
+        val player1 = Player(seat = 1, bet = 0, stack = 800, lastAction = null) // active player
+        val player2 = Player(seat = 2, bet = 0, stack = 800, lastAction = null)
+        val player3 = Player(seat = 3, bet = 0, stack = 800, lastAction = null)
 
         val state = HandState.ImmutableBuilder(
                 players = listOf(player0, player1, player2, player3),
