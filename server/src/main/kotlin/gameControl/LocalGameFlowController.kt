@@ -60,6 +60,9 @@ class LocalGameFlowController(val playerAdapter: LocalPlayerAdapter) {
                 }
 
                 handManager.takeAction()
+                if (handManager.getNextActionType() == HandFlowActionType.GAME_ACTION)
+                    handManager.finalizeBettingRound()
+
                 playerAdapter.update(handManager.currentState!!)
             }
 

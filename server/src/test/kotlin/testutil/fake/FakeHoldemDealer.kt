@@ -23,6 +23,7 @@ class FakeHoldemDealer(val holeCards: List<Pair<Card, Card>>, val communityCards
             BettingRound.FLOP -> handState.rebuild(communityCards = this.communityCards.take(3))
             BettingRound.TURN -> handState.rebuild(communityCards = this.communityCards.take(4))
             BettingRound.RIVER -> handState.rebuild(communityCards = this.communityCards.take(5))
+            else -> TODO()
         }
     }
 }

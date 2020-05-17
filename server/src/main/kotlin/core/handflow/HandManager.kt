@@ -70,13 +70,33 @@ class HandManager(val settings: RoomSettings) {
             throw HandFlowException("next player's action is not set")
 
         when (getNextActionType()) {
-            HandFlowActionType.PLAYER_ACTION -> currentState = nextPlayerAction!!.apply(currentState!!)
+            HandFlowActionType.PLAYER_ACTION -> {
+                currentState = nextPlayerAction!!.apply(currentState!!)
+                nextPlayerAction = null
+            }
             HandFlowActionType.GAME_ACTION -> {
                 currentState = dealer.deal(currentState!!)
                 if (playersInteractionIsOver.not())
                     initializeActivePlayer()
             }
         }
+    }
+
+    fun finalizeBettingRound() {
+        val state = currentState!!
+
+        val newPlayers = state.players.map {
+            val newPlayer = it.moveBetToPot()
+            if (newPlayer.isDecisive) newPlayer.copy(lastAction = null) else newPlayer
+        }
+
+        currentState = state.rebuild(
+                players = newPlayers,
+                lastAggressor = null,
+                lastLegalBet = 0,
+                minRaise = state.blinds.bigBlind,
+                extraBet = 0
+        )
     }
 
     val playersInteractionIsOver: Boolean = currentState?.let {

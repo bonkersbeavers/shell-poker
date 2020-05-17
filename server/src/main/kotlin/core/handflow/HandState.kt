@@ -26,7 +26,7 @@ class HandState private constructor(
     val positions: Positions,
 
     val communityCards: List<Card>,
-    val bettingRound: BettingRound,
+    val bettingRound: BettingRound?,
 
     val lastLegalBet: Int,
     val minRaise: Int,
@@ -87,7 +87,7 @@ class HandState private constructor(
 
             // default pre-flop initialization
             val communityCards = this.communityCards ?: emptyList()
-            val bettingRound = this.bettingRound ?: BettingRound.PRE_FLOP
+            val bettingRound = this.bettingRound
 
             val lastLegalBet = this.lastLegalBet ?: 0
             val minRaise = this.minRaise ?: blinds.bigBlind

@@ -3,6 +3,7 @@ package core.dealer
 import core.cards.Card
 import core.cards.baseDeck
 import core.flowUtils.BettingRound
+import core.handflow.HandFlowException
 import core.handflow.HandState
 import core.handflow.rebuild
 import kotlin.random.Random
@@ -12,10 +13,11 @@ class Dealer : IDealer {
 
     override fun deal(handState: HandState): HandState {
         return when (handState.bettingRound) {
-            BettingRound.PRE_FLOP -> dealHoleCards(handState)
-            BettingRound.FLOP -> dealFlop(handState)
-            BettingRound.TURN -> dealTurn(handState)
-            BettingRound.RIVER -> dealRiver(handState)
+            null -> dealHoleCards(handState).rebuild(bettingRound = BettingRound.PRE_FLOP)
+            BettingRound.PRE_FLOP -> dealFlop(handState).rebuild(bettingRound = BettingRound.FLOP)
+            BettingRound.FLOP -> dealTurn(handState).rebuild(bettingRound = BettingRound.TURN)
+            BettingRound.TURN -> dealRiver(handState).rebuild(bettingRound = BettingRound.RIVER)
+            BettingRound.RIVER -> throw HandFlowException("cannot deal any cards when already on river")
         }
     }
 
