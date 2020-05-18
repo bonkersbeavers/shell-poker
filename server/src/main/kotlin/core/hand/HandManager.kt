@@ -2,7 +2,7 @@ package core.hand
 
 import core.RoomSettings
 import core.hand.dealer.Dealer
-import core.hand.helpers.FinalizeBettingRound
+import core.hand.helpers.CollectBets
 import core.hand.helpers.FinalizeHand
 import core.hand.helpers.InitializeHand
 import core.hand.helpers.ShiftPositions
@@ -50,7 +50,7 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
                 }
             }
 
-            handRecord.register(FinalizeBettingRound)
+            handRecord.register(CollectBets)
         }
 
         // final dealer's actions

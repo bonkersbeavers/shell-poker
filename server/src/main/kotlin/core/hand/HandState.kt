@@ -5,10 +5,10 @@ import core.cards.Card
 import core.flowUtils.BettingRound
 import core.flowUtils.Blinds
 import core.flowUtils.Positions
-import core.flowUtils.Pot
 import core.hand.player.decisive
 import core.hand.player.inGame
 import core.hand.player.orderedBySeats
+import core.hand.pot.Pot
 import core.handflow.HandFlowException
 
 data class HandState(

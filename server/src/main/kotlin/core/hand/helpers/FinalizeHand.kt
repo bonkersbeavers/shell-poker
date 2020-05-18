@@ -16,6 +16,7 @@ object FinalizeHand: HandAction(), ApplicableHandAction {
                 blinds = handState.blinds,
                 positions = handState.positions,
                 communityCards = emptyList(),
+                pots = emptyList(),
                 lastLegalBet = 0,
                 extraBet = 0,
                 minRaise = 0
