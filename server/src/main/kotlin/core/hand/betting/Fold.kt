@@ -6,10 +6,10 @@ import core.hand.ValidAction
 
 data class Fold(override val seat: Int): BettingAction(seat) {
     override fun apply(handState: HandState): HandState {
-        val newPlayerStates = handState.playersStates.map {
+        val newPlayerStates = handState.players.map {
             if (it.seat == seat) it.copy(currentActionType = BettingActionType.FOLD) else it
         }
-        return handState.copy(playersStates = newPlayerStates)
+        return handState.copy(players = newPlayerStates)
     }
 
     override fun validate(handState: HandState): ActionValidation = ValidAction

@@ -12,7 +12,7 @@ data class ShiftPositions(val seatsNumber: Int): HandAction(), ApplicableHandAct
     private fun previousPosition(from: Int): Int = if (from > 0) (from - 1) else (seatsNumber - 1)
 
     override fun apply(handState: HandState): HandState {
-        val players = handState.playersStates
+        val players = handState.players
         val currentPositions = handState.positions
         val maxSeatNumber = seatsNumber - 1
 

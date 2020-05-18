@@ -1,17 +1,21 @@
 package core.hand
 
 import core.RoomSettings
-import core.hand.blinds.getPostActionsSequence
+import core.hand.blinds.getBlindsPostActionsSequence
 import core.hand.pot.getPotActionsSequence
 import core.hand.dealer.Dealer
 import core.hand.helpers.CollectBets
-import core.hand.helpers.FinalizeHand
 import core.hand.helpers.InitializeHand
 import core.hand.positions.ShiftPositions
+import core.hand.showdown.getShowdownActionsSequence
 
 class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdapter) {
 
+    private var handNumber: Int = 0
+
     fun playHand(initialState: HandState): HandState {
+        handNumber++
+        println("===================================== HAND NUMBER $handNumber ".padEnd(87, padChar = '='))
 
         // initialize helper structures
         val dealer = Dealer()
@@ -22,9 +26,11 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         // shift positions
         handRecord.register(ShiftPositions(seatsNumber = settings.seatsNumber))
 
-        // post blinds and ante
-        val postActions = getPostActionsSequence(handRecord.resolveHandState(), emptyList())
-        handRecord.registerSequence(postActions)
+        // TODO() collect ante
+
+        // post blinds
+        val blindsPostActions = getBlindsPostActionsSequence(handRecord.resolveHandState(), emptyList())
+        handRecord.registerSequence(blindsPostActions)
 
         // players interaction phase
         while (handRecord.resolveHandState().playersInteractionIsOver.not()) {
@@ -54,6 +60,11 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
             handRecord.register(CollectBets)
         }
 
+        // showdown phase
+        val showdownSequence = getShowdownActionsSequence(handRecord.resolveHandState())
+        playerAdapter.printShowdown(showdownSequence)
+        handRecord.registerSequence(showdownSequence)
+
         // final dealer's actions
         while (handRecord.resolveHandState().handIsOver.not()) {
             handRecord.register(dealer.getNextAction(handRecord.resolveHandState()))
@@ -61,10 +72,10 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
 
         val potDistributionSequence = getPotActionsSequence(handRecord.resolveHandState())
         handRecord.registerSequence(potDistributionSequence)
-        println(potDistributionSequence.joinToString(", "))
+        playerAdapter.printPotDistribution(potDistributionSequence)
 
-        //playerAdapter.update(handRecord.resolveHandState())
-        handRecord.register(FinalizeHand)
+        println("\nfinal results: ")
+        playerAdapter.update(handRecord.resolveHandState())
         return handRecord.resolveHandState()
     }
 }

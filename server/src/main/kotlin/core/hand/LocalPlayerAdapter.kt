@@ -1,6 +1,11 @@
 package core.hand
 
 import core.hand.betting.*
+import core.hand.pot.AwardChips
+import core.hand.pot.PotAction
+import core.hand.showdown.MuckCards
+import core.hand.showdown.ShowCards
+import core.hand.showdown.ShowdownAction
 
 class LocalPlayerAdapter() {
 
@@ -8,13 +13,13 @@ class LocalPlayerAdapter() {
 
         println("===================================== SHELL - POKER ===================================")
 
-        println("cards: ${handState.communityCards.joinToString(", ")}")
+        println("cards:\n${handState.communityCards.joinToString(", ")}")
         handState.pots.forEach { pot ->
             val prefix = if (pot.potNumber > 0) "side pot ${pot.potNumber}" else "main pot"
             println("$prefix: ${pot.size}")
         }
         println("players:")
-        for (player in handState.playersStates.sortedBy { it.seat }) {
+        for (player in handState.players.sortedBy { it.seat }) {
 
             val playerStringBuilder = StringBuilder()
 
@@ -47,6 +52,33 @@ class LocalPlayerAdapter() {
         println("=======================================================================================")
         println()
         println()
+    }
+
+    fun printShowdown(showdownSequence: List<ShowdownAction>) {
+        println("+++ SHOWDOWN +++")
+        for (action in showdownSequence) {
+            val showdownString = when {
+                action is ShowCards -> "player ${action.seat} shows ${action.cards.first}, ${action.cards.second}"
+                else -> "player ${action.seat} mucks"
+            }
+
+            println(showdownString)
+        }
+    }
+
+    fun printPotDistribution(potActionSequence: List<PotAction>) {
+        println("+++ RESULTS +++")
+        for (action in potActionSequence) {
+            if (action is AwardChips) {
+                val awardString = "player ${action.playerSeat} wins ${action.chips} chips from"
+                val potString = when (action.potNumber) {
+                    0 -> "main pot"
+                    else -> "${action.potNumber} side pot"
+                }
+
+                println("$awardString $potString")
+            }
+        }
     }
 
     fun requestBettingAction(playerSeat: Int): BettingAction {

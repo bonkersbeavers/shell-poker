@@ -8,7 +8,7 @@ import core.hand.getBySeat
 
 data class Call(override val seat: Int): BettingAction(seat) {
     override fun apply(handState: HandState): HandState {
-        val newPlayerStates = handState.playersStates.map {
+        val newPlayerStates = handState.players.map {
             if (it.seat == seat) {
                 val possibleBet = minOf(it.maxBet, handState.totalBet)
                 it.withBet(possibleBet).copy(currentActionType = BettingActionType.CALL)
@@ -16,11 +16,11 @@ data class Call(override val seat: Int): BettingAction(seat) {
             else it
         }
 
-        return handState.copy(playersStates = newPlayerStates)
+        return handState.copy(players = newPlayerStates)
     }
 
     override fun validate(handState: HandState): ActionValidation {
-        val player = handState.playersStates.getBySeat(seat)!!
+        val player = handState.players.getBySeat(seat)!!
         return if (player.currentBet < handState.totalBet) {
             ValidAction
         } else {

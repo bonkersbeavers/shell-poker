@@ -11,7 +11,7 @@ class Dealer {
 
     fun getNextAction(handState: HandState): DealerAction {
         return when(handState.bettingRound) {
-            null -> getDealHoleCardsAction(handState.playersStates)
+            null -> getDealHoleCardsAction(handState.players)
             BettingRound.PRE_FLOP -> getDealFlopAction()
             BettingRound.FLOP -> getDealTurnAction()
             BettingRound.TURN -> getDealRiverAction()

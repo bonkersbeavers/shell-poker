@@ -6,7 +6,7 @@ import core.hand.ValidAction
 
 data class Post(override val seat: Int, val chips: Int): BettingAction(seat) {
     override fun apply(handState: HandState): HandState {
-        val newPlayerStates = handState.playersStates.map {
+        val newPlayerStates = handState.players.map {
             if (it.seat == seat) {
                 val possibleBet = minOf(it.maxBet, chips)
                 it.withBet(possibleBet).copy(currentActionType = BettingActionType.POST)
@@ -14,7 +14,7 @@ data class Post(override val seat: Int, val chips: Int): BettingAction(seat) {
             else it
         }
 
-        return handState.copy(playersStates = newPlayerStates)
+        return handState.copy(players = newPlayerStates)
     }
 
     override fun validate(handState: HandState): ActionValidation = ValidAction

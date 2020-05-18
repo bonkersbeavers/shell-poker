@@ -16,10 +16,10 @@ data class DealHoleCards(val seatToCardsMapping: Map<Int, Pair<Card, Card>>) : D
     }
 
     override fun apply(handState: HandState): HandState {
-        val newPlayers = handState.playersStates.map {
+        val newPlayers = handState.players.map {
             it.copy(cards = seatToCardsMapping[it.seat])
         }
 
-        return handState.copy(playersStates = newPlayers)
+        return handState.copy(players = newPlayers)
     }
 }

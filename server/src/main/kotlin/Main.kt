@@ -15,10 +15,10 @@ fun main() {
     val positions = Positions(0, 1, 2)
     val players = (0 until 3).map { Player(seat = it, stack = 1000) }
 
+    val manager = HandManager(settings, adapter)
     var state = HandState(players, positions, blinds)
 
     while (true) {
-        val manager = HandManager(settings, adapter)
         state = manager.playHand(state)
     }
 }

@@ -4,47 +4,16 @@ import core.hand.betting.BettingActionType
 import core.hand.ApplicableHandAction
 import core.hand.HandAction
 import core.hand.HandState
-import core.hand.pot.Pot
 
 object CollectBets : HandAction(), ApplicableHandAction {
     override fun apply(handState: HandState): HandState {
 
-        // TODO: this implementation is ugly af
-
-        val seatToBetSize = handState.playersStates.map { it.seat to it.currentBet }.toMap().toMutableMap()
-        val playersInGameSeats = handState.playersStates.filter { it.isInGame }.map { it.seat }.toSet()
-        val mutablePotList = handState.pots.toMutableList()
-
-        // update pots
-        while (seatToBetSize.values.max()!! > 0) {
-
-            // determine next pot
-            val nextPotContributorsMap = seatToBetSize.filterValues { it > 0 }
-            val nextPotSeats = nextPotContributorsMap.keys.intersect(playersInGameSeats)
-            val nextPotBet = nextPotContributorsMap.values.min()!!
-            val nextPotSize = nextPotBet * nextPotContributorsMap.count()
-
-            val mergePots = if (mutablePotList.isEmpty()) false
-                else nextPotSeats.containsAll(mutablePotList.last().playersSeats)
-
-            // add pot to current pots list
-            if (mergePots) {
-                val previousPot = mutablePotList.last()
-                val mergedPot = previousPot.copy(size = previousPot.size + nextPotSize)
-                mutablePotList.removeAt(mutablePotList.lastIndex)
-                mutablePotList.add(mergedPot)
-            } else {
-                val nextPot = Pot(size = nextPotSize, playersSeats = nextPotSeats, potNumber = mutablePotList.count())
-                mutablePotList.add(nextPot)
-            }
-
-            // subtract chips used in new pot from players' bets
-            for (seat in nextPotContributorsMap.keys)
-                seatToBetSize.replace(seat, seatToBetSize[seat]!! - nextPotBet)
+        val totalContributionMap = handState.seatToPotContribution.toMutableMap()
+        for (player in handState.players) {
+            totalContributionMap[player.seat] = totalContributionMap.getOrDefault(player.seat, 0) + player.currentBet
         }
 
-        // clear bets
-        val newPlayers = handState.playersStates.map {
+        val newPlayers = handState.players.map {
             it.copy(
                     currentActionType = if (it.currentActionType == BettingActionType.FOLD) BettingActionType.FOLD else null,
                     currentBet = 0
@@ -52,8 +21,8 @@ object CollectBets : HandAction(), ApplicableHandAction {
         }
 
         return handState.copy(
-                playersStates = newPlayers,
-                pots = mutablePotList.toList(),
+                players = newPlayers,
+                seatToPotContribution = totalContributionMap.toMap(),
                 lastLegalBet = 0,
                 extraBet = 0,
                 minRaise = handState.blinds.bigBlind
