@@ -1,4 +1,4 @@
-package core.hand.utils
+package core.hand.helpers
 
 import core.betting.ActionType
 import core.hand.ApplicableHandAction

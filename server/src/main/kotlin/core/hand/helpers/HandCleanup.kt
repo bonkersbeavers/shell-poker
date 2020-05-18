@@ -1,4 +1,4 @@
-package core.hand.utils
+package core.hand.helpers
 
 import core.hand.ApplicableHandAction
 import core.hand.HandAction

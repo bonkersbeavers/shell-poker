@@ -5,7 +5,7 @@ import core.hand.player.orderedBySeats
 import core.hand.player.showdown.ShowCards
 import core.hand.player.showdown.ShowdownAction
 
-fun resolveShowdown(handState: HandState): List<ShowdownAction> {
+fun getShowdownActionsSequence(handState: HandState): List<ShowdownAction> {
     //    TODO()
     val startingSeat =
             if (handState.lastAggressor != null) handState.lastAggressor.seat

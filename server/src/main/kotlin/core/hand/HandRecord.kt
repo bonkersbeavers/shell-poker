@@ -5,7 +5,7 @@ class HandRecord(val initState: HandState) {
 
     fun register(action: HandAction) = handHistory.add(action)
 
-    fun registerSeries(actions: Collection<HandAction>) = handHistory.addAll(actions)
+    fun registerSequence(actions: Iterable<HandAction>) = handHistory.addAll(actions)
 
     fun getHandHistory() = handHistory.toList()
 

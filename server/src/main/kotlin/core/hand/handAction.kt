@@ -8,6 +8,6 @@ interface ApplicableHandAction {
     fun apply(handState: HandState): HandState
 }
 
-interface ValidableHandAction {
+interface ValidatableHandAction {
     fun validate(handState: HandState): Boolean
 }

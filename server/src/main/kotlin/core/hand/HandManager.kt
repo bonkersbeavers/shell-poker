@@ -2,6 +2,10 @@ package core.hand
 
 import core.RoomSettings
 import core.hand.dealer.Dealer
+import core.hand.helpers.BettingRoundCleanup
+import core.hand.helpers.HandCleanup
+import core.hand.helpers.HandInitialization
+import core.hand.helpers.ShiftPositions
 import core.hand.utils.*
 
 class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdapter) {
@@ -18,8 +22,8 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         handRecord.register(ShiftPositions(seatsNumber = settings.seatsNumber))
 
         // post blinds and ante
-        val postActions = resolveBlindPosting(handRecord.resolveHandState(), emptyList())
-        handRecord.registerSeries(postActions)
+        val postActions = getPostActionsSequence(handRecord.resolveHandState(), emptyList())
+        handRecord.registerSequence(postActions)
 
         // players interaction phase
         while (handRecord.resolveHandState().playersInteractionIsOver.not()) {
