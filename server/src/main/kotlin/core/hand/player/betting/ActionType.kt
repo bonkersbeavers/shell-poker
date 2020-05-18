@@ -1,4 +1,4 @@
-package core.betting
+package core.hand.player.betting
 
 enum class ActionType {
     POST,
@@ -7,5 +7,5 @@ enum class ActionType {
     CALL,
     BET,
     RAISE,
-    ALL_IN // ???
+    ALL_IN // to be deleted
 }

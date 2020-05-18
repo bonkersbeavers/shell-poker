@@ -2,9 +2,9 @@ package core.hand
 
 import core.RoomSettings
 import core.hand.dealer.Dealer
-import core.hand.helpers.BettingRoundCleanup
-import core.hand.helpers.HandCleanup
-import core.hand.helpers.HandInitialization
+import core.hand.helpers.FinalizeBettingRound
+import core.hand.helpers.FinalizeHand
+import core.hand.helpers.InitializeHand
 import core.hand.helpers.ShiftPositions
 import core.hand.utils.*
 
@@ -16,7 +16,7 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         val dealer = Dealer()
         val handRecord = HandRecord(initialState)
 
-        handRecord.register(HandInitialization)
+        handRecord.register(InitializeHand)
 
         // shift positions
         handRecord.register(ShiftPositions(seatsNumber = settings.seatsNumber))
@@ -40,8 +40,8 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
                     val action = playerAdapter.requestBettingAction(state.activePlayer!!.seat)
                     val validation = action.validate(state)
 
-                    if (validation == false)
-                        println("gowno")
+                    if (validation is InvalidAction)
+                        println(validation.reason)
 
                     else {
                         handRecord.register(action)
@@ -50,7 +50,7 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
                 }
             }
 
-            handRecord.register(BettingRoundCleanup)
+            handRecord.register(FinalizeBettingRound)
         }
 
         // final dealer's actions
@@ -59,7 +59,7 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         }
 
         playerAdapter.update(handRecord.resolveHandState())
-        handRecord.register(HandCleanup)
+        handRecord.register(FinalizeHand)
         return handRecord.resolveHandState()
     }
 }

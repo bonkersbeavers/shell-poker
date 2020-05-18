@@ -1,12 +1,12 @@
 package core.hand.player.betting
 
-import core.betting.ActionType
+import core.hand.ActionValidation
 import core.hand.HandState
+import core.hand.InvalidAction
+import core.hand.ValidAction
 import core.hand.player.getBySeat
 
 data class Raise(override val seat: Int, val chips: Int): BettingAction(seat) {
-    override val actionType: ActionType = ActionType.RAISE
-
     override fun apply(handState: HandState): HandState {
         val newPlayerStates = handState.playersStates.map {
             if (it.seat == seat) {
@@ -26,15 +26,14 @@ data class Raise(override val seat: Int, val chips: Int): BettingAction(seat) {
                     extraBet = 0
             )
         } else {
-            // The raise is player's all-in, but is not high enough to be considered
-            // as legal raise. Only extraBet parameter should be updated in such case.
+            // The raise is player's all-in, but is not high enough to be considered a legal raise.
             return stateWithUpdatedPlayer.copy(
                     extraBet = raisedAmount
             )
         }
     }
 
-    override fun validate(handState: HandState): Boolean {
+    override fun validate(handState: HandState): ActionValidation {
         val player = handState.playersStates.getBySeat(seat)!!
 
         val playerIsAllowedToRaise = (player.currentBet < handState.lastLegalBet) or (player.currentActionType == ActionType.POST)
@@ -43,7 +42,20 @@ data class Raise(override val seat: Int, val chips: Int): BettingAction(seat) {
         val betHasBeenMade = handState.lastLegalBet > 0
         val raiseIsPlayersAllIn = chips == player.maxBet
 
-        return playerIsAllowedToRaise && playerHasEnoughChips && betHasBeenMade &&
-                (raiseIsBigEnough || raiseIsPlayersAllIn)
+        return when {
+            playerIsAllowedToRaise.not() ->
+                InvalidAction("cannot raise if betting action has not been restarted since player's previous play")
+
+            playerHasEnoughChips.not() ->
+                InvalidAction("raise of size $chips is higher than player's maximum possible bet ${player.maxBet}")
+
+            betHasBeenMade.not() ->
+                InvalidAction("cannot raise if no bet has been made")
+
+            raiseIsBigEnough.not() and raiseIsPlayersAllIn.not() ->
+                InvalidAction("raise of size $chips is smaller than minimum legal raise ${handState.minRaise}")
+
+            else -> ValidAction
+        }
     }
 }

@@ -1,6 +1,6 @@
 package core.hand
 
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit

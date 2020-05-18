@@ -1,7 +1,5 @@
 package core.hand
 
-import core.betting.ActionValidation
-
 open class HandAction
 
 interface ApplicableHandAction {
@@ -9,5 +7,10 @@ interface ApplicableHandAction {
 }
 
 interface ValidatableHandAction {
-    fun validate(handState: HandState): Boolean
+    fun validate(handState: HandState): ActionValidation
 }
+
+sealed class ActionValidation
+
+object ValidAction : ActionValidation()
+data class InvalidAction(val reason: String) : ActionValidation()

@@ -1,12 +1,13 @@
 package core.betting
 
+import core.hand.player.betting.ActionType
 import core.handflow.HandState
 import core.handflow.rebuild
 import core.handflow.updateActivePlayer
 
 object AllIn : BettingAction() {
 
-    override val type: ActionType = ActionType.ALL_IN
+    override val type: ActionType = ActionType.BET//ActionType.ALL_IN
 
     override fun innerApply(handState: HandState): HandState {
         val player = handState.activePlayer!!
@@ -14,7 +15,7 @@ object AllIn : BettingAction() {
 
         val updatedPlayer = player
                 .withBet(betSize)
-                .copy(lastAction = ActionType.ALL_IN)
+                .copy(lastAction = ActionType.BET) //ActionType.ALL_IN
 
         val newState = handState.updateActivePlayer(updatedPlayer)
 

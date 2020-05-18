@@ -3,7 +3,7 @@ package core.player
 import core.cards.Card
 import core.cards.CardRank
 import core.cards.CardSuit
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.pokerhands.TwoPair
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

@@ -4,7 +4,7 @@ import core.hand.ApplicableHandAction
 import core.hand.HandAction
 import core.hand.HandState
 
-object HandInitialization: HandAction(), ApplicableHandAction {
+object InitializeHand: HandAction(), ApplicableHandAction {
     override fun apply(handState: HandState): HandState {
         return handState.copy(
                 lastLegalBet = handState.blinds.bigBlind,

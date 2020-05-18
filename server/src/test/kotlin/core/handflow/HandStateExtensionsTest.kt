@@ -1,6 +1,6 @@
 package core.handflow
 
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.flowUtils.Blinds
 import core.player.Player
 import core.flowUtils.Positions

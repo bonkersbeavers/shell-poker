@@ -1,11 +1,10 @@
 package core.hand.player.betting
 
-import core.betting.ActionType
+import core.hand.ActionValidation
 import core.hand.HandState
+import core.hand.ValidAction
 
 data class Post(override val seat: Int, val chips: Int): BettingAction(seat) {
-    override val actionType: ActionType = ActionType.POST
-
     override fun apply(handState: HandState): HandState {
         val newPlayerStates = handState.playersStates.map {
             if (it.seat == seat) {
@@ -18,7 +17,5 @@ data class Post(override val seat: Int, val chips: Int): BettingAction(seat) {
         return handState.copy(playersStates = newPlayerStates)
     }
 
-    override fun validate(handState: HandState): Boolean {
-        return true
-    }
+    override fun validate(handState: HandState): ActionValidation = ValidAction
 }

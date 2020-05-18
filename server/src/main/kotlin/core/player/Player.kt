@@ -1,7 +1,7 @@
 package core.player
 
 import core.cards.Card
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.pokerhands.PokerHand
 import core.pokerhands.pickBestHand
 

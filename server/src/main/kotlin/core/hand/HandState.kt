@@ -1,6 +1,6 @@
 package core.hand
 
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.cards.Card
 import core.flowUtils.BettingRound
 import core.flowUtils.Blinds

@@ -1,11 +1,10 @@
 package core.hand.player.betting
 
-import core.betting.ActionType
+import core.hand.ActionValidation
 import core.hand.HandState
+import core.hand.ValidAction
 
 data class Fold(override val seat: Int): BettingAction(seat) {
-    override val actionType: ActionType = ActionType.FOLD
-
     override fun apply(handState: HandState): HandState {
         val newPlayerStates = handState.playersStates.map {
             if (it.seat == seat) it.copy(currentActionType = ActionType.FOLD) else it
@@ -13,7 +12,5 @@ data class Fold(override val seat: Int): BettingAction(seat) {
         return handState.copy(playersStates = newPlayerStates)
     }
 
-    override fun validate(handState: HandState): Boolean {
-        return true
-    }
+    override fun validate(handState: HandState): ActionValidation = ValidAction
 }

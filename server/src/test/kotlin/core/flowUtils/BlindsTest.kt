@@ -1,6 +1,6 @@
 package core.flowUtils
 
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import core.handflow.HandState
 import core.player.Player
 import org.junit.jupiter.api.Test

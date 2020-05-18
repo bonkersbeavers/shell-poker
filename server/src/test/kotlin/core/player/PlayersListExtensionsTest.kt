@@ -1,6 +1,6 @@
 package core.player
 
-import core.betting.ActionType
+import core.hand.player.betting.ActionType
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
