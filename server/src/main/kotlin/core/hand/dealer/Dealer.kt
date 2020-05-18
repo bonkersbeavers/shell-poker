@@ -2,10 +2,9 @@ package core.hand.dealer
 
 import core.cards.Card
 import core.cards.baseDeck
-import core.flowUtils.BettingRound
 import core.hand.HandState
-import core.hand.PlayerState
-import core.handflow.HandFlowException
+import core.hand.Player
+import core.hand.HandFlowException
 
 class Dealer {
     private var deckIterator: ListIterator<Card> = baseDeck.shuffled().listIterator()
@@ -20,7 +19,7 @@ class Dealer {
         }
     }
 
-    private fun getDealHoleCardsAction(players: List<PlayerState>): DealHoleCards {
+    private fun getDealHoleCardsAction(players: List<Player>): DealHoleCards {
         val seatToCardsMapping = HashMap<Int, Pair<Card, Card>>()
 
         for (player in players) {

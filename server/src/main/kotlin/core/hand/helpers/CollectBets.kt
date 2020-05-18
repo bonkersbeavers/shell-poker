@@ -1,6 +1,6 @@
 package core.hand.helpers
 
-import core.hand.player.betting.ActionType
+import core.hand.betting.BettingActionType
 import core.hand.ApplicableHandAction
 import core.hand.HandAction
 import core.hand.HandState
@@ -46,7 +46,7 @@ object CollectBets : HandAction(), ApplicableHandAction {
         // clear bets
         val newPlayers = handState.playersStates.map {
             it.copy(
-                    currentActionType = if (it.currentActionType == ActionType.FOLD) ActionType.FOLD else null,
+                    currentActionType = if (it.currentActionType == BettingActionType.FOLD) BettingActionType.FOLD else null,
                     currentBet = 0
             )
         }

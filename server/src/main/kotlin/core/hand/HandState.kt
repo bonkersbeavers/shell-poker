@@ -1,18 +1,14 @@
 package core.hand
 
-import core.hand.player.betting.ActionType
+import core.hand.betting.BettingActionType
 import core.cards.Card
-import core.flowUtils.BettingRound
-import core.flowUtils.Blinds
-import core.flowUtils.Positions
-import core.hand.player.decisive
-import core.hand.player.inGame
-import core.hand.player.orderedBySeats
+import core.hand.dealer.BettingRound
+import core.hand.blinds.Blinds
+import core.hand.positions.Positions
 import core.hand.pot.Pot
-import core.handflow.HandFlowException
 
 data class HandState(
-        val playersStates: List<PlayerState>,
+        val playersStates: List<Player>,
         val positions: Positions,
         val blinds: Blinds,
         val communityCards: List<Card> = emptyList(),
@@ -35,10 +31,10 @@ data class HandState(
 
     val totalBet = lastLegalBet + extraBet
 
-    val lastAggressor: PlayerState? = playersStates.find { it.currentBet == totalBet &&
-            (it.currentActionType == ActionType.BET || it.currentActionType == ActionType.RAISE) }
+    val lastAggressor: Player? = playersStates.find { it.currentBet == totalBet &&
+            (it.currentActionType == BettingActionType.BET || it.currentActionType == BettingActionType.RAISE) }
 
-    val activePlayer: PlayerState? = run {
+    val activePlayer: Player? = run {
         if (playersStates.decisive().count() < 2) {
             null
         } else {

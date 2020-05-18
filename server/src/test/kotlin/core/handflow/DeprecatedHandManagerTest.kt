@@ -4,8 +4,8 @@ package core.handflow
 //import core.cards.Card
 //import core.cards.CardRank
 //import core.cards.CardSuit
-//import core.flowUtils.Blinds
-//import core.flowUtils.Positions
+//import core.hand.action.blinds.Blinds
+//import core.hand.action.positions.Positions
 //import core.RoomSettings
 //import gameControl.gamestate.GameState
 //import core.player.PlayerStatus

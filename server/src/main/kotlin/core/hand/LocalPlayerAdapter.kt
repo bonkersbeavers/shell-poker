@@ -1,6 +1,6 @@
 package core.hand
 
-import core.hand.player.betting.*
+import core.hand.betting.*
 
 class LocalPlayerAdapter() {
 
