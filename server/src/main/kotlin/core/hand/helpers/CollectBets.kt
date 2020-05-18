@@ -9,7 +9,10 @@ import core.hand.pot.Pot
 object CollectBets : HandAction(), ApplicableHandAction {
     override fun apply(handState: HandState): HandState {
 
+        // TODO: this implementation is ugly af
+
         val seatToBetSize = handState.playersStates.map { it.seat to it.currentBet }.toMap().toMutableMap()
+        val playersInGameSeats = handState.playersStates.filter { it.isInGame }.map { it.seat }.toSet()
         val mutablePotList = handState.pots.toMutableList()
 
         // update pots
@@ -17,9 +20,9 @@ object CollectBets : HandAction(), ApplicableHandAction {
 
             // determine next pot
             val nextPotContributorsMap = seatToBetSize.filterValues { it > 0 }
-            val nextPotSeats = nextPotContributorsMap.keys
+            val nextPotSeats = nextPotContributorsMap.keys.intersect(playersInGameSeats)
             val nextPotBet = nextPotContributorsMap.values.min()!!
-            val nextPotSize = nextPotBet * nextPotSeats.count()
+            val nextPotSize = nextPotBet * nextPotContributorsMap.count()
 
             val mergePots = if (mutablePotList.isEmpty()) false
                 else nextPotSeats.containsAll(mutablePotList.last().playersSeats)
@@ -36,7 +39,7 @@ object CollectBets : HandAction(), ApplicableHandAction {
             }
 
             // subtract chips used in new pot from players' bets
-            for (seat in nextPotSeats)
+            for (seat in nextPotContributorsMap.keys)
                 seatToBetSize.replace(seat, seatToBetSize[seat]!! - nextPotBet)
         }
 
