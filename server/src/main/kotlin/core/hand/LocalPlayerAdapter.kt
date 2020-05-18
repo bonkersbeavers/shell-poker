@@ -6,9 +6,9 @@ class LocalPlayerAdapter() {
 
     fun update(handState: HandState) {
 
-        println("===============================================================")
+        println("===================================== SHELL - POKER ===================================")
 
-        println("table: ${handState.communityCards.joinToString(", ")}")
+        println("cards: ${handState.communityCards.joinToString(", ")}")
         handState.pots.forEach { pot ->
             val prefix = if (pot.potNumber > 0) "side pot ${pot.potNumber}" else "main pot"
             println("$prefix: ${pot.size}")
@@ -18,34 +18,33 @@ class LocalPlayerAdapter() {
 
             val playerStringBuilder = StringBuilder()
 
-            if (player == handState.activePlayer)
-                playerStringBuilder.append("!")
+            playerStringBuilder.append("${player.seat}:".padEnd(3))
 
-            playerStringBuilder.append("${player.seat}: ")
+            val positionString = when (player.seat) {
+                handState.positions.button -> "D"
+                handState.positions.smallBlind -> "SB"
+                handState.positions.bigBlind -> "BB"
+                else -> ""
+            }
 
-            if (player.seat == handState.positions.button)
-                playerStringBuilder.append("D ")
+            val actionString = if (player == handState.activePlayer) " <<<" else ""
 
-            if (player.seat == handState.positions.smallBlind)
-                playerStringBuilder.append("SB ")
+            playerStringBuilder.append((positionString + actionString).padEnd(12))
 
-            if (player.seat == handState.positions.bigBlind)
-                playerStringBuilder.append("BB ")
+            playerStringBuilder.append("stack: ${player.stack}".padEnd(15))
 
-            playerStringBuilder.append("\t")
-            playerStringBuilder.append("stack: ${player.stack},\t")
+            playerStringBuilder.append("cards: ${player.cards!!.toList().joinToString(", ")}".padEnd(43))
 
             if (player.currentActionType != null)
                 playerStringBuilder.append("${player.currentActionType} ")
 
             if (player.currentBet > 0)
-                playerStringBuilder.append("${player.currentBet}\t")
+                playerStringBuilder.append("${player.currentBet}")
 
-            playerStringBuilder.append("\tcards: ${player.cards!!.toList().joinToString(", ")}")
             println(playerStringBuilder.toString())
         }
 
-        println("===============================================================")
+        println("=======================================================================================")
         println()
         println()
     }
