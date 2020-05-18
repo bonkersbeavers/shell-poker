@@ -58,7 +58,11 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
             handRecord.register(dealer.getNextAction(handRecord.resolveHandState()))
         }
 
-        playerAdapter.update(handRecord.resolveHandState())
+        val potDistributionSequence = getPotActionsSequence(handRecord.resolveHandState())
+        handRecord.registerSequence(potDistributionSequence)
+        println(potDistributionSequence.joinToString(", "))
+
+        //playerAdapter.update(handRecord.resolveHandState())
         handRecord.register(FinalizeHand)
         return handRecord.resolveHandState()
     }
