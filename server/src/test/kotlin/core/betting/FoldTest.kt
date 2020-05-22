@@ -2,7 +2,7 @@ package core.betting
 //
 //import core.flowUtils.*
 //import core.hand.player.betting.ActionType
-//import core.handflow.HandState
+//import core.handflow.hand.HandState
 //import core.player.Player
 //import core.player.inGame
 //import org.junit.jupiter.api.Test

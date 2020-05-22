@@ -1,7 +1,7 @@
 package core.flowUtils
 //
-//import core.RoomSettings
-//import core.handflow.HandState
+//import core.settings.RoomSettings
+//import core.handflow.hand.HandState
 //import core.player.Player
 //import org.junit.jupiter.api.Test
 //import org.junit.jupiter.api.TestInstance

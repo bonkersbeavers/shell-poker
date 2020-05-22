@@ -1,7 +1,7 @@
 package core.betting
 //
 //import core.hand.action.blinds.Blinds
-//import core.handflow.HandState
+//import core.handflow.hand.HandState
 //import core.player.Player
 //import core.hand.action.positions.Positions
 //import core.hand.player.betting.ActionType

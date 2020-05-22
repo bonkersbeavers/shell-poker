@@ -1,21 +1,21 @@
-import core.RoomSettings
-import core.hand.blinds.Blinds
-import core.hand.positions.Positions
-import core.hand.HandManager
-import core.hand.HandState
-import core.hand.LocalPlayerAdapter
-import core.hand.Player
+import core.settings.RoomSettings
+import core.handflow.blinds.Blinds
+import core.handflow.positions.Positions
+import service.local.LocalHandManager
+import core.handflow.hand.HandState
+import service.local.LocalConsoleAdapter
+import core.handflow.player.Player
 
 fun main() {
 
-    val adapter = LocalPlayerAdapter()
+    val adapter = LocalConsoleAdapter()
 
     val settings = RoomSettings(4)
     val blinds = Blinds(50, 100)
     val positions = Positions(0, 1, 2)
     val players = (0 until 3).map { Player(seat = it, stack = 1000) }
 
-    val manager = HandManager(settings, adapter)
+    val manager = LocalHandManager(settings, adapter)
     var state = HandState(players, positions, blinds)
 
     while (true) {

@@ -4,7 +4,7 @@ package core.flowUtils
 //import core.cards.CardSuit
 //import core.cards.baseDeck
 //import core.dealer.Dealer
-//import core.handflow.HandState
+//import core.handflow.hand.HandState
 //import core.handflow.rebuild
 //import core.player.Player
 //import org.junit.jupiter.api.*
