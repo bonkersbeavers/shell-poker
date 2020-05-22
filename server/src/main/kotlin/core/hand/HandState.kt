@@ -16,7 +16,8 @@ data class HandState(
         val seatToPotContribution: Map<Int, Int> = emptyMap(),
         val lastLegalBet: Int = 0,
         val extraBet: Int = 0,
-        val minRaise: Int = 0
+        val minRaise: Int = 0,
+        val handStage: HandStage? = null
 ) {
     val bettingRound: BettingRound? = run {
         val holeCardsDealt = players.all { it.cards != null }
@@ -35,7 +36,7 @@ data class HandState(
             (it.currentActionType == BettingActionType.BET || it.currentActionType == BettingActionType.RAISE) }
 
     val activePlayer: Player? = run {
-        if (players.decisive().count() < 2) {
+        if (players.inGame().count() < 2) {
             null
         } else {
             val startingSeat = when {
@@ -49,9 +50,4 @@ data class HandState(
     }
 
     val pots: List<Pot> = resolvePots(players, seatToPotContribution)
-
-    val handIsOver: Boolean = (bettingRound == BettingRound.RIVER && activePlayer == null) or
-            (players.inGame().count() < 2)
-
-    val playersInteractionIsOver: Boolean = handIsOver or (players.decisive().count() < 2)
 }

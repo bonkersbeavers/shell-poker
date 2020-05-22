@@ -1,10 +1,7 @@
 package core.hand.dealer
 
 import core.cards.Card
-import core.hand.ActionValidation
-import core.hand.HandState
-import core.hand.InvalidAction
-import core.hand.ValidAction
+import core.hand.*
 
 data class DealRiver(val card: Card) : DealerAction() {
     override fun validate(handState: HandState): ActionValidation {
@@ -16,6 +13,10 @@ data class DealRiver(val card: Card) : DealerAction() {
     }
 
     override fun apply(handState: HandState): HandState {
-        return handState.copy(communityCards = handState.communityCards + listOf(card))
+        val newStage = when (handState.handStage) {
+            HandStage.ALLIN_DUEL_STAGE -> HandStage.RESULTS_STAGE
+            else -> HandStage.INTERACTIVE_STAGE
+        }
+        return handState.copy(communityCards = handState.communityCards + listOf(card), handStage = newStage)
     }
 }

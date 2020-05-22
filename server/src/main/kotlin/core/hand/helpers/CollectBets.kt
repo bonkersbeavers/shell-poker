@@ -1,9 +1,8 @@
 package core.hand.helpers
 
+import core.hand.*
 import core.hand.betting.BettingActionType
-import core.hand.ApplicableHandAction
-import core.hand.HandAction
-import core.hand.HandState
+import core.hand.dealer.BettingRound
 
 object CollectBets : HandAction(), ApplicableHandAction {
     override fun apply(handState: HandState): HandState {
@@ -20,12 +19,21 @@ object CollectBets : HandAction(), ApplicableHandAction {
             )
         }
 
+        val stage = if (handState.bettingRound == BettingRound.RIVER || newPlayers.inGame().count() < 2) {
+            HandStage.RESULTS_STAGE
+        } else if (newPlayers.decisive().count() < 2) {
+            HandStage.ALLIN_DUEL_STAGE
+        } else {
+            HandStage.INTERACTIVE_STAGE
+        }
+
         return handState.copy(
                 players = newPlayers,
                 seatToPotContribution = totalContributionMap.toMap(),
                 lastLegalBet = 0,
                 extraBet = 0,
-                minRaise = handState.blinds.bigBlind
+                minRaise = handState.blinds.bigBlind,
+                handStage = stage
         )
     }
 }

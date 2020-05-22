@@ -37,6 +37,7 @@ fun getShowdownActionsSequence(handState: HandState): List<ShowdownAction> {
                 }) {
             MuckCards(player.seat)
         } else {
+            revealedPlayers.add(player)
             ShowCards(player.seat, player.cards!!)
         }
 

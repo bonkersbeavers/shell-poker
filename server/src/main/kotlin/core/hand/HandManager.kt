@@ -2,6 +2,7 @@ package core.hand
 
 import core.RoomSettings
 import core.hand.blinds.getBlindsPostActionsSequence
+import core.hand.dealer.BettingRound
 import core.hand.pot.getPotActionsSequence
 import core.hand.dealer.Dealer
 import core.hand.helpers.CollectBets
@@ -22,6 +23,7 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         val handRecord = HandRecord(initialState)
 
         handRecord.register(InitializeHand)
+        val currentState = { -> handRecord.resolveHandState() }
 
         // shift positions
         handRecord.register(ShiftPositions(seatsNumber = settings.seatsNumber))
@@ -29,23 +31,22 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         // TODO() collect ante
 
         // post blinds
-        val blindsPostActions = getBlindsPostActionsSequence(handRecord.resolveHandState(), emptyList())
+        val blindsPostActions = getBlindsPostActionsSequence(currentState(), emptyList())
         handRecord.registerSequence(blindsPostActions)
 
-        // players interaction phase
-        while (handRecord.resolveHandState().playersInteractionIsOver.not()) {
+        // players interaction
+        while (currentState().handStage == HandStage.INTERACTIVE_STAGE) {
 
             // dealer action
-            handRecord.register(dealer.getNextAction(handRecord.resolveHandState()))
+            handRecord.register(dealer.getNextAction(currentState()))
 
             // players actions
-            while (handRecord.resolveHandState().activePlayer != null) {
-                val state = handRecord.resolveHandState()
-                playerAdapter.update(state)
+            while (currentState().activePlayer != null) {
+                playerAdapter.update(currentState())
 
                 while (true) {
-                    val action = playerAdapter.requestBettingAction(state.activePlayer!!.seat)
-                    val validation = action.validate(state)
+                    val action = playerAdapter.requestBettingAction(currentState().activePlayer!!.seat)
+                    val validation = action.validate(currentState())
 
                     if (validation is InvalidAction)
                         println(validation.reason)
@@ -61,21 +62,21 @@ class HandManager(val settings: RoomSettings, val playerAdapter: LocalPlayerAdap
         }
 
         // showdown phase
-        val showdownSequence = getShowdownActionsSequence(handRecord.resolveHandState())
+        val showdownSequence = getShowdownActionsSequence(currentState())
         playerAdapter.printShowdown(showdownSequence)
         handRecord.registerSequence(showdownSequence)
 
         // final dealer's actions
-        while (handRecord.resolveHandState().handIsOver.not()) {
-            handRecord.register(dealer.getNextAction(handRecord.resolveHandState()))
+        while (currentState().handStage == HandStage.ALLIN_DUEL_STAGE) {
+            handRecord.register(dealer.getNextAction(currentState()))
         }
 
-        val potDistributionSequence = getPotActionsSequence(handRecord.resolveHandState())
+        val potDistributionSequence = getPotActionsSequence(currentState())
         handRecord.registerSequence(potDistributionSequence)
         playerAdapter.printPotDistribution(potDistributionSequence)
 
         println("\nfinal results: ")
-        playerAdapter.update(handRecord.resolveHandState())
+        playerAdapter.update(currentState())
         return handRecord.resolveHandState()
     }
 }
