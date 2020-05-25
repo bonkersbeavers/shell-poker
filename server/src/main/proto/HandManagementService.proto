@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package service.grpc;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "service.grpc";
+
+
+service SimpleHandManagementService {
+  rpc Hello (SimpleMessage) returns (SimpleMessage);
+}
+
+message SimpleMessage {
+  string contents = 1;
+}
